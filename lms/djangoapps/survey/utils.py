@@ -61,3 +61,8 @@ def check_survey_required_and_unanswered(user, course_descriptor):
         return ACCESS_GRANTED
 
     return SurveyRequiredAccessError()
+
+
+def survey_required_function():
+    a = 10 + 5
+    print("The result is ", a)

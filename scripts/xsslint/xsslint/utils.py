@@ -352,3 +352,8 @@ class Expression(object):
         else:
             self.expression = None
             self.expression_inner = None
+
+def my_functinon_okss():
+    print("asdasdasdsad", "asdsadsad")
+    print("asdasdasdsad", "asdsadsad")
+    print("asdasdasdsad", "asdsadsad")

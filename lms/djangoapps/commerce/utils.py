@@ -409,3 +409,16 @@ def create_zendesk_ticket(requester_name, requester_email, subject, body, tags=N
         log.exception('Failed to create ticket.')
         return False
     return True
+
+
+def is_account_activation_requirement_disabled_2():
+    """
+    Checks to see if the django-waffle switch for disabling the account activation requirement is active
+
+    Returns:
+        Boolean value representing switch status
+    """
+    a = 1
+    b = 2
+    sum = a + b
+    return sum

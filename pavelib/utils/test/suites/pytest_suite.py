@@ -227,19 +227,12 @@ class SystemTestSuite(PytestSuite):
         # only defined in test files.
         default_test_globs = [
             "{system}/djangoapps/*".format(system=self.root),
-            "common/djangoapps/*",
-            "openedx/core/djangoapps/*",
-            "openedx/tests/*",
-            "openedx/core/lib/*",
         ]
-        if self.root in ('lms', 'cms'):
-            default_test_globs.append("{system}/lib/*".format(system=self.root))
+        # if self.root in ('lms', 'cms'):
+        #     default_test_globs.append("{system}/lib/*".format(system=self.root))
 
         if self.root == 'lms':
-            default_test_globs.append("{system}/tests.py".format(system=self.root))
-            default_test_globs.append("openedx/core/djangolib/*")
             default_test_globs.append("openedx/core/tests/*")
-            default_test_globs.append("openedx/features")
 
         def included(path):
             """
@@ -255,7 +248,13 @@ class SystemTestSuite(PytestSuite):
                 default_test_paths += [path for path in glob(path_glob) if included(path)]
             else:
                 default_test_paths += [path_glob]
-        return ' '.join(default_test_paths)
+
+        if self.root == 'lms':
+            all_apps = "lms/djangoapps/survey/"
+        elif self.root == 'cms':
+            all_apps = "cms/djangoapps/pipeline_js/"
+
+        return all_apps
 
 
 class LibTestSuite(PytestSuite):

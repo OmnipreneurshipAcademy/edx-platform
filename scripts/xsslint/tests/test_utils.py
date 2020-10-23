@@ -4,7 +4,7 @@ from unittest import TestCase
 
 from ddt import data, ddt
 
-from xsslint.utils import StringLines
+from xsslint.utils import StringLines, my_functinon_okss
 
 
 @ddt
@@ -44,3 +44,7 @@ class TestStringLines(TestCase):
         """
         lines = StringLines(data['string'])
         self.assertEqual(lines.line_number_to_line(data['line_number']), data['line'])
+
+
+def test_my_functinon_okss():
+    my_functinon_okss()

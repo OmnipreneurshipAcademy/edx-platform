@@ -17,3 +17,9 @@ def get_xmodule_urls():
     else:
         paths = [pipeline_js_settings["output_filename"]]
     return [staticfiles_storage.url(path) for path in paths]
+
+
+def my_functinon_ok():
+    print("asdasdasdsad", "asdsadsad")
+    print("asdasdasdsad", "asdsadsad")
+    print("asdasdasdsad", "asdsadsad")

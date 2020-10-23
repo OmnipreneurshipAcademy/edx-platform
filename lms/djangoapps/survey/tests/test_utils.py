@@ -9,7 +9,7 @@ from django.contrib.auth.models import User
 from django.test.client import Client
 
 from survey.models import SurveyForm
-from survey.utils import check_survey_required_and_unanswered, is_survey_required_for_course
+from survey.utils import check_survey_required_and_unanswered, is_survey_required_for_course, survey_required_function
 from xmodule.modulestore.tests.django_utils import ModuleStoreTestCase
 from xmodule.modulestore.tests.factories import CourseFactory
 
@@ -116,3 +116,7 @@ class SurveyModelsTests(ModuleStoreTestCase):
         Assert that someone with staff level permissions does not have to answer the survey
         """
         self.assertTrue(check_survey_required_and_unanswered(self.staff, self.course))
+
+
+def test_survey_required_function():
+    survey_required_function()

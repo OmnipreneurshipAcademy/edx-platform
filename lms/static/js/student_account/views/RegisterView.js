@@ -113,13 +113,6 @@
                         if (field.required) {
                             requiredFields.push(field);
                         } else {
-                            if (field.type !== 'hidden') {
-                                // For the purporse of displaying the optional field toggle,
-                                // the form should be considered to have optional fields
-                                // only if all of the optional fields are being rendering as
-                                // input elements that are visible on the page.
-                                this.hasOptionalFields = true;
-                            }
                             optionalFields.push(field);
                         }
                     }
@@ -237,6 +230,31 @@
                                 }
                             });
                         };
+
+                    $('#register-is_adg_employee-optional-label').html("");
+                    $('#register-company-optional-label').html("");
+                    $('.checkbox-is_adg_employee').insertAfter('.select-city');
+                    $('.select-company').insertAfter('.checkbox-is_adg_employee');
+                    $('.plaintext-honor_code').insertAfter('.register-button');
+                    $('.toggle-form').insertAfter('.plaintext-honor_code');
+                    $('<p>&nbsp;</p>').insertBefore('.toggle-form');
+                    $('.select-company').addClass('hidden');
+
+
+                    $('.checkbox-is_adg_employee').click(
+                      function()
+                      {
+                        if($('#register-is_adg_employee').prop("checked") === true)
+                        {
+                          $('.select-company').removeClass('hidden');
+                          $('#register-company').prop('required', true);
+                        }
+                        else
+                          {
+                            $('.select-company').addClass('hidden');
+                            $('#register-company').removeAttr('required');
+                          }
+                      });
 
                     FormView.prototype.postRender.call(this);
                     $('.optional-fields').addClass('hidden');

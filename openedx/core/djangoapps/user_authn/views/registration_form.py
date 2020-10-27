@@ -21,6 +21,7 @@ from django_countries import countries
 
 import third_party_auth
 from edxmako.shortcuts import marketing_link
+from openedx.adg.constants import ADG_BUSINESS_LINES, CITIES_OF_KSA
 from openedx.core.djangoapps.site_configuration import helpers as configuration_helpers
 from openedx.core.djangoapps.user_api import accounts
 from openedx.core.djangoapps.user_api.helpers import FormDescription
@@ -107,7 +108,7 @@ class UsernameField(forms.CharField):
 
     default_validators = [validate_username]
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs):  # pylint: disable=unused-argument
         super(UsernameField, self).__init__(
             min_length=accounts.USERNAME_MIN_LENGTH,
             max_length=accounts.USERNAME_MAX_LENGTH,
@@ -306,6 +307,7 @@ class RegistrationFormFactory(object):
         "gender",
         "year_of_birth",
         "level_of_education",
+        "is_adg_employee",
         "company",
         "job_title",
         "title",
@@ -431,6 +433,23 @@ class RegistrationFormFactory(object):
                     )
 
         return form_desc
+
+    def _add_is_adg_employee_field(self, form_desc, required=False):
+        """Add an is adg employee checkbox field to a form description.
+        Arguments:
+            form_desc: A form description
+        Keyword Arguments:
+            required (bool): Whether this field is required; defaults to True
+        """
+
+        is_adg_employee_label = _(u"I am a current Al-Dabbagh Group employee.")
+        form_desc.add_field(
+            "is_adg_employee",
+            label=is_adg_employee_label,
+            required=required,
+            default=False,
+            field_type="checkbox"
+        )
 
     def _add_email_field(self, form_desc, required=True):
         """Add an email field to a form description.
@@ -760,6 +779,9 @@ class RegistrationFormFactory(object):
         form_desc.add_field(
             "city",
             label=city_label,
+            field_type="select",
+            options=CITIES_OF_KSA,
+            include_default_option=True,
             required=required,
             error_messages={
                 "required": error_msg
@@ -797,7 +819,10 @@ class RegistrationFormFactory(object):
         form_desc.add_field(
             "company",
             label=company_label,
-            required=required
+            required=required,
+            field_type="select",
+            include_default_option=True,
+            options=ADG_BUSINESS_LINES
         )
 
     def _add_title_field(self, form_desc, required=False):
@@ -927,15 +952,14 @@ class RegistrationFormFactory(object):
         else:
             # Translators: This is a legal document users must agree to
             # in order to register a new account.
-            terms_label = _(u"Terms of Service and Honor Code")
+            terms_label = _(u"Terms of Use")
             terms_link = marketing_link("HONOR")
 
         # Translators: "Terms of Service" is a legal document users must agree to
         # in order to register a new account.
         label = Text(_(
-            u"I agree to the {platform_name} {terms_of_service_link_start}{terms_of_service}{terms_of_service_link_end}"
+            u"I agree to the {terms_of_service_link_start}{terms_of_service}{terms_of_service_link_end}"
         )).format(
-            platform_name=configuration_helpers.get_value("PLATFORM_NAME", settings.PLATFORM_NAME),
             terms_of_service=terms_label,
             terms_of_service_link_start=HTML(u"<a href='{terms_link}' rel='noopener' target='_blank'>").format(
                 terms_link=terms_link
@@ -945,33 +969,25 @@ class RegistrationFormFactory(object):
 
         # Translators: "Terms of Service" is a legal document users must agree to
         # in order to register a new account.
-        error_msg = _(u"You must agree to the {platform_name} {terms_of_service}").format(
-            platform_name=configuration_helpers.get_value("PLATFORM_NAME", settings.PLATFORM_NAME),
-            terms_of_service=terms_label
-        )
+        error_msg = _(u"You must agree to the {terms_of_service}").format(terms_of_service=terms_label)
         field_type = 'checkbox'
+
+        honor_code_text = _("""
+        By continuing, you confirm that you are at least 16 years of age and agree to
+        Al-Dabbagh Group’s {terms_of_service_link_start}{terms_of_service}{terms_of_service_link_end}.
+        """)
+        honor_code_label = Text(honor_code_text)
 
         if not separate_honor_and_tos:
 
             field_type = 'plaintext'
 
-            pp_link = marketing_link("PRIVACY")
-            label = Text(_(
-                u"By creating an account, you agree to the \
-                  {terms_of_service_link_start}{terms_of_service}{terms_of_service_link_end} \
-                  and you acknowledge that {platform_name} and each Member process your personal data in accordance \
-                  with the {privacy_policy_link_start}Privacy Policy{privacy_policy_link_end}."
-            )).format(
-                platform_name=configuration_helpers.get_value("PLATFORM_NAME", settings.PLATFORM_NAME),
+            label = honor_code_label.format(
                 terms_of_service=terms_label,
                 terms_of_service_link_start=HTML(u"<a href='{terms_url}' rel='noopener' target='_blank'>").format(
                     terms_url=terms_link
                 ),
                 terms_of_service_link_end=HTML("</a>"),
-                privacy_policy_link_start=HTML(u"<a href='{pp_url}' rel='noopener' target='_blank'>").format(
-                    pp_url=pp_link
-                ),
-                privacy_policy_link_end=HTML("</a>"),
             )
 
         form_desc.add_field(

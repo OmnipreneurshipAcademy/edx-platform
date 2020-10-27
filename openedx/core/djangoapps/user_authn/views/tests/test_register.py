@@ -588,7 +588,7 @@ class RegistrationViewTest(ThirdPartyAuthTestMixin, UserAPITestCase):
                 {
                     "value": country_code,
                     "name": six.text_type(country_name),
-                    "default": True if country_code == expected_country_code else False
+                    "default": country_code == expected_country_code
                 }
                 for country_code, country_name in SORTED_COUNTRIES
             ]
@@ -894,11 +894,11 @@ class RegistrationViewTest(ThirdPartyAuthTestMixin, UserAPITestCase):
 
     def test_registration_form_city(self):
         self._assert_reg_field(
-            {"city": "optional"},
+            {"city": "required"},
             {
                 "name": "city",
-                "type": "text",
-                "required": False,
+                "type": "select",
+                "required": True,
                 "label": "City",
                 "errorMessages": {
                     "required": "Enter your city."
@@ -963,70 +963,60 @@ class RegistrationViewTest(ThirdPartyAuthTestMixin, UserAPITestCase):
             }
         )
 
+    def test_registration_form_is_adg_employee(self):
+        self._assert_reg_field(
+            {"is_adg_employee": "optional"},
+            {
+                "name": "is_adg_employee",
+                "type": "checkbox",
+                "required": False,
+                "label": u"I am a current Al-Dabbagh Group employee.",
+                "defaultValue": False
+            }
+        )
+
     @override_settings(
         MKTG_URLS={"ROOT": "https://www.test.com/", "HONOR": "honor"},
     )
     @mock.patch.dict(settings.FEATURES, {"ENABLE_MKTG_SITE": True})
     def test_registration_honor_code_mktg_site_enabled(self):
         link_template = "<a href='https://www.test.com/honor' rel='noopener' target='_blank'>{link_label}</a>"
-        link_template2 = u"<a href='#' rel='noopener' target='_blank'>{link_label}</a>"
-        link_label = "Terms of Service and Honor Code"
-        link_label2 = "Privacy Policy"
+        link_label = "Terms of Use"
+        honor_code_label = """
+        By continuing, you confirm that you are at least 16 years of age and agree to
+        Al-Dabbagh Group’s {link_label}.
+        """
+
         self._assert_reg_field(
             {"honor_code": "required"},
             {
-                "label": (u"By creating an account, you agree to the {spacing}"
-                          u"{link_label} {spacing}"
-                          u"and you acknowledge that {platform_name} and each Member process your "
-                          u"personal data in accordance {spacing}"
-                          u"with the {link_label2}.").format(
-                    platform_name=settings.PLATFORM_NAME,
-                    link_label=link_template.format(link_label=link_label),
-                    link_label2=link_template2.format(link_label=link_label2),
-                    spacing=' ' * 18
-                ),
+                "label": honor_code_label.format(link_label=link_template.format(link_label=link_label)),
                 "name": "honor_code",
                 "defaultValue": False,
                 "type": "plaintext",
                 "required": True,
-                "errorMessages": {
-                    "required": u"You must agree to the {platform_name} {link_label}".format(
-                        platform_name=settings.PLATFORM_NAME,
-                        link_label=link_label
-                    )
-                }
+                "errorMessages": {"required": u"You must agree to the {link_label}".format(link_label=link_label)}
             }
         )
 
     @override_settings(MKTG_URLS_LINK_MAP={"HONOR": "honor"})
     @mock.patch.dict(settings.FEATURES, {"ENABLE_MKTG_SITE": False})
     def test_registration_honor_code_mktg_site_disabled(self):
-        link_template = "<a href='/privacy' rel='noopener' target='_blank'>{link_label}</a>"
-        link_label = "Terms of Service and Honor Code"
-        link_label2 = "Privacy Policy"
+        link_label = "Terms of Use"
+        honor_code_label = """
+        By continuing, you confirm that you are at least 16 years of age and agree to
+        Al-Dabbagh Group’s {link_label}.
+        """
+
         self._assert_reg_field(
             {"honor_code": "required"},
             {
-                "label": (u"By creating an account, you agree to the {spacing}"
-                          u"{link_label} {spacing}"
-                          u"and you acknowledge that {platform_name} and each Member process your "
-                          u"personal data in accordance {spacing}"
-                          u"with the {link_label2}.").format(
-                    platform_name=settings.PLATFORM_NAME,
-                    link_label=self.link_template.format(link_label=link_label),
-                    link_label2=link_template.format(link_label=link_label2),
-                    spacing=' ' * 18
-                ),
+                "label": honor_code_label.format(link_label=self.link_template.format(link_label=link_label)),
                 "name": "honor_code",
                 "defaultValue": False,
                 "type": "plaintext",
                 "required": True,
-                "errorMessages": {
-                    "required": u"You must agree to the {platform_name} {link_label}".format(
-                        platform_name=settings.PLATFORM_NAME,
-                        link_label=link_label
-                    )
-                }
+                "errorMessages": {"required": u"You must agree to the {link_label}".format(link_label=link_label)}
             }
         )
 
@@ -1044,20 +1034,13 @@ class RegistrationViewTest(ThirdPartyAuthTestMixin, UserAPITestCase):
         self._assert_reg_field(
             {"honor_code": "required", "terms_of_service": "required"},
             {
-                "label": u"I agree to the {platform_name} {link_label}".format(
-                    platform_name=settings.PLATFORM_NAME,
-                    link_label=link_template.format(link_label=link_label)
-                ),
+                "label": u"I agree to the {link_label}".format(
+                    link_label=link_template.format(link_label=link_label)),
                 "name": "honor_code",
                 "defaultValue": False,
                 "type": "checkbox",
                 "required": True,
-                "errorMessages": {
-                    "required": u"You must agree to the {platform_name} {link_label}".format(
-                        platform_name=settings.PLATFORM_NAME,
-                        link_label=link_label
-                    )
-                }
+                "errorMessages": {"required": u"You must agree to the {link_label}".format(link_label=link_label)}
             }
         )
 
@@ -1093,16 +1076,14 @@ class RegistrationViewTest(ThirdPartyAuthTestMixin, UserAPITestCase):
         self._assert_reg_field(
             {"honor_code": "required", "terms_of_service": "required"},
             {
-                "label": u"I agree to the {platform_name} {link_label}".format(
-                    platform_name=settings.PLATFORM_NAME,
-                    link_label=self.link_template.format(link_label=link_label)
-                ),
+                "label": u"I agree to the {link_label}".format(
+                    link_label=self.link_template.format(link_label=link_label)),
                 "name": "honor_code",
                 "defaultValue": False,
                 "type": "checkbox",
                 "required": True,
                 "errorMessages": {
-                    "required": u"You must agree to the {platform_name} Honor Code".format(
+                    "required": u"You must agree to the Honor Code".format(
                         platform_name=settings.PLATFORM_NAME
                     )
                 }
@@ -1179,16 +1160,18 @@ class RegistrationViewTest(ThirdPartyAuthTestMixin, UserAPITestCase):
             "year_of_birth": "optional",
             "mailing_address": "optional",
             "goals": "optional",
-            "city": "optional",
+            "city": "required",
             "state": "optional",
             "country": "required",
             "honor_code": "required",
             "confirm_email": "required",
+            "company": "optional",
+            "is_adg_employee": "optional"
         },
         REGISTRATION_FIELD_ORDER=[
             "name",
-            "username",
             "email",
+            "username",
             "confirm_email",
             "password",
             "first_name",
@@ -1199,6 +1182,7 @@ class RegistrationViewTest(ThirdPartyAuthTestMixin, UserAPITestCase):
             "gender",
             "year_of_birth",
             "level_of_education",
+            "is_adg_employee",
             "company",
             "title",
             "job_title",
@@ -1219,8 +1203,8 @@ class RegistrationViewTest(ThirdPartyAuthTestMixin, UserAPITestCase):
         field_names = [field["name"] for field in form_desc["fields"]]
         self.assertEqual(field_names, [
             "name",
-            "username",
             "email",
+            "username",
             "confirm_email",
             "password",
             "city",
@@ -1229,9 +1213,11 @@ class RegistrationViewTest(ThirdPartyAuthTestMixin, UserAPITestCase):
             "gender",
             "year_of_birth",
             "level_of_education",
+            "is_adg_employee",
+            "company",
             "mailing_address",
             "goals",
-            "honor_code",
+            "honor_code"
         ])
 
     @override_settings(
@@ -2011,11 +1997,9 @@ class RegistrationValidationViewTests(test_utils.ApiTestCase):
                 'email': email
             },
             {
-                # pylint: disable=no-member
                 "username": USERNAME_CONFLICT_MSG.format(
                     username=user.username
                 ) if username == user.username else '',
-                # pylint: disable=no-member
                 "email": EMAIL_CONFLICT_MSG.format(
                     email_address=user.email
                 ) if email == user.email else ''
@@ -2033,7 +2017,6 @@ class RegistrationValidationViewTests(test_utils.ApiTestCase):
         email = 'email'
         self.assertValidationDecision(
             {'email': email},
-            # pylint: disable=no-member
             {'email': EMAIL_INVALID_MSG.format(email=email)}
         )
 

@@ -403,3 +403,48 @@ COMPREHENSIVE_THEME_DIRS = [
 ]
 TEMPLATES[1]["DIRS"] = _make_mako_template_dirs
 derive_settings(__name__)
+
+AUTH_PASSWORD_VALIDATORS = [
+    {
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
+    },
+    {
+        "NAME": "util.password_policy_validators.MinimumLengthValidator",
+        "OPTIONS": {
+            "min_length": 8
+        }
+    },
+    {
+        "NAME": "util.password_policy_validators.MaximumLengthValidator",
+        "OPTIONS": {
+            "max_length": 75
+        }
+    },
+    {
+        "NAME": "util.password_policy_validators.NumericValidator",
+        "OPTIONS": {
+            "min_numeric": 1
+        }
+    },
+    {
+        "NAME": "util.password_policy_validators.UppercaseValidator",
+        "OPTIONS": {
+            "min_upper": 1
+        }
+    },
+]
+
+REGISTRATION_EXTRA_FIELDS = {
+    "confirm_email": "hidden",
+    "level_of_education": "optional",
+    "gender": "optional",
+    "year_of_birth": "optional",
+    "mailing_address": "optional",
+    "goals": "optional",
+    "honor_code": "required",
+    "terms_of_service": "hidden",
+    "city": "required",
+    "country":"hidden",
+    "is_adg_employee":"optional",
+    "company":"optional"
+}

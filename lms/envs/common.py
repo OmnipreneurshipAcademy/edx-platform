@@ -2564,6 +2564,15 @@ INSTALLED_APPS = [
     'rest_framework_jwt',
 ]
 
+######################### ADG APPS #####################################
+
+ADG_INSTALLED_APPS = [
+
+    'openedx.adg.lms.mini_degree',
+]
+
+INSTALLED_APPS.extend(ADG_INSTALLED_APPS)
+
 ######################### CSRF #########################################
 
 # Forwards-compatibility with Django 1.7

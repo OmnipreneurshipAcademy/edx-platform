@@ -139,6 +139,9 @@ from student.models import CourseEnrollment
     <div class="dashboard" id="dashboard-main">
       <div class="main-container">
         <div class="my-courses" id="my-courses">
+          <a class="btn btn-primary" href="/mini_degree/degrees">
+            ${_("Mini-Degrees")}
+          </a>
           % if display_dashboard_courses:
           <%include file="learner_dashboard/_dashboard_navigation_courses.html"/>
           % endif

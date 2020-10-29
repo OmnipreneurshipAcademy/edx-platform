@@ -1,0 +1,11 @@
+{% extends "main_django.html" %}
+{% block body %}
+
+    <h2>Add Mini Degree</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Submit">
+        <a class="btn btn-primary" href="/mini_degree/degrees">Back</a>
+    </form>
+{% endblock body %}

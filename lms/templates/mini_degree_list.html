@@ -1,0 +1,51 @@
+{% extends "main_django.html" %}
+
+{% block headextra %}
+<style>
+    td {
+        padding:20px;
+        text-align:center;
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+    <a class="btn btn-primary" href="/dashboard">Back</a>
+    <a class="btn btn-primary" href="/mini_degree/add_degree">Add a new Mini Degree</a>
+    <br/><br/>
+    <h2>Mini Degrees</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Subtitle</th>
+                <th>Courses</th>
+                <th>Edit</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for degree in degrees %}
+            <tr>
+                <td>{{ degree.title }}</td>
+                <td>{{ degree.subtitle }}</td>
+                <td>
+                    {% for course in degree.courses.all %}
+                    {{ course }}<br/>
+                    {% endfor %}
+                </td>
+
+                {% if user == degree.user %}
+                    <td><a href="/mini_degree/edit_degree/{{degree.id}}"><i class="icon fa fa-edit"></a></td>
+                    <td><a href="/mini_degree/delete_degree/{{degree.id}}"><i class="icon fa fa-trash-o"></i></a></td>
+                {% else %}
+                    <td>-</td>
+                    <td>-</td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock body %}

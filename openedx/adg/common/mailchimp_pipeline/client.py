@@ -29,6 +29,9 @@ class Connection(object):
         self.root = '{}://{}.api.mailchimp.com/{}/'.format(proto, dc, self.version)
 
     def make_request(self, method="GET", path=None, **kwargs):
+        """
+        This function makes the desired request to mailchimp and performs actions on the subscriber list
+        """
         if path:
             url = '{}{}'.format(self.root, path)
         else:

@@ -1,8 +1,13 @@
-import json
+"""
+Mailchimp Connection Client
+This code is used to sync users with mailchimp subscriber list
+"""
 import hashlib
+import json
+
+from django.conf import settings
 from requests import request
 from requests.exceptions import HTTPError
-from django.conf import settings
 
 
 class MailChimpException(Exception):
@@ -49,7 +54,7 @@ class Connection(object):
 
         try:
             response.raise_for_status()
-        except HTTPError as e:
+        except HTTPError:
             message = "Exception detail: %s, Errors: %s " % (response.json().get('detail', ''),
                                                              str(response.json().get('errors', '')))
             if response.json()['status'] == 404:
@@ -61,36 +66,56 @@ class Connection(object):
 
     @classmethod
     def get_connection(cls):
+        """
+        It returns mailchimp client connection
+        """
         connection = cls(apikey=settings.MAILCHIMP_API_KEY, secure=True)
         return connection
 
 
 class ChimpClient(object):
+    """
+    This client contains necessary functions to do operations on Mailchimp subscriber list
+    """
     def __init__(self):
         self.conn = Connection.get_connection()
 
     def _get_email_hash(self, email):
+        """
+        It creates email hash for api call
+        """
         md = hashlib.md5()
         md.update(email.lower())
         return md.hexdigest()
 
     def get_list_members(self, list_id):
+        """
+        It returns all the members of the subscriber list
+        """
         path = "list/{}/members/".format(list_id)
         return self.conn.make_request(path=path)
 
     def add_list_members_in_batch(self, list_id, data):
+        """
+        It adds users in batch
+        """
         path = '/lists/{list_id}'.format(list_id=list_id)
         return self.conn.make_request(method="POST", path=path, body=data)
 
     def add_update_member_to_list(self, list_id, email, data):
+        """
+        It adds or updates the user in subscriber list
+        """
         email_hash = self._get_email_hash(email.lower())
         path = '/lists/{list_id}/members/{subscriber_hash}'.format(list_id=list_id, subscriber_hash=email_hash)
 
         return self.conn.make_request(method="PUT", path=path, body=data)
 
     def delete_user_from_list(self, list_id, email):
+        """
+        It deletes the user in subscriber list
+        """
         email_hash = self._get_email_hash(email.lower())
         path = '/lists/{list_id}/members/{subscriber_hash}'.format(list_id=list_id, subscriber_hash=email_hash)
 
         return self.conn.make_request(method="DELETE", path=path)
-

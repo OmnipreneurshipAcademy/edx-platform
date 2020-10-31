@@ -2567,11 +2567,9 @@ INSTALLED_APPS = [
 ######################### ADG APPS #####################################
 
 ADG_INSTALLED_APPS = [
-
     'openedx.adg.lms.course_meta',
-
-    # ADG Features app
     'openedx.adg.lms.applications',
+    'openedx.adg.common.mailchimp_pipeline'
 ]
 
 INSTALLED_APPS.extend(ADG_INSTALLED_APPS)

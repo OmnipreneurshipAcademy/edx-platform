@@ -934,6 +934,10 @@ MAINTENANCE_BANNER_TEXT = ENV_TOKENS.get('MAINTENANCE_BANNER_TEXT', None)
 ########################## limiting dashboard courses ######################
 DASHBOARD_COURSE_LIMIT = ENV_TOKENS.get('DASHBOARD_COURSE_LIMIT', None)
 
+############## Mailhcimp API Key & List ID####################
+MAILCHIMP_LIST_ID = ENV_TOKENS.get('MAILCHIMP_LIST_ID', '')
+MAILCHIMP_API_KEY = ENV_TOKENS.get('MAILCHIMP_API_KEY', '')
+
 ############################### Plugin Settings ###############################
 
 # This is at the bottom because it is going to load more settings after base settings are loaded

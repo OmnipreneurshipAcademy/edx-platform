@@ -17,13 +17,12 @@ TEST_SKIP_LIST = [
     'lms/djangoapps/commerce/tests/test_signals.py::TestRefundSignal::test_create_zendesk_ticket',
     'lms/djangoapps/courseware/tests/test_video_mongo.py::TestGetHtmlMethod::test_html_student_public_view',
     'lms/djangoapps/courseware/tests/test_video_mongo.py::TestGetHtmlMethod::test_poster_image',
+    'lms/djangoapps/courseware/tests/test_video_mongo.py::TestGetHtmlMethod::test_get_html_hls',
     'lms/djangoapps/discussion/django_comment_client/tests/test_utils.py::CategoryMapTestCase::test_self_paced_start_date_filter',  # noqa: E501
     'lms/djangoapps/discussion/django_comment_client/tests/test_utils.py::CategoryMapTestCase::test_sort_intermediates',
     'lms/djangoapps/discussion/django_comment_client/tests/test_utils.py::CategoryMapTestCase::test_tree',
     'lms/djangoapps/discussion/rest_api/tests/test_api.py::GetThreadListTest::test_thread_content',
     'lms/djangoapps/discussion/rest_api/tests/test_serializers.py::ThreadSerializerSerializationTest::test_basic',
-    'lms/djangoapps/courseware/tests/test_video_mongo.py::TestGetHtmlMethod::test_get_html_hls'
-
     'lms/djangoapps/survey/tests/test_views.py::SurveyViewsTests::test_survey_postback',
 
     'common/djangoapps/course_modes/tests/test_admin.py::AdminCourseModePageTest::test_expiration_timezone',

@@ -41,7 +41,8 @@ function generate_diff_cover_report() {
     export DIFF_COVER_REPORT
     # post comment to PR only from circleci
     [ "$CIRCLECI" ] && python3 adg_pipelines/scripts/post_comment.py -t ADG
-    return $EXIT_CODE
+    echo "$DIFF_COVER_REPORT"
+    return "$EXIT_CODE"
 }
 
 [[ -n "$branch" && "$branch" != origin/* ]] &&
@@ -49,5 +50,5 @@ function generate_diff_cover_report() {
 
 rm -rf reports                                                   # First delete previous reports
 run_adg_test $LMS                                                # Run test for LMS and LMS common
-run_adg_test $CMS "--cov-append"                                 # Run test for CMS and LMS common
+run_adg_test $CMS "--cov-append"                                 # Run test for CMS and CMS common
 generate_diff_cover_report "${branch=origin/master}" $FAIL_UNDER # Generate reports

@@ -41,9 +41,12 @@ paver test_system -s lms --cov-args="-p" --skip-clean --cov-config=.coveragerc-l
 coverage xml --rcfile=.coveragerc-local
 coverage html --rcfile=.coveragerc-local
 
+echo "*** Generating diff-cover report ***"
+EXIT_CODE=0
 DIFF_COVER_REPORT=$(diff-cover reports/coverage.xml --compare-branch="${branch=origin/master}" \
-    --html-report reports/diff_coverage_combined.html --fail-under="$FAIL_UNDER")
+    --html-report reports/diff_coverage_combined.html --fail-under="$FAIL_UNDER") || EXIT_CODE=$?
 export DIFF_COVER_REPORT
 # post comment to PR only from circleci
 [ "$CIRCLECI" ] && python3 adg_pipelines/scripts/post_comment.py -t Edx
-return $EXIT_CODE
+echo "$DIFF_COVER_REPORT"
+exit "$EXIT_CODE"

@@ -1,6 +1,4 @@
-"""
-MailchimpPipeline app configurations
-"""
+""" Mailchimp Pipeline app configurations """
 from django.apps import AppConfig
 
 

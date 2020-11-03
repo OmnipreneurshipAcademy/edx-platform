@@ -2,8 +2,8 @@
 {% block body %}
     <form method="post">
         {% csrf_token %}
-        <p>Are you sure you want to delete "{{ object }}"?</p>
+        <p>Are you sure you want to delete the {{ mini_degree.title }} degree?</p>
         <input type="submit" value="Confirm">
-        <a class="btn btn-primary" href="/mini_degree/degrees">Cancel</a>
+        <a class="btn btn-primary" href="{% url 'mini_degree:degrees' %}">Cancel</a>
     </form>
 {% endblock body %}

@@ -1,5 +1,5 @@
 """
-All models for applications app
+All models for mini_degree app
 """
 from django.db import models
 from model_utils.models import TimeStampedModel

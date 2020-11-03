@@ -1,11 +1,11 @@
 """
-All configurations for applications app
+All configurations for mini_degree app
 """
 from django.apps import AppConfig
 
 
-class ApplicationsConfig(AppConfig):
+class MiniDegreeConfig(AppConfig):
     """
-    Applications app configuration.
+    mini_degree app configuration.
     """
     name = 'mini_degrees'

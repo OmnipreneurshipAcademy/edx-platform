@@ -1,11 +1,11 @@
 """
-All urls for applications app
+All urls for mini_degree app
 """
 
 from django.urls import path
 
 from openedx.adg.lms.mini_degree.views import AddMiniDegreeView, \
-    MiniDegreeListView, EditMiniDegreeView, DeleteMiniDegreeView
+     DeleteMiniDegreeView, EditMiniDegreeView, MiniDegreeListView
 
 app_name = 'mini_degree'
 urlpatterns = [

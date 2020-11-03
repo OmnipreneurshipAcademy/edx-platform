@@ -1,17 +1,8 @@
 {% extends "main_django.html" %}
 
-{% block headextra %}
-<style>
-    td {
-        padding:20px;
-        text-align:center;
-    }
-</style>
-{% endblock %}
-
 {% block body %}
-    <a class="btn btn-primary" href="/dashboard">Back</a>
-    <a class="btn btn-primary" href="/mini_degree/add_degree">Add a new Mini Degree</a>
+    <a class="btn btn-primary" href="{% url 'dashboard' %}">Back</a>
+    <a class="btn btn-primary" href="{% url 'mini_degree:degrees' %}">Add a new Mini Degree</a>
     <br/><br/>
     <h2>Mini Degrees</h2>
 
@@ -37,8 +28,8 @@
                 </td>
 
                 {% if user == degree.user %}
-                    <td><a href="/mini_degree/edit_degree/{{degree.id}}"><i class="icon fa fa-edit"></a></td>
-                    <td><a href="/mini_degree/delete_degree/{{degree.id}}"><i class="icon fa fa-trash-o"></i></a></td>
+                    <td><a href="{% url 'mini_degree:edit_degree' pk=degree.id %}"><i class="icon fa fa-edit"></a></td>
+                    <td><a href="{% url 'mini_degree:delete_degree' pk=degree.id %}"><i class="icon fa fa-trash-o"></i></a></td>
                 {% else %}
                     <td>-</td>
                     <td>-</td>

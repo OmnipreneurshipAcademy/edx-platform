@@ -19,6 +19,8 @@ if [ "$1" == "-h" ]; then
     exit 0
 fi
 
+set -x
+
 readonly LMS=lms
 readonly CMS=cms
 readonly FAIL_UNDER=20
@@ -40,7 +42,7 @@ function generate_diff_cover_report() {
         --html-report reports/diff_coverage.html --fail-under="${2:-80}") || EXIT_CODE=$?
     export DIFF_COVER_REPORT
     # post comment to PR only from circleci
-    [ "$CIRCLECI" ] && python3 adg_pipelines/scripts/post_comment.py -t ADG
+    [ "$CIRCLECI" ] && python3 adg_pipelines/scripts/post_comment.py -t ADG -s $EXIT_CODE
     echo "$DIFF_COVER_REPORT"
     return "$EXIT_CODE"
 }

@@ -74,6 +74,11 @@ jobs:
 workflows:
   main:
     jobs:
+      - adg-test:
+          context:
+            - adg-context
       - edx-test:
           context:
             - adg-context
+          requires:
+            - adg-test

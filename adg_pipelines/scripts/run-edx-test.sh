@@ -21,7 +21,7 @@ fi
 
 set -e
 set -o pipefail
-set -x
+
 readonly FAIL_UNDER=20
 branch="$1"
 
@@ -47,6 +47,5 @@ DIFF_COVER_REPORT=$(diff-cover reports/coverage.xml --compare-branch="${branch=o
     --html-report reports/diff_coverage_combined.html --fail-under="$FAIL_UNDER") || EXIT_CODE=$?
 export DIFF_COVER_REPORT
 # post comment to PR only from circleci
-[ "$CIRCLECI" ] && python3 adg_pipelines/scripts/post_comment.py -t Edx
-echo "$DIFF_COVER_REPORT"
+[ "$CIRCLECI" ] && python3 adg_pipelines/scripts/post_comment.py -t Edx -s $EXIT_CODE
 exit "$EXIT_CODE"

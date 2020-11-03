@@ -3,6 +3,7 @@ import argparse, os, requests
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--type', '-t', help='Report type i.e. AAG, Edx')
+parser.add_argument('--status', '-s', help='Test coverage status; 0 of cover is a success')
 args = parser.parse_args()
 
 CIRCLE_PULL_REQUEST = os.environ['CIRCLE_PULL_REQUEST']
@@ -29,9 +30,10 @@ def post_coverage_stats():
         link=_artifacts_link(),
         type='- {}'.format(args.type) if args.type else '',
     )
-    message = '{report_message}\n```\n{report_stats}\n```'.format(
+    message = '{report_message} Coverage !!! {icon}\n```\n{report_stats}\n```'.format(
         report_message=report_message,
         report_stats=diff_cover_report,
+        icon='Coverage !!! :rocket:' if args.status == '0' else 'Coverage !!! :scream:',
     )
 
     _create_comment_on_pr(message)

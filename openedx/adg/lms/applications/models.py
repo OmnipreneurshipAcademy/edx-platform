@@ -7,7 +7,7 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from model_utils.models import TimeStampedModel
 
-from openedx.adg.common.util.date_utils import month_choices, year_choices
+from openedx.adg.lms.utils.date_utils import month_choices, year_choices
 
 
 class ApplicationHub(TimeStampedModel):
@@ -56,6 +56,9 @@ class UserApplication(TimeStampedModel):
 
 
 class UserStartAndEndDates(TimeStampedModel):
+    """
+    Abstract model for Education and WorkExperience
+    """
     month_choices = month_choices(default_title='Month')
     year_choices = year_choices(default_title='Year')
 

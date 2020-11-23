@@ -2,8 +2,10 @@
 All the constants for Bootcamps application's templatetags.
 """
 
-NOT_STARTED = 0
-IN_PROGRESS = 1
-COMPLETED = 2
+NOT_STARTED = 'Not Started'
+IN_PROGRESS = 'In Progress'
+COMPLETED = 'Completed'
 
-MAP_PROGRESS_INTEGER_TO_STRING = ["Not Started", "In Progress", "Completed"]
+USERNAME = 'test'
+EMAIL = 'test@example.com'
+PASSWORD = 'edx'

@@ -7,4 +7,9 @@ adg_url_patterns = [
         r'^application/',
         include('openedx.adg.lms.applications.urls'),
     ),
+
+    url(
+        r'^bootcamps/',
+        include('openedx.adg.lms.bootcamps.urls'),
+    )
 ]

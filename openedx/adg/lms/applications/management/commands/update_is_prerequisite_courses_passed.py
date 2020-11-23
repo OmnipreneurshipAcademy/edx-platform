@@ -5,10 +5,9 @@ import sys
 from django.contrib.auth.models import User
 from django.core.management.base import BaseCommand
 from django.db.models import Count, Q
-
-from lms.djangoapps.grades.api import CourseGradeFactory
 from openedx.adg.lms.applications.models import ApplicationHub
 from openedx.adg.lms.course_meta.models import CourseMeta
+from openedx.adg.lms.utils.adg_utils import is_user_failed_in_course
 
 logger = logging.getLogger(__name__)
 
@@ -26,7 +25,7 @@ class Command(BaseCommand):
         users_to_be_checked_for_update = self.get_minimal_users_to_be_checked_for_update(pre_req_courses)
         for user in users_to_be_checked_for_update:
             for pre_req_course in pre_req_courses:
-                if self.is_user_failed_in_course(user, pre_req_course):
+                if is_user_failed_in_course(user, pre_req_course):
                     logger.info('{username} has not yet passed all the pre-reqs'.format(username=user.username))
                     break
             else:
@@ -55,16 +54,3 @@ class Command(BaseCommand):
         ).filter(
             num_of_enrolled_pre_reqs=len(pre_req_courses)
         )
-
-    def is_user_failed_in_course(self, user, course_key):
-        """
-        Checks if user is failed in the given course
-        Args:
-            user: User object
-            course_key: CourseLocator object
-        Returns:
-            boolean, True if the course is failed otherwise False
-
-        """
-        course_grade = CourseGradeFactory().read(user, course_key=course_key)
-        return not (course_grade and course_grade.passed)

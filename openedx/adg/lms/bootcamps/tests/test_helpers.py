@@ -1,17 +1,18 @@
 """
 Tests for all the template tags helpers.
 """
-from openedx.adg.lms.bootcamps.templatetags.constants import (
-    USERNAME,
-    EMAIL,
-    PASSWORD
-)
 from openedx.adg.lms.bootcamps.templatetags.helpers import (
     is_user_enrolled_in_course,
 )
 from student.tests.factories import UserFactory, CourseEnrollmentFactory
 from xmodule.modulestore.tests.django_utils import ModuleStoreTestCase
 from xmodule.modulestore.tests.factories import CourseFactory
+
+from .constants import (
+    USERNAME,
+    EMAIL,
+    PASSWORD
+)
 
 
 class HelpersTestCase(ModuleStoreTestCase):

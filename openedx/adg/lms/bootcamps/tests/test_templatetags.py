@@ -8,14 +8,17 @@ from openedx.adg.lms.bootcamps.templatetags.bootcamp_extras import (
 from openedx.adg.lms.bootcamps.templatetags.constants import (
     NOT_STARTED,
     IN_PROGRESS,
-    COMPLETED,
-    USERNAME,
-    EMAIL,
-    PASSWORD
+    COMPLETED
 )
 from student.tests.factories import UserFactory, CourseEnrollmentFactory
 from xmodule.modulestore.tests.django_utils import ModuleStoreTestCase
 from xmodule.modulestore.tests.factories import CourseFactory
+
+from .constants import (
+    USERNAME,
+    EMAIL,
+    PASSWORD
+)
 
 
 class BootcampExtrasTestCase(ModuleStoreTestCase):

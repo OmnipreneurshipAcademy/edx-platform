@@ -59,8 +59,7 @@ class UserApplication(TimeStampedModel):
     Model for status of all required parts of user application submission.
     """
     user = models.OneToOneField(User, related_name='application', on_delete=models.CASCADE, verbose_name=_('User'), )
-    city = models.CharField(verbose_name=_('City'), max_length=255, )
-    business_line = models.OneToOneField(BusinessLine, verbose_name=_('Business Line'),
+    business_line = models.ForeignKey(BusinessLine, verbose_name=_('Business Line'),
                                          on_delete=models.CASCADE, null=True)
 
     organization = models.CharField(verbose_name=_('Organization'), max_length=255, blank=True, )

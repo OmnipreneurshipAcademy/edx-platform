@@ -2,8 +2,17 @@
 Registering models for applications app.
 """
 from django.contrib import admin
+from .models import ApplicationHub, BusinessLine, Education, UserApplication, WorkExperience, Book, AdminNote
+from rules.contrib.admin import ObjectPermissionsModelAdmin
 
-from .models import ApplicationHub, BusinessLine, Education, UserApplication, WorkExperience
+
+@admin.register(Book)
+class BookAdmin(ObjectPermissionsModelAdmin):
+    """
+    Django admin class for BusinessLine
+    """
+
+    pass
 
 
 @admin.register(ApplicationHub)
@@ -18,53 +27,51 @@ class ApplicationHubAdmin(admin.ModelAdmin):
     raw_id_fields = ('user',)
 
 
+class EducationAdmin(admin.StackedInline):
+    """
+    Django admin class for Education
+    """
+    model = Education
+
+
+class WorkExperienceAdmin(admin.StackedInline):
+    """
+    Django admin class for WorkExperience
+    """
+    model = WorkExperience
+
+
+class AdminNoteAdmin(admin.StackedInline):
+    """
+    Django admin class for BusinessLine
+    """
+    model = AdminNote
+
+
+class BusinessLineAdmin(admin.StackedInline):
+    """
+    Django admin class for BusinessLine
+    """
+    model = BusinessLine
+
+
 @admin.register(UserApplication)
 class UserApplicationAdmin(admin.ModelAdmin):
     """
     Django admin class for UserApplication
     """
     list_display = ('id', 'user_email', 'business_line',)
-    list_filter = ('business_line',)
-    raw_id_fields = ('user', )
 
     def user_email(self, obj):
         return obj.user.email
 
+    def get_queryset(self, request):
+        qs = super(UserApplicationAdmin, self).get_queryset(request)
 
-@admin.register(Education)
-class EducationAdmin(admin.ModelAdmin):
-    """
-    Django admin class for Education
-    """
-    fields = (
-        'name_of_school', 'degree', 'ares_of_study', 'date_started_month', 'date_started_year', 'date_completed_month',
-        'date_completed_year', 'is_in_progress', 'user_application',
-    )
-    list_display = ('id', 'name_of_school', 'degree', 'ares_of_study', 'user_application',)
-    list_filter = ('degree', 'ares_of_study',)
-    search_fields = ('name_of_school', 'degree',)
+        from .rules import is_bu_admin
+        if request.user.is_superuser or is_bu_admin(request.user):
+            return qs
 
+        return qs.filter(business_line__group__in=request.user.groups.all())
 
-@admin.register(WorkExperience)
-class WorkExperienceAdmin(admin.ModelAdmin):
-    """
-    Django admin class for WorkExperience
-    """
-    fields = (
-        'name_of_organization', 'job_position_title', 'date_started_month', 'date_started_year', 'date_completed_month',
-        'date_completed_year', 'is_current_position', 'job_responsibilities', 'user_application'
-    )
-    list_display = ('id', 'name_of_organization', 'job_position_title', 'user_application',)
-    list_filter = ('name_of_organization', 'job_position_title',)
-    search_fields = ('name_of_organization', 'job_position_title',)
-
-
-@admin.register(BusinessLine)
-class BusinessLineAdmin(admin.ModelAdmin):
-    """
-    Django admin class for BusinessLine
-    """
-    fields = ('title', 'logo', 'description',)
-    list_display = ('id', 'title', 'logo', 'description',)
-    list_filter = ('title',)
-    search_fields = ('title',)
+    inlines = [EducationAdmin, WorkExperienceAdmin, AdminNoteAdmin, ]

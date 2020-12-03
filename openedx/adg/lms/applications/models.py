@@ -10,6 +10,8 @@ from model_utils.models import TimeStampedModel
 
 from openedx.adg.lms.utils.date_utils import month_choices, year_choices
 
+from django.contrib.auth.models import Group
+
 from .constants import ALLOWED_LOGO_EXTENSIONS
 from .helpers import validate_logo_size
 
@@ -45,7 +47,9 @@ class BusinessLine(TimeStampedModel):
         validators=[FileExtensionValidator(ALLOWED_LOGO_EXTENSIONS), validate_logo_size],
         help_text=_('Accepted extensions: .png, .jpg, .svg'),
     )
+
     description = models.TextField(verbose_name=_('Description'),)
+    group = models.OneToOneField(Group, related_name='bu_groups', on_delete=models.CASCADE, null=True)
 
     class Meta:
         app_label = 'applications'
@@ -184,3 +188,13 @@ class AdminNote(TimeStampedModel):
 
     def __str__(self):
         return 'Application {id}, Admin note {note} '.format(id=self.user_application.id, note=self.note)
+
+
+from django.db import models
+import rules
+from rules.contrib.models import RulesModel
+class Book(RulesModel):
+    name = models.CharField(max_length=255, )
+
+    class Meta:
+        app_label = 'applications'

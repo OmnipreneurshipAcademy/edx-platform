@@ -34,7 +34,7 @@ class UserApplicationFactory(factory.DjangoModelFactory):
 
 class ApplicationHubFactory(factory.DjangoModelFactory):
     """
-    Factory for ApplicationHub Model
+    Factory for ApplicationHub model
     """
 
     class Meta:

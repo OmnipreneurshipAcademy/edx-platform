@@ -45,7 +45,7 @@ class BusinessLine(TimeStampedModel):
         validators=[FileExtensionValidator(ALLOWED_LOGO_EXTENSIONS), validate_logo_size],
         help_text=_('Accepted extensions: .png, .jpg, .svg'),
     )
-    description = models.TextField(verbose_name=_('Description'),)
+    description = models.TextField(verbose_name=_('Description'), )
 
     class Meta:
         app_label = 'applications'
@@ -60,7 +60,7 @@ class UserApplication(TimeStampedModel):
     """
     user = models.OneToOneField(User, related_name='application', on_delete=models.CASCADE, verbose_name=_('User'), )
     business_line = models.ForeignKey(BusinessLine, verbose_name=_('Business Line'),
-                                         on_delete=models.CASCADE, null=True)
+                                      on_delete=models.CASCADE, null=True)
 
     organization = models.CharField(verbose_name=_('Organization'), max_length=255, blank=True, )
     linkedin_url = models.URLField(verbose_name=_('LinkedIn URL'), max_length=255, blank=True, )

@@ -12,24 +12,24 @@ from student.tests.factories import UserFactory
 @pytest.mark.mute_signals
 def test_task_send_user_info_to_mailchimp(mocker):
     """
-    Assert that mailchimp client is called with valid data for syncing user's info
+    Assert that mailchimp client is called with valid data when User is created.
     """
-    user = UserFactory()
     mock_mailchimp_client = mocker.patch.object(mailchimp_tasks, 'MailchimpClient', autospec=True)
     mock_create_or_update_list_member = mock_mailchimp_client().create_or_update_list_member
-    mailchimp_tasks.task_send_user_info_to_mailchimp(user)
 
+    user = UserFactory()
+    user_email = user.email
     user_json = {
-        "email_address": user.email,
-        "merge_fields": {
-            "DATEREGIS": str(user.date_joined.strftime("%m/%d/%Y")),
-            "FULLNAME": user.get_full_name(),
-            "USERNAME": user.username
+        'email_address': user_email,
+        'status_if_new': 'subscribed',
+        'merge_fields': {
+            'DATEREGIS': str(user.date_joined.strftime('%m/%d/%Y')),
+            'USERNAME': user.username
         },
-        "status_if_new": "subscribed",
     }
 
-    mock_create_or_update_list_member.assert_called_once_with(email=user.email, data=user_json)
+    mailchimp_tasks.task_send_user_info_to_mailchimp(user_email, user_json)
+    mock_create_or_update_list_member.assert_called_once_with(email=user_email, data=user_json)
 
 
 @pytest.mark.django_db

@@ -16,29 +16,18 @@ log = logging.getLogger(__name__)
 
 
 @task(routing_key=settings.HIGH_PRIORITY_QUEUE)
-def task_send_user_info_to_mailchimp(instance, **kwargs):  # pylint: disable=unused-argument
+def task_send_user_info_to_mailchimp(user_email, user_json):
     """
-    Add new user data to Mailchimp (audience) list
+    Sync user data to Mailchimp (audience) list
 
     Args:
-        instance (User): The user object
+        user_email (str): User email which needs to be updated
+        user_json (dict): User updated data.
 
     Returns:
         None
     """
-    # TODO LP-2446 Add complete user info which needs to be synced with Mailchimp
-    user_json = {
-        "email_address": instance.email,
-        "status_if_new": "subscribed",
-        "merge_fields": {
-            "FULLNAME": instance.get_full_name(),
-            "USERNAME": instance.username
-        }
-    }
-
-    user_json["merge_fields"].update({"DATEREGIS": str(instance.date_joined.strftime("%m/%d/%Y"))})
-
-    MailchimpClient().create_or_update_list_member(email=instance.email, data=user_json)
+    MailchimpClient().create_or_update_list_member(email=user_email, data=user_json)
 
 
 @task(routing_key=settings.HIGH_PRIORITY_QUEUE)

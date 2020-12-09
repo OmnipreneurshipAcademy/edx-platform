@@ -44,8 +44,8 @@ def test_task_send_user_enrollments_to_mailchimp(mocker):
         "email_address": user_email,
         "status_if_new": "subscribed",
         "merge_fields": {
-            "ENROLLS": 'course1,course2,course3',
-            "ENROLL_IDS": '100,101,102',
+            "ENROLLS": 'course1, course2, course3',
+            "ENROLL_IDS": '100, 101, 102',
         }
     }
 

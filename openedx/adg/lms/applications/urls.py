@@ -6,6 +6,7 @@ from django.views.generic import TemplateView
 from rest_framework.routers import DefaultRouter
 
 from .api_views import EducationViewSet, WorkExperienceViewSet
+from .views import ApplicationHubView, ApplicationSuccessView
 
 router = DefaultRouter()
 router.register('education', EducationViewSet, basename='education')

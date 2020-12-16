@@ -51,6 +51,7 @@ def send_application_submission_confirmation_email(recipient_email):
     }
     send_mandrill_email(MandrillClient.APPLICATION_SUBMISSION_CONFIRMATION, recipient_email, context)
 
+
 # pylint: disable=translation-of-non-string
 def check_validations_for_past_record(attrs, error_message):
     """
@@ -102,25 +103,3 @@ def check_validations_for_current_record(attrs, error_message):
         errors['date_completed_year'] = _(error_message).format(key='Date completed year')
 
     return errors
-
-
-def send_application_submission_confirmation_email(recipient_email):
-    """
-    Send an email to the recipient_email according to the mandrill template
-
-    Args:
-        recipient_email(str): target email address to send the email to
-
-    Returns:
-        None
-    """
-    root_url = configuration_helpers.get_value('LMS_ROOT_URL', settings.LMS_ROOT_URL)
-    course_catalog_url = '{root_url}{course_catalog_url}'.format(
-        root_url=root_url,
-        course_catalog_url=reverse('courses')
-    )
-
-    context = {
-        'course_catalog_url': course_catalog_url
-    }
-    send_mandrill_email(MandrillClient.APPLICATION_SUBMISSION_CONFIRMATION, recipient_email, context)

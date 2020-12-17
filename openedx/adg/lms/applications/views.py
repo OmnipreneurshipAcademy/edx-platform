@@ -1,14 +1,17 @@
 """
 All views for applications app
 """
-from django.contrib.auth.mixins import AccessMixin
+from django.contrib.auth.mixins import AccessMixin, LoginRequiredMixin
 from django.contrib.auth.views import redirect_to_login
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
+from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import TemplateView
+from django.views.generic.edit import FormView
 
 from openedx.adg.common.course_meta.models import CourseMeta
+from openedx.adg.lms.applications.forms import ContactInformationForm
 from openedx.core.djangoapps.content.course_overviews.models import CourseOverview
 
 from .helpers import send_application_submission_confirmation_email
@@ -135,3 +138,33 @@ class ApplicationSuccessView(RedirectToLoginOrRelevantPageMixin, TemplateView):
         context = super(ApplicationSuccessView, self).get_context_data(**kwargs)
         context['submission_date'] = self.request.user.application_hub.submission_date
         return context
+
+
+class ContactInformationView(LoginRequiredMixin, FormView):
+    """
+    View for the contact information of user application
+    """
+
+    template_name = 'adg/lms/applications/contact_info.html'
+    form_class = ContactInformationForm
+    login_url = '/register'
+    success_url = reverse_lazy('application_experience')
+
+    def form_valid(self, form):
+        form.save(request=self.request)
+        if form.cleaned_data.get('resume'):
+            return HttpResponseRedirect(reverse_lazy('application_cover_letter'))
+        return super(ContactInformationView, self).form_valid(form)
+
+    def get_initial(self):
+        """
+        Returns the initial data to use for forms on this view.
+        """
+        user = self.request.user
+        initial = super().get_initial()
+        initial['name'] = user.profile.name
+        initial['email'] = user.email
+        initial['city'] = user.profile.city
+        initial['saudi_national'] = user.extended_profile.saudi_national
+        initial['organization'] = user.extended_profile.company
+        return initial

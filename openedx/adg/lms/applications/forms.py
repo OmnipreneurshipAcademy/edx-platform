@@ -66,16 +66,10 @@ class ContactInformationForm(forms.Form):
                 'resume': data.get('resume')
             }
         )
-
-        day = data.get('birth_day')
-        month = data.get('birth_month')
-        year = data.get('birth_year')
-        birth_date = date(int(year), int(month), int(day))
-
         ExtendedUserProfile.objects.update_or_create(
             user=user,
             defaults={
-                'birth_date': birth_date,
+                'birth_date': data.get('birth_date'),
             }
         )
 
@@ -91,7 +85,7 @@ class ContactInformationForm(forms.Form):
         if day and month and year:
             try:
                 birth_date = date(int(year), int(month), int(day))
-            except Exception as e:
+            except ValueError as e:  # pylint: disable=unused-variable
                 raise forms.ValidationError(
                     {'birth_day': [_('Please enter a valid date')]}
                 )
@@ -106,3 +100,5 @@ class ContactInformationForm(forms.Form):
                 raise forms.ValidationError(
                     {'birth_day': [_('Sorry, the age limit for the program is 21-60'), ]}
                 )
+            cleaned_data['birth_date'] = birth_date
+        return cleaned_data

@@ -8,7 +8,8 @@ import pytest
 from django.test import Client, RequestFactory
 from django.urls import reverse
 
-from openedx.adg.lms.applications.views import ApplicationHubView, ApplicationSuccessView
+from openedx.adg.lms.applications.views import ApplicationHubView, ApplicationSuccessView, ContactInformationView
+from openedx.adg.lms.registration_extension.tests.factories import ExtendedUserProfileFactory
 from student.tests.factories import UserFactory
 
 from .constants import PASSWORD, USERNAME
@@ -26,6 +27,7 @@ def user_fixture():
     """
     user = UserFactory(username=USERNAME, password=PASSWORD)
     ApplicationHubFactory(user=user)
+    ExtendedUserProfileFactory(user=user)
     return user
 
 
@@ -282,3 +284,53 @@ def test_get_no_user_application_exists_for_application_success_view(get_request
 
     response = ApplicationSuccessView.as_view()(get_request_for_application_success_view)
     assert response.status_code == 400
+
+
+# ------- Contact Information View tests below -------
+
+
+@pytest.fixture(name='get_request_for_contact_information_view')
+def get_request_for_contact_information_view_fixture(request_factory, user):
+    """
+    Create a get request for the contact_information url.
+    """
+    request = request_factory.get(reverse('application_contact'))
+    request.user = user
+    return request
+
+
+@pytest.mark.django_db
+def test_get_redirects_without_login_for_contact_information_view():
+    """
+    Test the case where an unauthenticated user is redirected to login page or not.
+    """
+    response = Client().get(reverse('application_contact'))
+    assert '/register?next=/application/contact' in response.url
+
+
+@pytest.mark.django_db
+def test_post_user_redirects_without_login_for_contact_information_view():
+    """
+    Test the case where an unauthenticated user is redirected to login page or not.
+    """
+    response = Client().post(reverse('application_contact'))
+    assert '/register?next=/application/contact' in response.url
+
+
+@pytest.mark.django_db
+def test_get_initial_data_for_contact_information_view(get_request_for_contact_information_view):
+    """
+    Test if the context contains all the initial data for the form.
+    """
+    user = get_request_for_contact_information_view.user
+    user.application_hub.set_is_prerequisite_courses_passed()
+    expected_context = {
+        'name': user.profile.name,
+        'email': user.email,
+        'city': user.profile.city,
+        'saudi_national': user.extended_profile.saudi_national,
+        'organization': user.extended_profile.company
+    }
+
+    response = ContactInformationView.as_view()(get_request_for_contact_information_view)
+    assert expected_context == response.context_data['form'].initial

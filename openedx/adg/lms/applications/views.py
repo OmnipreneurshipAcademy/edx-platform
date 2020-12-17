@@ -12,7 +12,7 @@ from openedx.adg.common.course_meta.models import CourseMeta
 from openedx.core.djangoapps.content.course_overviews.models import CourseOverview
 
 from .helpers import send_application_submission_confirmation_email
-from .models import ApplicationHub, BusinessLine
+from .models import ApplicationHub, BusinessLine, UserApplication
 
 
 class RedirectToLoginOrRelevantPageMixin(AccessMixin):
@@ -137,7 +137,7 @@ class ApplicationSuccessView(RedirectToLoginOrRelevantPageMixin, TemplateView):
         return context
 
 
-class CoverLetterView(TemplateView):
+class CoverLetterView(View):
     """
     View enabling the user to select a Business Line and upload or write a cover letter.
     """
@@ -179,8 +179,24 @@ class CoverLetterView(TemplateView):
         """
         business_lines = BusinessLine.objects.all()
 
+        try:
+            user_application = UserApplication.objects.get(user=request.user)
+        except UserApplication.DoesNotExist:
+            user_application = None
+
         context = {
             'business_lines': business_lines,
+            'logo_url': 'http://localhost:18000/media/',
+            'user_application': user_application,
         }
 
         return render(request, self.template_name, context)
+
+    def post(self, request):
+        """
+        Submit user application.
+
+        Returns:
+            HttpResponse object.
+        """
+

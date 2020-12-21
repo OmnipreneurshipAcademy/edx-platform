@@ -14238,7 +14238,7 @@ msgstr "مرحباً بك في  {platform_name} "
 #. untranslated. See http://open.edx.org for more information.
 #: lms/templates/index_overlay.html
 msgid "It works! Powered by Open edX{registered_trademark}"
-msgstr "إنها تعمل! تشغل بواسطة Open edX{علامة تجارية مسجلة}"
+msgstr "إنها تعمل! تشغل بواسطة Open edX{registered_trademark}"
 
 #: lms/templates/invalid_email_key.html
 msgid "Invalid email change key"

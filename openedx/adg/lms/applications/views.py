@@ -1,12 +1,15 @@
 """
 All views for applications app
 """
+from pathlib import Path
+
 from django.contrib.auth.mixins import AccessMixin
 from django.contrib.auth.views import redirect_to_login
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.views import View
 from django.views.generic import TemplateView
+from django.middleware.csrf import get_token
 
 from openedx.adg.common.course_meta.models import CourseMeta
 from openedx.core.djangoapps.content.course_overviews.models import CourseOverview
@@ -137,38 +140,35 @@ class ApplicationSuccessView(RedirectToLoginOrRelevantPageMixin, TemplateView):
         return context
 
 
-class CoverLetterView(View):
+class CoverLetterView(RedirectToLoginOrRelevantPageMixin, View):
     """
     View enabling the user to select a Business Line and upload or write a cover letter.
     """
 
     template_name = 'adg/lms/applications/cover_letter.html'
 
-    # def is_precondition_satisfied(self):
-    #     """
-    #     Checks if a user's application is already submitted or not.
-    #
-    #     Returns:
-    #         Boolean, True or False.
-    #     """
-    #     user_application_hub, _ = ApplicationHub.objects.get_or_create(user=self.request.user)
-    #
-    #     if self.request.method == 'POST':
-    #         return user_application_hub.are_application_pre_reqs_completed()
-    #     else:
-    #         return not user_application_hub.is_application_submitted
-    #
-    # def handle_no_permission(self):
-    #     """
-    #     Redirects on test failure, `is_precondition_satisfied()` returns False.
-    #
-    #     Returns:
-    #         HttpResponse object.
-    #     """
-    #     if self.request.method == 'POST':
-    #         return HttpResponse(status=400)
-    #     else:
-    #         return redirect('application_success')
+    def is_precondition_satisfied(self):
+        """
+        Checks if a user's application is already submitted or not.
+
+        Returns:
+            Boolean, True or False.
+        """
+        user_application_hub, _ = ApplicationHub.objects.get_or_create(user=self.request.user)
+
+        return not user_application_hub.is_written_application_completed
+
+    def handle_no_permission(self):
+        """
+        Redirects on test failure, `is_precondition_satisfied()` returns False.
+
+        Returns:
+            HttpResponse object.
+        """
+        if self.request.method == 'POST':
+            return HttpResponse(status=400)
+        else:
+            return redirect('application_hub')
 
     def get(self, request):
         """
@@ -178,9 +178,11 @@ class CoverLetterView(View):
             HttpResponse object.
         """
         business_lines = BusinessLine.objects.all()
+        file_name = None
 
         try:
             user_application = UserApplication.objects.get(user=request.user)
+            file_name = Path(user_application.cover_letter_file.name).name
         except UserApplication.DoesNotExist:
             user_application = None
 
@@ -188,6 +190,8 @@ class CoverLetterView(View):
             'business_lines': business_lines,
             'logo_url': 'http://localhost:18000/media/',
             'user_application': user_application,
+            'csrf_token': get_token(request),
+            'filename': file_name
         }
 
         return render(request, self.template_name, context)
@@ -199,4 +203,31 @@ class CoverLetterView(View):
         Returns:
             HttpResponse object.
         """
+        user_application, _ = UserApplication.objects.get_or_create(user=request.user)
 
+        if 'business_line' in request.POST and request.POST['business_line']:
+            business_line = BusinessLine.objects.get(id=request.POST['business_line'])
+            user_application.business_line = business_line
+            user_application.save()
+
+        if 'text-coverletter' in request.POST:
+            if request.POST['text-coverletter']:
+                cover_letter_text = request.POST['text-coverletter']
+                user_application.cover_letter = cover_letter_text
+            else:
+                user_application.cover_letter = None
+
+            user_application.cover_letter_file = None
+            user_application.save()
+        elif 'add-coverletter' in request.FILES:
+            cover_letter_file = request.FILES['add-coverletter']
+            user_application.cover_letter_file = cover_letter_file
+            user_application.cover_letter = None
+            user_application.save()
+
+        if request.POST['next'] == 'back':
+            return redirect('application_experience')
+        else:
+            application_hub, _ = ApplicationHub.objects.get_or_create(user=request.user)
+            application_hub.set_is_written_application_completed()
+            return redirect('application_hub')

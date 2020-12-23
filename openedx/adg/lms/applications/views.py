@@ -6,10 +6,10 @@ from pathlib import Path
 from django.contrib.auth.mixins import AccessMixin
 from django.contrib.auth.views import redirect_to_login
 from django.http import HttpResponse
+from django.middleware.csrf import get_token
 from django.shortcuts import redirect, render
 from django.views import View
 from django.views.generic import TemplateView
-from django.middleware.csrf import get_token
 
 from openedx.adg.common.course_meta.models import CourseMeta
 from openedx.core.djangoapps.content.course_overviews.models import CourseOverview

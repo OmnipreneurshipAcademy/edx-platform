@@ -149,7 +149,7 @@ class CoverLetterView(RedirectToLoginOrRelevantPageMixin, View):
 
     def is_precondition_satisfied(self):
         """
-        Checks if a user's application is already submitted or not.
+        Checks if a written application is already submitted or not.
 
         Returns:
             Boolean, True or False.
@@ -160,7 +160,7 @@ class CoverLetterView(RedirectToLoginOrRelevantPageMixin, View):
 
     def handle_no_permission(self):
         """
-        Redirects on test failure, `is_precondition_satisfied()` returns False.
+        Redirects to application hub on get request or returns htt 400 on post request.
 
         Returns:
             HttpResponse object.
@@ -172,7 +172,7 @@ class CoverLetterView(RedirectToLoginOrRelevantPageMixin, View):
 
     def get(self, request):
         """
-        Send the context data i.e a list of business lines.
+        Send the context data for example a list of business lines and saved user_application.
 
         Returns:
             HttpResponse object.

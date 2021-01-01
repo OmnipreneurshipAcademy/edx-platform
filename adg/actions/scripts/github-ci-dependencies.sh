@@ -4,8 +4,8 @@ set -xe
 
 SHORT_DIST="bionic" # Update this if you update ubuntu version
 PIP_VERSION="20.0.2"
-SETUPTOOLS_VERSION="44.1.0"
-WHEEL_VERSION="0.34.2"
+SETUPTOOLS_VERSION="50.3.0"
+WHEEL_VERSION="0.35.1"
 EDX_PPA_KEY_SERVER="keyserver.ubuntu.com"
 EDX_PPA_KEY_ID="B41E5E3969464050"
 

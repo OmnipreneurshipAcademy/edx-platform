@@ -52,8 +52,12 @@ jobs:
 
       - name: Install edx-platform requirements
         run: |
-          pip install -r requirements/edx/testing.txt
-          pip install -r requirements/adg/base.txt
+          pip --version
+          pip show wheel
+          pip show setuptools
+
+          pip install -q --disable-pip-version-check --exists-action w -r requirements/edx/testing.txt
+          pip install -q --disable-pip-version-check --exists-action w -r requirements/adg/base.txt
         if: env.GIT_DIFF && steps.cache-python-requirements.outputs.cache-hit != 'true'
 
       - name: Creating pylint report

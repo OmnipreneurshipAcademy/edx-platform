@@ -46,3 +46,6 @@ def year_choices(from_year=1900, default_title=None):
         choices.insert(0, (None, default_title))
 
     return choices
+
+def a_dummy_function():
+    return None

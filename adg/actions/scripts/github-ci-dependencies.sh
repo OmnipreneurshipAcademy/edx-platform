@@ -74,7 +74,3 @@ fi
 apt-get update -y
 apt-get install -y python3-apt python3-jinja2 build-essential sudo git-core libmysqlclient-dev libffi-dev \
 libssl-dev libxml2-dev libxmlsec1-dev libxmlsec1-openssl
-
-python3 -m pip install --upgrade pip=="${PIP_VERSION}"
-python3 -m pip install setuptools=="${SETUPTOOLS_VERSION}"
-python3 -m pip install wheel=="${WHEEL_VERSION}"

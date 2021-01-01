@@ -140,6 +140,15 @@ class UserApplication(TimeStampedModel):
         verbose_name = _('User Application')
         verbose_name_plural = _('User Applications')
 
+    def save_cover_letter_and_cover_letter_file(self, cover_letter, cover_letter_file):
+        self.cover_letter = cover_letter
+        self.cover_letter_file = cover_letter_file
+        self.save()
+
+    def save_business_line(self, business_line):
+        self.business_line = business_line
+        self.save()
+
     def __str__(self):
         return 'UserApplication {id}, for user {email}'.format(id=self.id, email=self.user.email)
 

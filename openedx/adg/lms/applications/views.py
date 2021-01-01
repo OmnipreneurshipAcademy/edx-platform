@@ -152,7 +152,7 @@ class CoverLetterView(RedirectToLoginOrRelevantPageMixin, View):
         Checks if a written application is already submitted or not.
 
         Returns:
-            Boolean, True or False.
+            bool: True if written application is not completed, False otherwise.
         """
         user_application_hub, _ = ApplicationHub.objects.get_or_create(user=self.request.user)
 
@@ -160,7 +160,7 @@ class CoverLetterView(RedirectToLoginOrRelevantPageMixin, View):
 
     def handle_no_permission(self):
         """
-        Redirects to application hub on get request or returns htt 400 on post request.
+        Redirects to application hub on get request or returns http 400 on post request.
 
         Returns:
             HttpResponse object.
@@ -181,8 +181,9 @@ class CoverLetterView(RedirectToLoginOrRelevantPageMixin, View):
         file_name = None
 
         try:
-            user_application = UserApplication.objects.get(user=request.user)
-            file_name = Path(user_application.cover_letter_file.name).name
+            user_application = request.user.application
+            if user_application.cover_letter_file:
+                file_name = Path(user_application.cover_letter_file.name).name
         except UserApplication.DoesNotExist:
             user_application = None
 
@@ -198,7 +199,7 @@ class CoverLetterView(RedirectToLoginOrRelevantPageMixin, View):
 
     def post(self, request):
         """
-        Submit user application.
+        Submit user application and redirects to application hub or experience depending upon button click.
 
         Returns:
             HttpResponse object.
@@ -207,27 +208,22 @@ class CoverLetterView(RedirectToLoginOrRelevantPageMixin, View):
 
         if 'business_line' in request.POST and request.POST['business_line']:
             business_line = BusinessLine.objects.get(id=request.POST['business_line'])
-            user_application.business_line = business_line
-            user_application.save()
+            user_application.save_business_line(business_line)
 
         if 'text-coverletter' in request.POST:
             if request.POST['text-coverletter']:
                 cover_letter_text = request.POST['text-coverletter']
-                user_application.cover_letter = cover_letter_text
+                user_application.save_cover_letter_and_cover_letter_file(cover_letter_text, None)
             else:
-                user_application.cover_letter = None
+                user_application.save_cover_letter_and_cover_letter_file(None, None)
 
-            user_application.cover_letter_file = None
-            user_application.save()
         elif 'add-coverletter' in request.FILES:
             cover_letter_file = request.FILES['add-coverletter']
-            user_application.cover_letter_file = cover_letter_file
-            user_application.cover_letter = None
-            user_application.save()
+            user_application.save_cover_letter_and_cover_letter_file(None, cover_letter_file)
 
         if request.POST['next'] == 'back':
             return redirect('application_experience')
         else:
-            application_hub, _ = ApplicationHub.objects.get_or_create(user=request.user)
+            application_hub = request.user.application_hub
             application_hub.set_is_written_application_completed()
             return redirect('application_hub')

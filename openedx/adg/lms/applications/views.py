@@ -199,7 +199,7 @@ class CoverLetterView(RedirectToLoginOrRelevantPageMixin, View):
 
     def post(self, request):
         """
-        Submit user application and redirects to application hub or experience depending upon button click.
+        Submit user application and redirect to application hub or experience depending upon button click.
 
         Returns:
             HttpResponse object.
@@ -209,7 +209,6 @@ class CoverLetterView(RedirectToLoginOrRelevantPageMixin, View):
         if 'business_line' in request.POST and request.POST['business_line']:
             business_line = BusinessLine.objects.get(id=request.POST['business_line'])
             user_application.business_line = business_line
-            # user_application.save_business_line(business_line)
 
         if 'text-coverletter' in request.POST:
             if request.POST['text-coverletter']:

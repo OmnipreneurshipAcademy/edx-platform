@@ -208,18 +208,25 @@ class CoverLetterView(RedirectToLoginOrRelevantPageMixin, View):
 
         if 'business_line' in request.POST and request.POST['business_line']:
             business_line = BusinessLine.objects.get(id=request.POST['business_line'])
-            user_application.save_business_line(business_line)
+            user_application.business_line = business_line
+            # user_application.save_business_line(business_line)
 
         if 'text-coverletter' in request.POST:
             if request.POST['text-coverletter']:
                 cover_letter_text = request.POST['text-coverletter']
-                user_application.save_cover_letter_and_cover_letter_file(cover_letter_text, None)
+                user_application.cover_letter = cover_letter_text
             else:
-                user_application.save_cover_letter_and_cover_letter_file(None, None)
+                user_application.cover_letter = None
+
+            user_application.cover_letter_file = None
 
         elif 'add-coverletter' in request.FILES:
             cover_letter_file = request.FILES['add-coverletter']
-            user_application.save_cover_letter_and_cover_letter_file(None, cover_letter_file)
+            user_application.cover_letter = None
+            user_application.cover_letter_file = cover_letter_file
+
+        if 'business_line' in request.POST or 'text-coverletter' in request.POST or 'add-coverletter' in request.FILES:
+            user_application.save()
 
         if request.POST['next'] == 'back':
             return redirect('application_experience')

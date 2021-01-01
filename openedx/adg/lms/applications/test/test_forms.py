@@ -1,28 +1,17 @@
 """
 All tests for applications views
 """
+import os
 from datetime import date, timedelta
-from unittest.mock import Mock
+from unittest.mock import MagicMock
 
 import pytest
 from dateutil.relativedelta import relativedelta
+from django.core.files import File
 
-from openedx.adg.lms.applications.forms import ContactInformationForm
+from openedx.adg.lms.applications.constants import RESUME_FILE_MAX_SIZE
+from openedx.adg.lms.applications.forms import ExtendedUserProfileForm, UserApplicationForm
 from openedx.adg.lms.registration_extension.tests.factories import ExtendedUserProfileFactory
-
-
-def contact_information_dictionary(gender='male', phone_number='00000000', organization='test',
-                                   linkedin_url='', **kwargs):
-    """
-    Initialize the data dictionary for contact information forms
-    """
-    kwargs.update({
-        'gender': gender,
-        'phone_number': phone_number,
-        'organization': organization,
-        'linkedin_url': linkedin_url
-    })
-    return kwargs
 
 
 @pytest.fixture(name='user_extended_profile')
@@ -33,47 +22,75 @@ def user_extended_profile_fixture():
     return ExtendedUserProfileFactory()
 
 
-def test_contact_info_form_with_future_birth_date():
+def birth_date_dictionary(day):
     """
-    Verify that future dates are not allowed in birth_date field
+    Initialize the data dictionary for birth_date of extended profile form
+    """
+    return {
+        'birth_day': day.day,
+        'birth_month': day.month,
+        'birth_year': day.year
+    }
+
+
+def test_extended_user_profile_form_with_future_birth_date():
+    """
+    Validate that future dates are not allowed in birth_date field
     """
     tomorrow = date.today() + timedelta(days=1)
-    data = contact_information_dictionary(birth_day=str(tomorrow.day),
-                                          birth_month=str(tomorrow.month), birth_year=str(tomorrow.year))
-    form = ContactInformationForm(data=data)
+    form = ExtendedUserProfileForm(data=birth_date_dictionary(tomorrow))
     assert not form.is_valid()
 
 
-@pytest.mark.parametrize("age_year , expected", [(21, True), (61, False)])
-def test_contact_info_form_with_birth_date(age_year, expected):
+def test_extended_user_profile_form_with_invalid_date():
     """
-    Verify that birth_date with at least 21 year difference is allowed
+    Validate that future dates are not allowed in birth_date field
+    """
+    data = {
+        'birth_day': 30,
+        'birth_month': 2,
+        'birth_year': 2000
+    }
+    form = ExtendedUserProfileForm(data=data)
+    assert not form.is_valid()
+
+
+@pytest.mark.parametrize('age_year , expected', [(21, True), (61, False)])
+def test_extended_user_profile_form_with_birth_date(age_year, expected):
+    """
+    Validate that birth_date with at least 21 year difference is allowed
     """
     age = date.today() - relativedelta(years=age_year)
-    data = contact_information_dictionary(birth_day=str(age.day),
-                                          birth_month=str(age.month), birth_year=str(age.year))
-    form = ContactInformationForm(data=data)
+    form = ExtendedUserProfileForm(data=birth_date_dictionary(age))
     assert form.is_valid() == expected
 
 
 @pytest.mark.django_db
-def test_contact_info_form_valid_data(user_extended_profile):
+def test_extended_user_profile_form_valid_data(user_extended_profile):
     """
-    Verify that valid data is stored in database successfully
+    Validate that valid data is stored in database successfully
     """
     user = user_extended_profile.user
     birth_date = date.today() - relativedelta(years=30)
-    data = contact_information_dictionary(birth_day=str(birth_date.day),
-                                          birth_month=str(birth_date.month), birth_year=str(birth_date.year))
-    form = ContactInformationForm(data=data)
-    mocked_request = Mock()
+    form = ExtendedUserProfileForm(data=birth_date_dictionary(birth_date))
+    mocked_request = MagicMock()
     mocked_request.user = user
     if form.is_valid():
         form.save(request=mocked_request)
-    user.profile.refresh_from_db()
     user_extended_profile.refresh_from_db()
-    assert data.get('gender') == user.profile.gender
-    assert data.get('phone_number') == user.profile.phone_number
-    assert data.get('organization') == user.application.organization
-    assert data.get('linkedin_url') == user.application.linkedin_url
     assert birth_date == user_extended_profile.birth_date
+
+
+@pytest.mark.parametrize('size , expected', [(RESUME_FILE_MAX_SIZE, True), (RESUME_FILE_MAX_SIZE+1, False)])
+def test_user_application_form_with_resume_size(size, expected):
+    """
+    Validate resume size is less than maximum allowed size
+    """
+    path = 'dummy_file.pdf'
+    with open(path, 'w') as f:
+        mocked_file = File(f)
+    mocked_file.size = size
+    file_dict = {'resume': mocked_file}
+    form = UserApplicationForm(None, files=file_dict)
+    assert form.is_valid() == expected
+    os.remove(path)

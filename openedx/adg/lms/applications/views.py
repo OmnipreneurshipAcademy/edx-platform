@@ -3,19 +3,19 @@ All views for applications app
 """
 from django.contrib.auth.mixins import AccessMixin, LoginRequiredMixin
 from django.contrib.auth.views import redirect_to_login
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import TemplateView
-from django.views.generic.edit import FormView
 
 from openedx.adg.common.course_meta.models import CourseMeta
-from openedx.adg.lms.applications.forms import ContactInformationForm
+from openedx.adg.lms.applications.forms import ExtendedUserProfileForm, UserApplicationForm, UserProfileForm
+from openedx.adg.lms.registration_extension.models import ExtendedUserProfile
 from openedx.core.djangoapps.content.course_overviews.models import CourseOverview
 
 from .helpers import send_application_submission_confirmation_email
-from .models import ApplicationHub
+from .models import ApplicationHub, UserApplication
 
 
 class RedirectToLoginOrRelevantPageMixin(AccessMixin):
@@ -140,31 +140,103 @@ class ApplicationSuccessView(RedirectToLoginOrRelevantPageMixin, TemplateView):
         return context
 
 
-class ContactInformationView(LoginRequiredMixin, FormView):
+class ContactInformationView(LoginRequiredMixin, View):
     """
     View for the contact information of user application
     """
 
-    template_name = 'adg/lms/applications/contact_info.html'
-    form_class = ContactInformationForm
     login_url = '/register'
-    success_url = reverse_lazy('application_experience')
+    template_name = 'adg/lms/applications/contact_info.html'
+    user_profile_form = UserProfileForm()
+    extended_profile_form = ExtendedUserProfileForm()
+    application_form = UserApplicationForm()
 
-    def form_valid(self, form):
-        form.save(request=self.request)
-        if form.cleaned_data.get('resume'):
-            return HttpResponseRedirect(reverse_lazy('application_cover_letter'))
-        return super(ContactInformationView, self).form_valid(form)
+    def get(self, request):
+        """
+        Send the context data to the template for rendering.
 
-    def get_initial(self):
+        Returns:
+            HttpResponse object.
         """
-        Returns the initial data to use for forms on this view.
+        return render(request, self.template_name, self.initialize_forms(request))
+
+    def post(self, request):
         """
-        user = self.request.user
-        initial = super().get_initial()
-        initial['name'] = user.profile.name
-        initial['email'] = user.email
-        initial['city'] = user.profile.city
-        initial['saudi_national'] = user.extended_profile.saudi_national
-        initial['organization'] = user.extended_profile.company
-        return initial
+        Submit user contact information data. If successful, redirects to the experience page.
+        If resume is added, then experience page is skipped and redirect to application cover letter page.
+
+        Returns:
+            HttpResponse object.
+        """
+        forms = self.initialize_forms(request)
+        if self.is_valid():
+
+            self.user_profile_form.save()
+            self.extended_profile_form.save(request=request)
+            instance = self.application_form.save(commit=False)
+            instance.user = request.user
+            if self.application_form.data.get('delete-file') == 'Yes':
+                instance.resume.delete()
+            instance.save()
+
+            if self.application_form.cleaned_data.get('resume'):
+                return redirect(reverse_lazy('application_cover_letter'))
+            return redirect(reverse_lazy('application_experience'))
+        return render(request, self.template_name, forms)
+
+    def is_valid(self):
+        """
+        Send the context data to the template for rendering.
+
+        Returns:
+            Boolean object.
+        """
+        if self.user_profile_form.is_valid() and self.extended_profile_form.is_valid() and \
+                self.application_form.is_valid():
+            return True
+        return False
+
+    def initialize_forms(self, request):
+        """
+        Initialize the form with available data
+
+        Returns:
+            None.
+        """
+        application = UserApplication.objects.filter(user=request.user).first()
+
+        if request.method == 'GET':
+            self.user_profile_form = UserProfileForm(instance=request.user.profile)
+            self.extended_profile_form = ExtendedUserProfileForm(initial=self.get_context_data(request))
+            self.application_form = UserApplicationForm(instance=application)
+
+        if request.method == 'POST':
+            self.user_profile_form = UserProfileForm(request.POST, instance=request.user.profile)
+            self.extended_profile_form = ExtendedUserProfileForm(request.POST)
+            self.application_form = UserApplicationForm(request.POST, request.FILES, instance=application)
+
+        return {
+            'user_profile_form': self.user_profile_form,
+            'extended_profile_form': self.extended_profile_form,
+            'application_form': self.application_form,
+        }
+
+    def get_context_data(self, request):
+        """
+        Initialize the data for extended profile form
+
+        Returns:
+            Dict.
+        """
+        data = {'email': request.user.email}
+        extended_profile = ExtendedUserProfile.objects.filter(user=request.user).first()
+        if extended_profile:
+            data['saudi_national'] = extended_profile.saudi_national
+
+            if extended_profile.birth_date:
+                data.update({
+                    'birth_day': extended_profile.birth_date.day,
+                    'birth_month': extended_profile.birth_date.month,
+                    'birth_year': extended_profile.birth_date.year,
+                })
+        return data

@@ -461,15 +461,14 @@ def test_post_with_business_line_cover_letter_view(cover_letter_view_post_reques
 
 
 @pytest.mark.django_db
-@mock.patch('openedx.adg.lms.applications.views.UserApplication.save_cover_letter_and_cover_letter_file')
+@mock.patch('openedx.adg.lms.applications.views.UserApplication.save')
 @pytest.mark.parametrize('cover_letter', ['cover letter', None], ids=['typed_cover_letter', 'no_cover_letter'])
-def test_post_with_cover_letter_typed_cover_letter_view(mock_save_cover_letter, cover_letter,
-                                                        cover_letter_view_post_request):
+def test_post_with_cover_letter_typed_cover_letter_view(mock_save, cover_letter, cover_letter_view_post_request):
     # pylint: disable=protected-access
     """
     Test the case when the user has typed a cover letter or neither typed a cover letter nor uploaded a file
     """
-    mock_save_cover_letter.return_value = None
+    mock_save.return_value = None
 
     _mutable = cover_letter_view_post_request.POST._mutable
     cover_letter_view_post_request.POST._mutable = True
@@ -484,13 +483,13 @@ def test_post_with_cover_letter_typed_cover_letter_view(mock_save_cover_letter, 
 
 
 @pytest.mark.django_db
-@mock.patch('openedx.adg.lms.applications.views.UserApplication.save_cover_letter_and_cover_letter_file')
-def test_post_with_cover_letter_file_upload_cover_letter_view(mock_save_cover_letter, cover_letter_view_post_request):
+@mock.patch('openedx.adg.lms.applications.views.UserApplication.save')
+def test_post_with_cover_letter_file_upload_cover_letter_view(mock_save, cover_letter_view_post_request):
     # pylint: disable=protected-access
     """
     Test the case when the user has uploaded a file
     """
-    mock_save_cover_letter.return_value = None
+    mock_save.return_value = None
 
     _mutable = cover_letter_view_post_request.POST._mutable
     cover_letter_view_post_request.POST._mutable = True

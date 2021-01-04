@@ -337,29 +337,25 @@ def test_redirection_of_a_user_without_login_for_cover_letter_view(is_get_reques
 
 
 @pytest.mark.django_db
-def test_get_request_of_user_with_complete_application_cover_letter_view(cover_letter_view_get_request):
+@pytest.mark.parametrize('is_get_request', [True, False], ids=['get_request', 'post_request'])
+def test_response_for_user_with_complete_written_application_cover_letter_view(
+    is_get_request, cover_letter_view_get_request, cover_letter_view_post_request
+):
     """
     Test that if a user who has already completed written application sends a get request, they are redirected to the
-    Application Hub page.
+    Application Hub page and if a user sends a post request, http 400 is returned.
     """
-    cover_letter_view_get_request.user.application_hub.set_is_written_application_completed()
+    request = cover_letter_view_get_request if is_get_request else cover_letter_view_post_request
 
-    response = CoverLetterView.as_view()(cover_letter_view_get_request)
+    request.user.application_hub.set_is_written_application_completed()
 
-    assert response.get('Location') == reverse('application_hub')
-    assert response.status_code == 302
+    response = CoverLetterView.as_view()(request)
 
-
-@pytest.mark.django_db
-def test_post_request_of_user_with_complete_application_cover_letter_view(cover_letter_view_post_request):
-    """
-    Test that if a user who has already completed written application sends a post request, http 400 is returned.
-    """
-    cover_letter_view_post_request.user.application_hub.set_is_written_application_completed()
-
-    response = CoverLetterView.as_view()(cover_letter_view_post_request)
-
-    assert response.status_code == 400
+    if is_get_request:
+        assert response.get('Location') == reverse('application_hub')
+        assert response.status_code == 302
+    else:
+        assert response.status_code == 400
 
 
 @pytest.mark.django_db

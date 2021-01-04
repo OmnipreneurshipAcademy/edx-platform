@@ -22,14 +22,14 @@ def user_extended_profile_fixture():
     return ExtendedUserProfileFactory()
 
 
-def birth_date_dictionary(day):
+def birth_date_dictionary(birth_date):
     """
     Initialize the data dictionary for birth_date of extended profile form
     """
     return {
-        'birth_day': day.day,
-        'birth_month': day.month,
-        'birth_year': day.year
+        'birth_day': birth_date.day,
+        'birth_month': birth_date.month,
+        'birth_year': birth_date.year
     }
 
 

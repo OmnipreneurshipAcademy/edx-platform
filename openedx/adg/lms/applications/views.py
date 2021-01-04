@@ -147,9 +147,9 @@ class ContactInformationView(LoginRequiredMixin, View):
 
     login_url = '/register'
     template_name = 'adg/lms/applications/contact_info.html'
-    user_profile_form = UserProfileForm()
-    extended_profile_form = ExtendedUserProfileForm()
-    application_form = UserApplicationForm()
+    user_profile_form = None
+    extended_profile_form = None
+    application_form = None
 
     def get(self, request):
         """
@@ -191,10 +191,8 @@ class ContactInformationView(LoginRequiredMixin, View):
         Returns:
             Boolean object.
         """
-        if self.user_profile_form.is_valid() and self.extended_profile_form.is_valid() and \
-                self.application_form.is_valid():
-            return True
-        return False
+        return (self.user_profile_form.is_valid() and self.extended_profile_form.is_valid()
+                and self.application_form.is_valid())
 
     def initialize_forms(self, request):
         """
@@ -210,7 +208,7 @@ class ContactInformationView(LoginRequiredMixin, View):
             self.extended_profile_form = ExtendedUserProfileForm(initial=self.get_context_data(request))
             self.application_form = UserApplicationForm(instance=application)
 
-        if request.method == 'POST':
+        elif request.method == 'POST':
             self.user_profile_form = UserProfileForm(request.POST, instance=request.user.profile)
             self.extended_profile_form = ExtendedUserProfileForm(request.POST)
             self.application_form = UserApplicationForm(request.POST, request.FILES, instance=application)
@@ -228,15 +226,15 @@ class ContactInformationView(LoginRequiredMixin, View):
         Returns:
             Dict.
         """
-        data = {'email': request.user.email}
+        context = {'email': request.user.email}
         extended_profile = ExtendedUserProfile.objects.filter(user=request.user).first()
         if extended_profile:
-            data['saudi_national'] = extended_profile.saudi_national
+            context['saudi_national'] = extended_profile.saudi_national
 
             if extended_profile.birth_date:
-                data.update({
+                context.update({
                     'birth_day': extended_profile.birth_date.day,
                     'birth_month': extended_profile.birth_date.month,
                     'birth_year': extended_profile.birth_date.year,
                 })
-        return data
+        return context

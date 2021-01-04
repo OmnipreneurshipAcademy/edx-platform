@@ -12,7 +12,7 @@ from django.urls import reverse
 from openedx.adg.lms.applications.views import ApplicationHubView, ApplicationSuccessView, CoverLetterView
 from student.tests.factories import UserFactory
 
-from .constants import PASSWORD, USERNAME
+from .constants import COVER_LETTER_REDIRECT_LOGIN_URL, PASSWORD, USERNAME
 from .factories import ApplicationHubFactory, BusinessLineFactory, UserApplicationFactory
 
 
@@ -323,27 +323,24 @@ def cover_letter_view_post_request_fixture(request_factory, user):
 
 
 @pytest.mark.django_db
-def test_get_redirects_without_login_for_cover_letter_view():
+@pytest.mark.parametrize('is_get_request', [True, False], ids=['get_request', 'post_request'])
+def test_redirection_of_a_user_without_login_for_cover_letter_view(is_get_request):
     """
-    Test the case where an unauthenticated user is redirected to login page or not on sending a get request.
+    Test if an unauthenticated user is redirected to login page on sending a get or post request.
     """
-    response = Client().get(reverse('application_cover_letter'))
-    assert '/login?next=/application/cover_letter' in response.url
+    if is_get_request:
+        response = Client().get(reverse('application_cover_letter'))
+    else:
+        response = Client().post(reverse('application_cover_letter'))
 
-
-@pytest.mark.django_db
-def test_post_redirects_without_login_for_cover_letter_view():
-    """
-    Test the case where an unauthenticated user is redirected to login page or not on sending a post request.
-    """
-    response = Client().post(reverse('application_cover_letter'))
-    assert '/login?next=/application/cover_letter' in response.url
+    assert COVER_LETTER_REDIRECT_LOGIN_URL in response.url
 
 
 @pytest.mark.django_db
 def test_get_request_of_user_with_complete_application_cover_letter_view(cover_letter_view_get_request):
     """
-    Test the case where a user who has already completed written application sends a get request.
+    Test that if a user who has already completed written application sends a get request, they are redirected to the
+    Application Hub page.
     """
     cover_letter_view_get_request.user.application_hub.set_is_written_application_completed()
 
@@ -356,7 +353,7 @@ def test_get_request_of_user_with_complete_application_cover_letter_view(cover_l
 @pytest.mark.django_db
 def test_post_request_of_user_with_complete_application_cover_letter_view(cover_letter_view_post_request):
     """
-    Test the case where a user who has already completed written application sends a post request.
+    Test that if a user who has already completed written application sends a post request, http 400 is returned.
     """
     cover_letter_view_post_request.user.application_hub.set_is_written_application_completed()
 
@@ -369,20 +366,28 @@ def test_post_request_of_user_with_complete_application_cover_letter_view(cover_
 @mock.patch('openedx.adg.lms.applications.views.render')
 @mock.patch('openedx.adg.lms.applications.views.get_token')
 @mock.patch('openedx.adg.lms.applications.views.BusinessLine.objects.all')
-def test_get_with_no_user_application_cover_letter_view(mock_business_lines, mock_get_token, mock_render,
-                                                        cover_letter_view_get_request):
+@pytest.mark.parametrize('is_user_application_saved', [True, False], ids=['user_application', 'no_user_application'])
+def test_get_with_or_without_user_application_cover_letter_view(
+    mock_business_lines, mock_get_token, mock_render, cover_letter_view_get_request, is_user_application_saved
+):
     """
-    Test the case when the user has not yet saved the user application.
+    Test that if a user has not yet saved the user application then the class view sends None and if a user has a saved
+    instance of user application then the view sends that instance in user application in context upon get request.
     """
     mock_get_token.return_value = 'csrf_token'
     mock_business_lines.return_value = 'business_lines'
+
+    if is_user_application_saved:
+        user_application = UserApplicationFactory(user=cover_letter_view_get_request.user)
+    else:
+        user_application = None
 
     CoverLetterView.as_view()(cover_letter_view_get_request)
 
     expected_context = {
         'business_lines': 'business_lines',
         'logo_url': 'http://localhost:18000/media/',
-        'user_application': None,
+        'user_application': user_application,
         'csrf_token': 'csrf_token',
         'filename': None
     }
@@ -393,41 +398,13 @@ def test_get_with_no_user_application_cover_letter_view(mock_business_lines, moc
 
 
 @pytest.mark.django_db
-@mock.patch('openedx.adg.lms.applications.views.render')
-@mock.patch('openedx.adg.lms.applications.views.get_token')
-@mock.patch('openedx.adg.lms.applications.views.BusinessLine.objects.all')
-def test_get_with_user_application_cover_letter_view(mock_business_lines, mock_get_token, mock_render,
-                                                     cover_letter_view_get_request):
-    """
-    Test the case when the user has already saved the user application.
-    """
-    mock_get_token.return_value = 'csrf_token'
-    mock_business_lines.return_value = 'business_lines'
-
-    UserApplicationFactory(user=cover_letter_view_get_request.user)
-
-    CoverLetterView.as_view()(cover_letter_view_get_request)
-
-    expected_context = {
-        'business_lines': 'business_lines',
-        'logo_url': 'http://localhost:18000/media/',
-        'user_application': cover_letter_view_get_request.user.application,
-        'csrf_token': 'csrf_token',
-        'filename': None
-    }
-
-    mock_render.assert_called_once_with(
-        cover_letter_view_get_request, 'adg/lms/applications/cover_letter.html', expected_context
-    )
-
-
-@pytest.mark.django_db
-@pytest.mark.parametrize('btn_next, template', [('back', 'application_experience'), ('submit', 'application_hub')],
-                         ids=['back', 'submit'])
+@pytest.mark.parametrize(
+    'btn_next, template', [('back', 'application_experience'), ('submit', 'application_hub')], ids=['back', 'submit']
+)
 def test_post_back_or_submit_written_application_cover_letter_view(btn_next, template, cover_letter_view_post_request):
     # pylint: disable=protected-access
     """
-    Test the case when the user either clicks on back or submit button
+    Test that the user is redirected to experience on clicking back and to application hub on submitting.
     """
     _mutable = cover_letter_view_post_request.POST._mutable
     cover_letter_view_post_request.POST._mutable = True
@@ -462,39 +439,27 @@ def test_post_with_business_line_cover_letter_view(cover_letter_view_post_reques
 
 @pytest.mark.django_db
 @mock.patch('openedx.adg.lms.applications.views.UserApplication.save')
-@pytest.mark.parametrize('cover_letter', ['cover letter', None], ids=['typed_cover_letter', 'no_cover_letter'])
-def test_post_with_cover_letter_typed_cover_letter_view(mock_save, cover_letter, cover_letter_view_post_request):
+@pytest.mark.parametrize(
+    'cover_letter, attribute',
+    [
+        (None, 'text-coverletter'),
+        ('cover letter', 'text-coverletter'),
+        (SimpleUploadedFile('cover_letter.png', b'<svg><rect width="50" height="100"/></svg>'), 'add-coverletter')
+    ],
+    ids=['no_cover_letter', 'typed_cover_letter', 'cover_letter_file'])
+def test_post_with_no_cover_letter_typed_cover_letter_and_file_cover_letter_view(
+    mock_save, cover_letter, attribute, cover_letter_view_post_request
+):
     # pylint: disable=protected-access
     """
-    Test the case when the user has typed a cover letter or neither typed a cover letter nor uploaded a file
+    Test that whether the user has neither typed a cover letter nor uploaded a file or typed a cover letter or uploaded
+    a file, in each case the information is updated in the database
     """
     mock_save.return_value = None
 
     _mutable = cover_letter_view_post_request.POST._mutable
     cover_letter_view_post_request.POST._mutable = True
-    cover_letter_view_post_request.POST['text-coverletter'] = cover_letter
-    cover_letter_view_post_request.POST['next'] = 'back'
-    cover_letter_view_post_request.POST._mutable = _mutable
-
-    response = CoverLetterView.as_view()(cover_letter_view_post_request)
-
-    assert response.get('Location') == reverse('application_experience')
-    assert response.status_code == 302
-
-
-@pytest.mark.django_db
-@mock.patch('openedx.adg.lms.applications.views.UserApplication.save')
-def test_post_with_cover_letter_file_upload_cover_letter_view(mock_save, cover_letter_view_post_request):
-    # pylint: disable=protected-access
-    """
-    Test the case when the user has uploaded a file
-    """
-    mock_save.return_value = None
-
-    _mutable = cover_letter_view_post_request.POST._mutable
-    cover_letter_view_post_request.POST._mutable = True
-    cover_letter_view_post_request.FILES['add-coverletter'] = SimpleUploadedFile(
-        'cover_letter.png', b'<svg><rect width="50" height="100"/></svg>')
+    cover_letter_view_post_request.POST[attribute] = cover_letter
     cover_letter_view_post_request.POST['next'] = 'back'
     cover_letter_view_post_request.POST._mutable = _mutable
 

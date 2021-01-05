@@ -140,7 +140,7 @@ class ApplicationSuccessView(RedirectToLoginOrRelevantPageMixin, TemplateView):
         return context
 
 
-class ContactInformationView(LoginRequiredMixin, View):
+class ContactInformationView(RedirectToLoginOrRelevantPageMixin, View):
     """
     View for the contact information of user application
     """
@@ -150,6 +150,29 @@ class ContactInformationView(LoginRequiredMixin, View):
     user_profile_form = None
     extended_profile_form = None
     application_form = None
+
+    def is_precondition_satisfied(self):
+        """
+        Checks if a written application is already submitted or not.
+
+        Returns:
+            bool: True if written application is not completed, False otherwise.
+        """
+        user_application_hub, _ = ApplicationHub.objects.get_or_create(user=self.request.user)
+
+        return not user_application_hub.is_written_application_completed
+
+    def handle_no_permission(self):
+        """
+        Redirects to application hub on get request or returns http 400 on post request.
+
+        Returns:
+            HttpResponse object.
+        """
+        if self.request.method == 'POST':
+            return HttpResponse(status=400)
+        else:
+            return redirect('application_hub')
 
     def get(self, request):
         """
@@ -230,6 +253,7 @@ class ContactInformationView(LoginRequiredMixin, View):
         extended_profile = ExtendedUserProfile.objects.filter(user=request.user).first()
         if extended_profile:
             context['saudi_national'] = extended_profile.saudi_national
+            context['organization'] = extended_profile.company
 
             if extended_profile.birth_date:
                 context.update({

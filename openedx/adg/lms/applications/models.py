@@ -148,8 +148,8 @@ class UserApplication(TimeStampedModel):
             current = UserApplication.objects.get(pk=self.pk)
             if current.resume != self.resume:
                 current.resume.delete(save=False)
-            if current.cover_letter != self.cover_letter:
-                current.cover_letter.delete(save=False)
+            if current.cover_letter_file != self.cover_letter_file:
+                current.cover_letter_file.delete(save=False)
         super(UserApplication, self).save(*args, **kwargs)
 
 

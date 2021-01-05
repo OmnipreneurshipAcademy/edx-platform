@@ -49,3 +49,20 @@ def year_choices(from_year=1900, default_title=None):
 
 def a_dummy_function():
     return None
+
+def day_choices(default_title=None):
+    """
+    Create choices for all the day of a month, in ascending order. i.e. [(1, 1) ... (31, 31)]
+
+    Args:
+        default_title (str): The default title i.e. Day
+
+    Returns:
+        list: Choice in a list of tuples
+    """
+    choices = [(day, day) for day in range(1, 32)]
+
+    if default_title:
+        choices.insert(0, (None, default_title))
+
+    return choices

@@ -12,6 +12,7 @@ class Migration(migrations.Migration):
     dependencies = [
         ('applications', '0003_user_application_update_business_line'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
+        ('applications', '0003_user_application_update_business_line'),
     ]
 
     operations = [

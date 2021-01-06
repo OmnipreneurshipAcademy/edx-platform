@@ -1,0 +1,72 @@
+name: Detect Transifex translations
+
+on:
+  pull_request:
+    types: [ opened, synchronize, reopened ]
+    branches:
+      - develop
+
+jobs:
+  generate-translations:
+    name: Detect changed source and generate Transifex translations
+    runs-on: ubuntu-18.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.5
+        if: env.GIT_DIFF
+
+      - name: Cache python requirements
+        uses: actions/cache@v2
+        id: cache-python-requirements
+        with:
+          path: /opt/hostedtoolcache/Python/
+          key: |
+            ${{ hashFiles('requirements/adg/base.txt') }}
+        if: env.GIT_DIFF
+
+      - name: Install requirements
+        run: |
+          sudo apt-get install libxmlsec1-dev pkg-config
+          sudo apt-get update
+          python3 -m pip install pip==20.0.2
+          python3 -m pip install setuptools==50.3.0
+          python3 -m pip install wheel==0.35.1
+          pip install --disable-pip-version-check --exists-action w -r requirements/adg/base.txt
+        if: env.GIT_DIFF && steps.cache-python-requirements.outputs.cache-hit != 'true'
+
+      - name: Clone adg-edx-theme repo
+        uses: actions/checkout@v2
+        with:
+          repository: OmnipreneurshipAcademy/adg-edx-theme
+          path: ./themes
+          token: ${{ secrets.ADG_THEME_ACCESS_TOKEN }}
+
+      - name: Pull latest translations
+        id: pull-latest-translations
+        if: env.GIT_DIFF
+        with:
+          TX_TOKEN: ${{ secrets.TX_TOKEN }}
+        run: tx pull -l ar
+
+      - name: Generate translations for changed source
+        id: generate-new-translations
+        if: env.GIT_DIFF
+        with:
+          TX_TOKEN: ${{ secrets.TX_TOKEN }}
+        run: make extract_translations
+
+      - name: Merge all the translations
+        id: merge-translations
+        if: env.GIT_DIFF
+        run: msgmerge conf/locale/ar/LC_MESSAGES/django-partial.po conf/locale/en/LC_MESSAGES/django-partial.po --update && msgmerge conf/locale/ar/LC_MESSAGES/django-partial.po conf/locale/en/LC_MESSAGES/django-partial.po --update && msgmerge conf/locale/ar/LC_MESSAGES/django-studio.po conf/locale/en/LC_MESSAGES/django-studio.po --update && msgmerge conf/locale/ar/LC_MESSAGES/djangojs-partial.po conf/locale/en/LC_MESSAGES/djangojs-partial.po --update && msgmerge conf/locale/ar/LC_MESSAGES/djangojs-studio.po conf/locale/en/LC_MESSAGES/djangojs-studio.po --update && msgmerge conf/locale/ar/LC_MESSAGES/mako.po conf/locale/en/LC_MESSAGES/mako.po --update && msgmerge conf/locale/ar/LC_MESSAGES/mako-studio.po conf/locale/en/LC_MESSAGES/mako-studio.po --update && msgmerge conf/locale/ar/LC_MESSAGES/underscore.po conf/locale/en/LC_MESSAGES/underscore.po --update && msgmerge conf/locale/ar/LC_MESSAGES/underscore-studio.po conf/locale/en/LC_MESSAGES/underscore-studio.po --update && msgmerge conf/locale/ar/LC_MESSAGES/wiki.po conf/locale/en/LC_MESSAGES/wiki.po --update
+
+      - name: Generate i18n files
+        id: generate-i18n-files
+        if: env.GIT_DIFF
+        run: paver i18n_fastgenerate

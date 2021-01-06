@@ -3,7 +3,7 @@ All views for applications app
 """
 from pathlib import Path
 
-from django.contrib.auth.mixins import AccessMixin, LoginRequiredMixin
+from django.contrib.auth.mixins import AccessMixin
 from django.contrib.auth.views import redirect_to_login
 from django.http import HttpResponse
 from django.middleware.csrf import get_token
@@ -11,6 +11,7 @@ from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import TemplateView
+from rest_framework.status import HTTP_400_BAD_REQUEST
 
 from openedx.adg.common.course_meta.models import CourseMeta
 from openedx.adg.lms.applications.forms import ExtendedUserProfileForm, UserApplicationForm, UserProfileForm
@@ -143,7 +144,7 @@ class ApplicationSuccessView(RedirectToLoginOrRelevantPageMixin, TemplateView):
         return context
 
 
-class ContactInformationView(LoginRequiredMixin, View):
+class ContactInformationView(RedirectToLoginOrRelevantPageMixin, View):
     """
     View for the contact information of user application
     """
@@ -153,6 +154,29 @@ class ContactInformationView(LoginRequiredMixin, View):
     user_profile_form = None
     extended_profile_form = None
     application_form = None
+
+    def is_precondition_satisfied(self):
+        """
+        Checks if a written application is already submitted or not.
+
+        Returns:
+            bool: True if written application is not completed, False otherwise.
+        """
+        user_application_hub, _ = ApplicationHub.objects.get_or_create(user=self.request.user)
+
+        return not user_application_hub.is_written_application_completed
+
+    def handle_no_permission(self):
+        """
+        Redirects to application hub on get request or returns http 400 on post request.
+
+        Returns:
+            HttpResponse object.
+        """
+        if self.request.method == 'POST':
+            return HttpResponse(status=HTTP_400_BAD_REQUEST)
+        else:
+            return redirect('application_hub')
 
     def get(self, request):
         """
@@ -233,6 +257,7 @@ class ContactInformationView(LoginRequiredMixin, View):
         extended_profile = ExtendedUserProfile.objects.filter(user=request.user).first()
         if extended_profile:
             context['saudi_national'] = extended_profile.saudi_national
+            context['organization'] = extended_profile.company
 
             if extended_profile.birth_date:
                 context.update({

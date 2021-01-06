@@ -50,14 +50,14 @@ jobs:
       - name: Pull latest translations
         id: pull-latest-translations
         if: env.GIT_DIFF
-        with:
+        env:
           TX_TOKEN: ${{ secrets.TX_TOKEN }}
         run: tx pull -l ar
 
       - name: Generate translations for changed source
         id: generate-new-translations
         if: env.GIT_DIFF
-        with:
+        env:
           TX_TOKEN: ${{ secrets.TX_TOKEN }}
         run: make extract_translations
 

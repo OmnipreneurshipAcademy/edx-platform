@@ -40,15 +40,8 @@ jobs:
           pip install --disable-pip-version-check --exists-action w -r requirements/adg/base.txt
         if: env.GIT_DIFF && steps.cache-python-requirements.outputs.cache-hit != 'true'
 
-      - name: Clone adg-edx-theme repo
-        uses: actions/checkout@v2
-        with:
-          repository: OmnipreneurshipAcademy/adg-edx-theme
-          path: ./themes
-          token: ${{ secrets.ADG_THEME_ACCESS_TOKEN }}
-
       - name: Push new tranlations to Transifex
         id: push_generated_translations
-        with:
+        env:
           TX_TOKEN: ${{ secrets.TX_TOKEN }}
         run: tx push -s -t

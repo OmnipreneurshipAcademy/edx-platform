@@ -1,13 +1,14 @@
 """
 All views for applications app
 """
-from django.contrib.auth.mixins import AccessMixin, LoginRequiredMixin
+from django.contrib.auth.mixins import AccessMixin
 from django.contrib.auth.views import redirect_to_login
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import TemplateView
+from rest_framework.status import HTTP_400_BAD_REQUEST
 
 from openedx.adg.common.course_meta.models import CourseMeta
 from openedx.adg.lms.applications.forms import ExtendedUserProfileForm, UserApplicationForm, UserProfileForm
@@ -170,7 +171,7 @@ class ContactInformationView(RedirectToLoginOrRelevantPageMixin, View):
             HttpResponse object.
         """
         if self.request.method == 'POST':
-            return HttpResponse(status=400)
+            return HttpResponse(status=HTTP_400_BAD_REQUEST)
         else:
             return redirect('application_hub')
 

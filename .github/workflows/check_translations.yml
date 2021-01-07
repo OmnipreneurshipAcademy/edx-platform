@@ -45,6 +45,7 @@ jobs:
         with:
           repository: OmnipreneurshipAcademy/adg-edx-theme
           path: ./themes
+          ref: ${{ github.head_ref }}
           token: ${{ secrets.ADG_THEME_ACCESS_TOKEN }}
 
       - name: Pull latest translations

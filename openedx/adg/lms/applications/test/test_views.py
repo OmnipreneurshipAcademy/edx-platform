@@ -13,7 +13,7 @@ from openedx.adg.lms.applications.views import ApplicationHubView, ApplicationSu
 from openedx.adg.lms.registration_extension.tests.factories import ExtendedUserProfileFactory
 from student.tests.factories import UserFactory
 
-from .constants import COVER_LETTER_REDIRECT_LOGIN_URL, PASSWORD, USERNAME
+from .constants import COVER_LETTER_REDIRECT_URL, PASSWORD, USERNAME
 from .factories import ApplicationHubFactory, BusinessLineFactory, UserApplicationFactory
 
 
@@ -114,7 +114,8 @@ def test_get_initial_application_state_for_application_hub_view(mock_render, app
 @pytest.mark.django_db
 @mock.patch('openedx.adg.lms.applications.views.render')
 def test_get_written_application_completed_state_for_application_hub_view(
-    mock_render, application_hub_view_get_request):
+    mock_render, application_hub_view_get_request
+):
     """
     Test the case where the user has completed the written application but not the pre_req courses.
     """
@@ -192,7 +193,8 @@ def test_post_logged_in_user_without_required_objectives_completed_for_applicati
 @pytest.mark.django_db
 @mock.patch('openedx.adg.lms.applications.views.send_application_submission_confirmation_email')
 def test_post_logged_in_user_with_required_objectives_completed_to_application_hub_view(
-    mock_send_mail, user, logged_in_client):
+    mock_send_mail, user, logged_in_client
+):
     """
     Test the case where an authenticated user, with all the required objectives completed, hits the url.
     """
@@ -366,7 +368,7 @@ def test_redirection_of_a_user_without_login_for_cover_letter_view(is_get_reques
     else:
         response = Client().post(reverse('application_cover_letter'))
 
-    assert COVER_LETTER_REDIRECT_LOGIN_URL in response.url
+    assert COVER_LETTER_REDIRECT_URL in response.url
 
 
 @pytest.mark.django_db
@@ -415,7 +417,6 @@ def test_get_with_or_without_user_application_cover_letter_view(
 
     expected_context = {
         'business_lines': 'business_lines',
-        'logo_url': 'http://localhost:18000/media/',
         'user_application': user_application,
         'csrf_token': 'csrf_token',
         'filename': None
@@ -467,7 +468,6 @@ def test_post_with_business_line_cover_letter_view(cover_letter_view_post_reques
 
 
 @pytest.mark.django_db
-@mock.patch('openedx.adg.lms.applications.views.UserApplication.save')
 @pytest.mark.parametrize(
     'cover_letter, attribute',
     [
@@ -477,18 +477,21 @@ def test_post_with_business_line_cover_letter_view(cover_letter_view_post_reques
     ],
     ids=['no_cover_letter', 'typed_cover_letter', 'cover_letter_file'])
 def test_post_with_no_cover_letter_typed_cover_letter_and_file_cover_letter_view(
-    mock_save, cover_letter, attribute, cover_letter_view_post_request
+    cover_letter, attribute, cover_letter_view_post_request
 ):
     # pylint: disable=protected-access
     """
     Test that whether the user has neither typed a cover letter nor uploaded a file or typed a cover letter or uploaded
     a file, in each case the information is updated in the database
     """
-    mock_save.return_value = None
-
     _mutable = cover_letter_view_post_request.POST._mutable
     cover_letter_view_post_request.POST._mutable = True
-    cover_letter_view_post_request.POST[attribute] = cover_letter
+
+    if attribute == 'text-coverletter':
+        cover_letter_view_post_request.POST[attribute] = cover_letter
+    else:
+        cover_letter_view_post_request.FILES[attribute] = cover_letter
+
     cover_letter_view_post_request.POST['next'] = 'back'
     cover_letter_view_post_request.POST._mutable = _mutable
 

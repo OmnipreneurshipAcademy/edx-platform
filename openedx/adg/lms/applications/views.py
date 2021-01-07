@@ -274,6 +274,7 @@ class CoverLetterView(RedirectToLoginOrRelevantPageMixin, View):
     """
 
     template_name = 'adg/lms/applications/cover_letter.html'
+    login_url = '/register'
 
     def is_precondition_satisfied(self):
         """
@@ -317,7 +318,6 @@ class CoverLetterView(RedirectToLoginOrRelevantPageMixin, View):
 
         context = {
             'business_lines': business_lines,
-            'logo_url': 'http://localhost:18000/media/',
             'user_application': user_application,
             'csrf_token': get_token(request),
             'filename': file_name
@@ -343,13 +343,13 @@ class CoverLetterView(RedirectToLoginOrRelevantPageMixin, View):
                 cover_letter_text = request.POST['text-coverletter']
                 user_application.cover_letter = cover_letter_text
             else:
-                user_application.cover_letter = None
+                user_application.cover_letter = ''
 
             user_application.cover_letter_file = None
 
         elif 'add-coverletter' in request.FILES:
             cover_letter_file = request.FILES['add-coverletter']
-            user_application.cover_letter = None
+            user_application.cover_letter = ''
             user_application.cover_letter_file = cover_letter_file
 
         if 'business_line' in request.POST or 'text-coverletter' in request.POST or 'add-coverletter' in request.FILES:

@@ -64,17 +64,7 @@ jobs:
       - name: Merge all the translations
         id: merge-translations
         if: env.GIT_DIFF
-        run: |
-        msgmerge conf/locale/ar/LC_MESSAGES/django-partial.po conf/locale/en/LC_MESSAGES/django-partial.po --update
-          && msgmerge conf/locale/ar/LC_MESSAGES/django-partial.po conf/locale/en/LC_MESSAGES/django-partial.po --update
-          && msgmerge conf/locale/ar/LC_MESSAGES/django-studio.po conf/locale/en/LC_MESSAGES/django-studio.po --update
-          && msgmerge conf/locale/ar/LC_MESSAGES/djangojs-partial.po conf/locale/en/LC_MESSAGES/djangojs-partial.po --update
-          && msgmerge conf/locale/ar/LC_MESSAGES/djangojs-studio.po conf/locale/en/LC_MESSAGES/djangojs-studio.po --update
-          && msgmerge conf/locale/ar/LC_MESSAGES/mako.po conf/locale/en/LC_MESSAGES/mako.po --update
-          && msgmerge conf/locale/ar/LC_MESSAGES/mako-studio.po conf/locale/en/LC_MESSAGES/mako-studio.po --update
-          && msgmerge conf/locale/ar/LC_MESSAGES/underscore.po conf/locale/en/LC_MESSAGES/underscore.po --update
-          && msgmerge conf/locale/ar/LC_MESSAGES/underscore-studio.po conf/locale/en/LC_MESSAGES/underscore-studio.po --update
-          && msgmerge conf/locale/ar/LC_MESSAGES/wiki.po conf/locale/en/LC_MESSAGES/wiki.po --update
+        run: msgmerge conf/locale/ar/LC_MESSAGES/django-partial.po conf/locale/en/LC_MESSAGES/django-partial.po --update && msgmerge conf/locale/ar/LC_MESSAGES/django-partial.po conf/locale/en/LC_MESSAGES/django-partial.po --update && msgmerge conf/locale/ar/LC_MESSAGES/django-studio.po conf/locale/en/LC_MESSAGES/django-studio.po --update && msgmerge conf/locale/ar/LC_MESSAGES/djangojs-partial.po conf/locale/en/LC_MESSAGES/djangojs-partial.po --update && msgmerge conf/locale/ar/LC_MESSAGES/djangojs-studio.po conf/locale/en/LC_MESSAGES/djangojs-studio.po --update && msgmerge conf/locale/ar/LC_MESSAGES/mako.po conf/locale/en/LC_MESSAGES/mako.po --update && msgmerge conf/locale/ar/LC_MESSAGES/mako-studio.po conf/locale/en/LC_MESSAGES/mako-studio.po --update && msgmerge conf/locale/ar/LC_MESSAGES/underscore.po conf/locale/en/LC_MESSAGES/underscore.po --update && msgmerge conf/locale/ar/LC_MESSAGES/underscore-studio.po conf/locale/en/LC_MESSAGES/underscore-studio.po --update && msgmerge conf/locale/ar/LC_MESSAGES/wiki.po conf/locale/en/LC_MESSAGES/wiki.po --update
 
       - name: Generate i18n files
         id: generate-i18n-files

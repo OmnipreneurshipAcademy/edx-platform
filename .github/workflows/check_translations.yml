@@ -76,11 +76,11 @@ jobs:
         uses: EndBug/add-and-commit@v6
         with:
           message: 'Add changed translation files'
-          add: ['conf/locale/ar/LC_MESSAGES/django.mo',
-                'conf/locale/ar/LC_MESSAGES/django.po',
-                'conf/locale/ar/LC_MESSAGES/djangojs.po',
-                'conf/locale/ar/LC_MESSAGES/djangojs.mo',
-                'lms/static/js/i18n/ar/djangojs.js']
+          add: "['conf/locale/ar/LC_MESSAGES/django.mo',
+                 'conf/locale/ar/LC_MESSAGES/django.po',
+                 'conf/locale/ar/LC_MESSAGES/djangojs.po',
+                 'conf/locale/ar/LC_MESSAGES/djangojs.mo',
+                 'lms/static/js/i18n/ar/djangojs.js']"
           push: true
           token: ${{ secrets.GITHUB_TOKEN }}
           signoff: true

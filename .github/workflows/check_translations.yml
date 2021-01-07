@@ -42,6 +42,7 @@ jobs:
 
       - name: Clone adg-edx-theme repo
         uses: actions/checkout@v2
+        continue-on-error: true
         with:
           repository: OmnipreneurshipAcademy/adg-edx-theme
           path: ./themes

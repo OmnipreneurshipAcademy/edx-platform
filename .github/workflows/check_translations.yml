@@ -19,7 +19,12 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: 3.5
-        if: env.GIT_DIFF
+
+      - name: Add translation requirements file
+        run: |
+          touch requirements/adg/translation.txt
+          echo 'paver==1.3.4' >> requirements/adg/translation.txt
+          echo 'transifex-client==0.13.4' >> requirements/adg/translation.txt
 
       - name: Cache python requirements
         uses: actions/cache@v2
@@ -27,20 +32,17 @@ jobs:
         with:
           path: /opt/hostedtoolcache/Python/
           key: |
-            ${{ hashFiles('requirements/adg/base.txt') }}
-        if: env.GIT_DIFF
+            ${{ hashFiles('requirements/adg/translation.txt') }}
 
       - name: Install requirements
-        if: env.GIT_DIFF && steps.cache-python-requirements.outputs.cache-hit != 'true'
+        if: steps.cache-python-requirements.outputs.cache-hit != 'true'
         run: |
           sudo apt-get install libxmlsec1-dev pkg-config
           sudo apt-get update
           python3 -m pip install pip==20.0.2
           python3 -m pip install setuptools==50.3.0
           python3 -m pip install wheel==0.35.1
-          pip install --disable-pip-version-check --exists-action w -r requirements/adg/base.txt
-          pip install --disable-pip-version-check transifex-client==0.13.4
-          pip install --disable-pip-version-check paver==1.3.4
+          pip install --disable-pip-version-check --exists-action w -r requirements/adg/translation.txt
 
       - name: Clone adg-edx-theme repo
         uses: actions/checkout@v2
@@ -84,7 +86,6 @@ jobs:
           push: true
           token: ${{ secrets.GITHUB_TOKEN }}
           signoff: true
-        if: env.GIT_DIFF
 
       - name: Post progress report on PR
         uses: mshick/add-pr-comment@v1

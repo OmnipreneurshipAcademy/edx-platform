@@ -37,6 +37,7 @@ jobs:
           echo 'watchdog==0.10.2' >> requirements/adg/translations.txt
           echo 'python-memcached==1.59' >> requirements/adg/translations.txt
           echo 'lazy==1.4' >> requirements/adg/translations.txt
+          echo 'wrapt==1.11.2' >> requirements/adg/translations.txt
 
       - name: Cache python requirements
         uses: actions/cache@v2

@@ -34,6 +34,7 @@ jobs:
           echo '-e git+https://github.com/edx/django-wiki.git@0.0.27#egg=django-wiki' >> requirements/adg/translations.txt
           echo 'polib==1.1.0' >> requirements/adg/translations.txt
           echo 'edx_proctoring_proctortrack' >> requirements/adg/translations.txt
+          echo 'watchdog==0.10.2' >> requirements/adg/translations.txt
 
       - name: Cache python requirements
         uses: actions/cache@v2

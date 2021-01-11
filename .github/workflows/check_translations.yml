@@ -20,33 +20,13 @@ jobs:
         with:
           python-version: 3.5
 
-      - name: Add translation requirements file
-        run: |
-          touch requirements/adg/translations.txt
-          echo 'paver==1.3.4' >> requirements/adg/translations.txt
-          echo 'transifex-client==0.13.4' >> requirements/adg/translations.txt
-          echo 'edx-i18n-tools==0.5.3' >> requirements/adg/translations.txt
-          echo 'django-statici18n==1.9.0' >> requirements/adg/translations.txt
-          echo 'babel==2.8.0' >> requirements/adg/translations.txt
-          echo 'mako==1.0.2' >> requirements/adg/translations.txt
-          echo 'git+https://github.com/edx/django-babel-underscore.git@37705f7377a4d0a4e673f1431895ce28a8860cd7#egg=django-babel-underscore==0.6.0' >> requirements/adg/translations.txt
-          echo 'git+https://github.com/Zegocover/enmerkar.git@dbc113798aa4beabdfa2d00e6fef48248eb0f185#egg=django-babel==0.6.3.dev0' >> requirements/adg/translations.txt
-          echo '-e git+https://github.com/edx/django-wiki.git@0.0.27#egg=django-wiki' >> requirements/adg/translations.txt
-          echo 'polib==1.1.0' >> requirements/adg/translations.txt
-          echo 'edx_proctoring_proctortrack' >> requirements/adg/translations.txt
-          echo 'watchdog==0.10.2' >> requirements/adg/translations.txt
-          echo 'python-memcached==1.59' >> requirements/adg/translations.txt
-          echo 'lazy==1.4' >> requirements/adg/translations.txt
-          echo 'wrapt==1.11.2' >> requirements/adg/translations.txt
-          echo 'mock==3.0.5' >> requirements/adg/translations.txt
-
       - name: Cache python requirements
         uses: actions/cache@v2
         id: cache-python-requirements
         with:
           path: /opt/hostedtoolcache/Python/
           key: |
-            ${{ hashFiles('requirements/adg/translations.txt') }}-1
+            ${{ hashFiles('requirements/edx/development.txt') }}-1
 
       - name: Install requirements
         if: steps.cache-python-requirements.outputs.cache-hit != 'true'
@@ -56,7 +36,7 @@ jobs:
           python3 -m pip install pip==20.0.2
           python3 -m pip install setuptools==50.3.0
           python3 -m pip install wheel==0.35.1
-          pip install --disable-pip-version-check --exists-action w -r requirements/adg/translations.txt
+          pip install --disable-pip-version-check --exists-action w -r requirements/edx/development.txt
 
       - name: Clone adg-edx-theme repo
         uses: actions/checkout@v2

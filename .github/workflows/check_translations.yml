@@ -81,6 +81,12 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           signoff: true
 
+      - name: Push generated translation strings
+        id: push-generated-translations
+        env:
+          TX_TOKEN: ${{ secrets.TX_TOKEN }}
+        run: tx push -s -t
+
       - name: Post progress report on PR
         uses: mshick/add-pr-comment@v1
         with:

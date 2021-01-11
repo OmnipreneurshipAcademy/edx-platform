@@ -22116,6 +22116,10 @@ msgid "This is just a random change"
 msgstr ""
 
 #: themes/edx-platform/adg/lms/templates/adg/lms/applications/hub.html
+msgid "This is another test string"
+msgstr ""
+
+#: themes/edx-platform/adg/lms/templates/adg/lms/applications/hub.html
 msgid "Start Application"
 msgstr "اسم التطبيق"
 

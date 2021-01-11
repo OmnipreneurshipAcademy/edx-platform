@@ -29,6 +29,7 @@ jobs:
           echo 'django-statici18n==1.9.0' >> requirements/adg/translation.txt
           echo 'babel==2.8.0' >> requirements/adg/translation.txt
           echo 'mako==1.0.2' >> requirements/adg/translation.txt
+          echo 'git+https://github.com/edx/django-babel-underscore.git@37705f7377a4d0a4e673f1431895ce28a8860cd7#egg=django-babel-underscore==0.6.0' >> requirements/adg/translation.txt
 
       - name: Cache python requirements
         uses: actions/cache@v2

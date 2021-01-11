@@ -49,7 +49,7 @@ jobs:
           python3 -m pip install pip==20.0.2
           python3 -m pip install setuptools==50.3.0
           python3 -m pip install wheel==0.35.1
-          pip install --disable-pip-version-check --exists-action w -r requirements/edx/development.txt
+          pip install --disable-pip-version-check --exists-action w -r requirements/edx/translation.txt
 
       - name: Clone adg-edx-theme repo
         uses: actions/checkout@v2

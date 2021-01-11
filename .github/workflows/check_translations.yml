@@ -27,6 +27,7 @@ jobs:
           echo 'transifex-client==0.13.4' >> requirements/adg/translation.txt
           echo 'edx-i18n-tools==0.5.3' >> requirements/adg/translation.txt
           echo 'django-statici18n==1.9.0' >> requirements/adg/translation.txt
+          echo 'babel==2.8.0' >> requirements/adg/translation.txt
 
       - name: Cache python requirements
         uses: actions/cache@v2

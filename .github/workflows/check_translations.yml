@@ -28,6 +28,7 @@ jobs:
           echo 'edx-i18n-tools==0.5.3' >> requirements/adg/translation.txt
           echo 'django-statici18n==1.9.0' >> requirements/adg/translation.txt
           echo 'babel==2.8.0' >> requirements/adg/translation.txt
+          echo 'mako==1.0.2' >> requirements/adg/translation.txt
 
       - name: Cache python requirements
         uses: actions/cache@v2

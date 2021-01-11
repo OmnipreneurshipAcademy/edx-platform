@@ -22,7 +22,7 @@ jobs:
 
       - name: Add translation requirements file
         run: |
-          touch requirements/adg/translation.txt
+          touch requirements/adg/translations.txt
           echo 'paver==1.3.4' >> requirements/adg/translation.txt
           echo 'transifex-client==0.13.4' >> requirements/adg/translation.txt
           echo 'edx-i18n-tools==0.5.3' >> requirements/adg/translation.txt
@@ -39,7 +39,7 @@ jobs:
         with:
           path: /opt/hostedtoolcache/Python/
           key: |
-            ${{ hashFiles('requirements/adg/translation.txt') }}
+            ${{ hashFiles('requirements/adg/translations.txt') }}
 
       - name: Install requirements
         if: steps.cache-python-requirements.outputs.cache-hit != 'true'
@@ -49,7 +49,7 @@ jobs:
           python3 -m pip install pip==20.0.2
           python3 -m pip install setuptools==50.3.0
           python3 -m pip install wheel==0.35.1
-          pip install --disable-pip-version-check --exists-action w -r requirements/adg/translation.txt
+          pip install --disable-pip-version-check --exists-action w -r requirements/adg/translations.txt
 
       - name: Clone adg-edx-theme repo
         uses: actions/checkout@v2

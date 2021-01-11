@@ -31,7 +31,7 @@ jobs:
           echo 'mako==1.0.2' >> requirements/adg/translations.txt
           echo 'git+https://github.com/edx/django-babel-underscore.git@37705f7377a4d0a4e673f1431895ce28a8860cd7#egg=django-babel-underscore==0.6.0' >> requirements/adg/translations.txt
           echo 'git+https://github.com/Zegocover/enmerkar.git@dbc113798aa4beabdfa2d00e6fef48248eb0f185#egg=django-babel==0.6.3.dev0' >> requirements/adg/translations.txt
-          echo '-e git+https://github.com/edx/django-wiki.git@0.0.27#egg=django-wiki' >> >> requirements/adg/translations.txt
+          echo '-e git+https://github.com/edx/django-wiki.git@0.0.27#egg=django-wiki' >> requirements/adg/translations.txt
           echo 'polib==1.1.0' >> requirements/adg/translations.txt
 
       - name: Cache python requirements

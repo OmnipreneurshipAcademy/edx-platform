@@ -39,7 +39,7 @@ jobs:
         with:
           path: /opt/hostedtoolcache/Python/
           key: |
-            ${{ hashFiles('requirements/adg/translations.txt') }}
+            ${{ hashFiles('requirements/adg/translations.txt') }}-1
 
       - name: Install requirements
         if: steps.cache-python-requirements.outputs.cache-hit != 'true'

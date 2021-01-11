@@ -44,7 +44,7 @@ jobs:
       - name: Install requirements
         if: steps.cache-python-requirements.outputs.cache-hit != 'true'
         run: |
-          sudo apt-get install libxmlsec1-dev pkg-config
+          sudo apt-get install libxmlsec1-dev pkg-config gettext
           sudo apt-get update
           python3 -m pip install pip==20.0.2
           python3 -m pip install setuptools==50.3.0

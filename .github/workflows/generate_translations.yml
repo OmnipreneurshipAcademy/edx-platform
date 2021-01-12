@@ -31,10 +31,9 @@ jobs:
         with:
           path: /opt/hostedtoolcache/Python/
           key: |
-            ${{ hashFiles('requirements/edx/development.txt') }}-1
+            ${{ hashFiles('requirements/edx/development.txt') }}
 
       - name: Install pip requirements
-        if: steps.cache-python-requirements.outputs.cache-hit != 'true'
         run: |
           python3 -m pip install pip==20.0.2
           python3 -m pip install setuptools==50.3.0

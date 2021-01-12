@@ -31,7 +31,7 @@ jobs:
         with:
           path: /opt/hostedtoolcache/Python/
           key: |
-            ${{ hashFiles('requirements/edx/development.txt') }}
+            ${{ hashFiles('requirements/edx/development.txt') }}-1
 
       - name: Install pip requirements
         if: steps.cache-python-requirements.outputs.cache-hit != 'true'

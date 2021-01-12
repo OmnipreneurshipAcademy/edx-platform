@@ -20,19 +20,22 @@ jobs:
         with:
           python-version: 3.5
 
+      - name: Install OS requirements
+        run: |
+          sudo apt-get install libxmlsec1-dev pkg-config gettext
+          sudo apt-get update
+
       - name: Cache python requirements
         uses: actions/cache@v2
         id: cache-python-requirements
         with:
           path: /opt/hostedtoolcache/Python/
           key: |
-            ${{ hashFiles('requirements/edx/development.txt') }}-1
+            ${{ hashFiles('requirements/edx/development.txt') }}
 
-      - name: Install requirements
+      - name: Install pip requirements
         if: steps.cache-python-requirements.outputs.cache-hit != 'true'
         run: |
-          sudo apt-get install libxmlsec1-dev pkg-config gettext
-          sudo apt-get update
           python3 -m pip install pip==20.0.2
           python3 -m pip install setuptools==50.3.0
           python3 -m pip install wheel==0.35.1
@@ -87,13 +90,24 @@ jobs:
           TX_TOKEN: ${{ secrets.TX_TOKEN }}
         run: tx push -s -t
 
-      - name: Post progress report on PR
+      - name: Post success comment on PR
         uses: mshick/add-pr-comment@v1
         with:
           message: |
-              New translations have been generated for the changed source. :v:
+              New translations have been generated for the changed source. :white_check_mark:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           repo-token-user-login: 'github-actions[bot]'
           allow-repeats: true
         if: steps.commit-and-push-generated-files.outputs.committed == 'true'
                 && steps.commit-and-push-generated-files.outputs.pushed == 'true'
+
+      - name: Post failure comment on PR
+        uses: mshick/add-pr-comment@v1
+        with:
+          message: |
+              Translations have NOT been addded for the changed source! :x:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          repo-token-user-login: 'github-actions[bot]'
+          allow-repeats: true
+        if: steps.commit-and-push-generated-files.outputs.committed == 'false'
+              || steps.commit-and-push-generated-files.outputs.pushed == 'false'

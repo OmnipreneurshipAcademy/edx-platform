@@ -29,7 +29,6 @@ jobs:
             ${{ runner.os }}-${{ hashFiles('requirements/edx/development.txt') }}
 
       - name: Install OS requirements
-        if: steps.cache-python-requirements.outputs.cache-hit != 'true'
         run: |
           sudo apt-get install libxmlsec1-dev pkg-config gettext
           sudo apt-get update

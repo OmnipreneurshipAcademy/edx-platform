@@ -90,7 +90,7 @@ jobs:
           TX_TOKEN: ${{ secrets.TX_TOKEN }}
         run: tx push -s -t
 
-      - name: Post success comment on PR
+      - name: Post translation generated comment on PR
         uses: mshick/add-pr-comment@v1
         with:
           message: |
@@ -101,13 +101,13 @@ jobs:
         if: steps.commit-and-push-generated-files.outputs.committed == 'true'
                 && steps.commit-and-push-generated-files.outputs.pushed == 'true'
 
-      - name: Post failure comment on PR
+      - name: Post no translations comment on PR
         uses: mshick/add-pr-comment@v1
         with:
           message: |
-              Translations have NOT been addded for the changed source! :x:
+              No new translations have been found for the changed source! :v:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           repo-token-user-login: 'github-actions[bot]'
           allow-repeats: true
         if: steps.commit-and-push-generated-files.outputs.committed == 'false'
-              || steps.commit-and-push-generated-files.outputs.pushed == 'false'
+              && steps.commit-and-push-generated-files.outputs.pushed == 'false'

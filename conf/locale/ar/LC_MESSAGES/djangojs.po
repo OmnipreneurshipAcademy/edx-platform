@@ -1,55 +1,57 @@
 # #-#-#-#-#  djangojs-partial.po (0.1a)  #-#-#-#-#
 # edX translation file.
-# Copyright (C) 2020 EdX
+# Copyright (C) 2021 EdX
 # This file is distributed under the GNU AFFERO GENERAL PUBLIC LICENSE.
-# EdX Team <info@edx.org>, 2020.
+# EdX Team <info@edx.org>, 2021.
 #
 # Translators:
 # Rana Waqar <rana.waqar@arbisoft.com>, 2020
 #
 # #-#-#-#-#  djangojs-studio.po (0.1a)  #-#-#-#-#
 # edX translation file.
-# Copyright (C) 2020 EdX
+# Copyright (C) 2021 EdX
 # This file is distributed under the GNU AFFERO GENERAL PUBLIC LICENSE.
-# EdX Team <info@edx.org>, 2020.
+# EdX Team <info@edx.org>, 2021.
 #
 # Translators:
 # Rana Waqar <rana.waqar@arbisoft.com>, 2020
+# Imran Bashir <admin@omnipreneurshipacademy.com>, 2021
 #
 # #-#-#-#-#  djangojs-account-settings-view.po (0.1a)  #-#-#-#-#
 # edX translation file.
-# Copyright (C) 2020 EdX
+# Copyright (C) 2021 EdX
 # This file is distributed under the GNU AFFERO GENERAL PUBLIC LICENSE.
-# EdX Team <info@edx.org>, 2020.
+# EdX Team <info@edx.org>, 2021.
 #
 # Translators:
 # Rana Waqar <rana.waqar@arbisoft.com>, 2020
 #
 # #-#-#-#-#  underscore.po (0.1a)  #-#-#-#-#
 # edX translation file
-# Copyright (C) 2020 edX
+# Copyright (C) 2021 edX
 # This file is distributed under the GNU AFFERO GENERAL PUBLIC LICENSE.
-# EdX Team <info@edx.org>, 2020.
+# EdX Team <info@edx.org>, 2021.
 #
 # Translators:
 # Rana Waqar <rana.waqar@arbisoft.com>, 2020
 #
 # #-#-#-#-#  underscore-studio.po (0.1a)  #-#-#-#-#
 # edX translation file
-# Copyright (C) 2020 edX
+# Copyright (C) 2021 edX
 # This file is distributed under the GNU AFFERO GENERAL PUBLIC LICENSE.
-# EdX Team <info@edx.org>, 2020.
+# EdX Team <info@edx.org>, 2021.
 #
 # Translators:
 # Rana Waqar <rana.waqar@arbisoft.com>, 2020
+# Imran Bashir <admin@omnipreneurshipacademy.com>, 2021
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: 0.1a\n"
 "Report-Msgid-Bugs-To: openedx-translation@googlegroups.com\n"
-"POT-Creation-Date: 2021-01-11 12:55+0000\n"
+"POT-Creation-Date: 2021-01-12 11:21+0000\n"
 "PO-Revision-Date: 2020-10-27 19:11+0000\n"
-"Last-Translator: Rana Waqar <rana.waqar@arbisoft.com>, 2020\n"
+"Last-Translator: Imran Bashir <admin@omnipreneurshipacademy.com>, 2021\n"
 "Language-Team: Arabic (https://www.transifex.com/philanthropy-u/teams/113553/ar/)\n"
 "Language: ar\n"
 "MIME-Version: 1.0\n"
@@ -5633,119 +5635,12 @@ msgstr "الإنجازات"
 msgid "Profile"
 msgstr "الملف الشخصي"
 
-#: cms/static/js/certificates/views/signatory_editor.js
-#: cms/static/js/views/course_info_update.js cms/static/js/views/list_item.js
-#: cms/static/js/views/show_textbook.js cms/static/js/views/tabs.js
-#: cms/static/js/views/utils/xblock_utils.js
-msgid "Deleting"
-msgstr "حذف"
-
-#: cms/static/js/features/import/factories/import.js
-msgid "There was an error during the upload process."
-msgstr "{numErrors} تعذر إضافة الطلّاب إلى هذا الفوج:"
-
-#: cms/static/js/features/import/factories/import.js
-msgid "There was an error while unpacking the file."
-msgstr "حدث خطأ أثناء تحديث هدفك."
-
-#: cms/static/js/features/import/factories/import.js
-msgid "There was an error while verifying the file you submitted."
-msgstr "{numErrors} تعذر إضافة الطلّاب إلى هذا الفوج:"
-
-#: cms/static/js/features/import/factories/import.js
-msgid "There was an error while importing the new library to our database."
-msgstr "{numErrors} تعذر إضافة الطلّاب إلى هذا الفوج:"
-
-#: cms/static/js/features/import/factories/import.js
-msgid "There was an error while importing the new course to our database."
-msgstr "حدث خطأ في إنشاء التقرير الخاص بك."
-
-#: cms/static/js/features/import/views/import.js
-msgid "There was an error with the upload"
-msgstr "{numErrors} تعذر إضافة الطلّاب إلى هذا الفوج:"
-
-#: cms/static/js/features_jsx/studio/CourseOrLibraryListing.jsx
-msgid "Course Number:"
-msgstr "اسم المساق"
-
-#: cms/static/js/features_jsx/studio/CourseOrLibraryListing.jsx
-msgid "Course Run:"
-msgstr "محتوى المقرر"
-
-#: cms/templates/js/show-textbook.underscore
-msgid "View Live"
-msgstr "استعراض"
-
-#: cms/static/js/models/chapter.js
-msgid "Chapter name is required"
-msgstr "كلمة المرور مطلوبة"
-
-#: cms/static/js/models/chapter.js
-msgid "asset_path is required"
-msgstr "كلمة المرور مطلوبة"
-
-#: cms/static/js/models/course.js cms/static/js/models/section.js
-msgid "You must specify a name"
-msgstr "يجب أن تحدّد اسمًا للشعبة."
-
-#: lms/templates/student_account/hinted_login.underscore
-#: lms/templates/student_account/institution_login.underscore
-#: lms/templates/student_account/institution_register.underscore
-msgid "or"
-msgstr "المزيد"
-
-#: cms/static/js/views/move_xblock_list.js
-#: cms/templates/js/group-configuration-editor.underscore
-msgid "Groups"
-msgstr "مجموعة"
-
-#: cms/static/js/views/move_xblock_list.js
-#: cms/templates/js/group-configuration-details.underscore
-#: cms/templates/js/partition-group-details.underscore
-msgid "Course Outline"
-msgstr "محتوى المقرر"
-
-#: cms/static/js/views/tabs.js
-msgid ""
-"Are you sure you want to delete this page? This action cannot be undone."
-msgstr "هل أنت واثق من أنّك تودّ حذف هذا الرد؟"
-
-#: cms/static/js/views/uploads.js
-#: cms/templates/js/metadata-file-uploader-item.underscore
-#: cms/templates/js/video/metadata-translations-item.underscore
-msgid "Upload"
-msgstr "جاري التحميل"
-
-#: cms/static/js/views/utils/xblock_utils.js
-msgid "Undo moving"
-msgstr "جاري الحذف"
-
-#: cms/templates/js/container-access.underscore
-msgid "unit"
-msgstr "جميع الوحدات"
-
-#: cms/static/js/views/video/transcripts/file_uploader.js
-msgid "Error: Uploading failed."
-msgstr "نأسف لحدوث خطأ في إرسال الرسالة."
-
-#: cms/static/js/views/video/transcripts/message_manager.js
-msgid "Error: Choosing failed."
-msgstr "نأسف لحدوث خطأ في إرسال الرسالة."
-
-#: cms/static/js/views/video/translations_editor.js
+#: cms/static/cms/js/main.js cms/static/js/views/active_video_upload_list.js
 #: cms/static/js/views/video_transcripts.js
-msgid "Are you sure you want to remove this transcript?"
-msgstr "هل أنت واثق من أنّك تودّ حذف هذا المنشور؟"
-
-#: cms/static/js/views/xblock_editor.js
-#: lms/templates/instructor/instructor_dashboard_2/cohort-editor.underscore
-msgid "Settings"
-msgstr "إعدادات الحساب"
-
-#: lms/templates/student_account/institution_register.underscore
-#: lms/templates/student_account/register.underscore
-msgid "Create an Account"
-msgstr "إنشاء حساب"
+msgid ""
+"This may be happening because of an error with our server or your internet "
+"connection. Try refreshing the page or making sure you are online."
+msgstr ""
 
 #: cms/static/cms/js/main.js
 msgid "Studio's having trouble saving your work"
@@ -5815,6 +5710,13 @@ msgstr "هل تريد حذف \"<٪ - signatoryName٪>\" من لائحة المو
 #: cms/static/js/views/course_info_update.js
 msgid "This action cannot be undone."
 msgstr "يتعذّر التراجع عن هذه العملية لاحقًا. "
+
+#: cms/static/js/certificates/views/signatory_editor.js
+#: cms/static/js/views/course_info_update.js cms/static/js/views/list_item.js
+#: cms/static/js/views/show_textbook.js cms/static/js/views/tabs.js
+#: cms/static/js/views/utils/xblock_utils.js
+msgid "Deleting"
+msgstr "تعطيل"
 
 #: cms/static/js/certificates/views/signatory_editor.js
 msgid "Upload signature image."
@@ -5888,9 +5790,33 @@ msgid "You have unsaved changes. Do you really want to leave this page?"
 msgstr "لديك تغييرات غير محفّظة. هل تريد حقًّا أن تغادر الصفحة؟"
 
 #: cms/static/js/features/import/factories/import.js
+msgid "There was an error during the upload process."
+msgstr "نأسف لحدوث خطأ في تغيير دور المستخدم."
+
+#: cms/static/js/features/import/factories/import.js
+msgid "There was an error while unpacking the file."
+msgstr "نأسف لحدوث خطأ في تغيير دور المستخدم."
+
+#: cms/static/js/features/import/factories/import.js
+msgid "There was an error while verifying the file you submitted."
+msgstr "نأسف لحدوث خطأ في تغيير دور المستخدم."
+
+#: cms/static/js/features/import/factories/import.js
+msgid "Choose new file"
+msgstr ""
+
+#: cms/static/js/features/import/factories/import.js
 msgid ""
 "File format not supported. Please upload a file with a {ext} extension."
 msgstr ""
+
+#: cms/static/js/features/import/factories/import.js
+msgid "There was an error while importing the new library to our database."
+msgstr "نأسف لحدوث خطأ في تغيير دور المستخدم."
+
+#: cms/static/js/features/import/factories/import.js
+msgid "There was an error while importing the new course to our database."
+msgstr "نأسف لحدوث خطأ في تغيير دور المستخدم."
 
 #: cms/static/js/features/import/factories/import.js
 msgid "Your import has failed."
@@ -5904,6 +5830,22 @@ msgstr ""
 msgid "Error importing course"
 msgstr "ناسف لحدوث خطأ في حذف المستخدم."
 
+#: cms/static/js/features/import/views/import.js
+msgid "There was an error with the upload"
+msgstr "نأسف لحدوث خطأ في تغيير دور المستخدم."
+
+#: cms/static/js/features_jsx/studio/CourseOrLibraryListing.jsx
+msgid "Organization:"
+msgstr ""
+
+#: cms/static/js/features_jsx/studio/CourseOrLibraryListing.jsx
+msgid "Course Number:"
+msgstr "فهرس المساق"
+
+#: cms/static/js/features_jsx/studio/CourseOrLibraryListing.jsx
+msgid "Course Run:"
+msgstr "فهرس المساق"
+
 #: cms/static/js/features_jsx/studio/CourseOrLibraryListing.jsx
 msgid "(Read-only)"
 msgstr ""
@@ -5911,6 +5853,10 @@ msgstr ""
 #: cms/static/js/features_jsx/studio/CourseOrLibraryListing.jsx
 msgid "Re-run Course"
 msgstr ""
+
+#: cms/templates/js/show-textbook.underscore
+msgid "View Live"
+msgstr "عرض النسخة الحالية المنشورة"
 
 #: cms/static/js/maintenance/force_publish_course.js
 msgid "Internal Server Error."
@@ -5936,6 +5882,18 @@ msgstr "عذرًا، لم ينجح التحميل."
 #: cms/static/js/models/chapter.js
 msgid "Chapter name and asset_path are both required"
 msgstr ""
+
+#: cms/static/js/models/chapter.js
+msgid "Chapter name is required"
+msgstr "اسم الشهادة مطلوب."
+
+#: cms/static/js/models/chapter.js
+msgid "asset_path is required"
+msgstr "اسم المجموعة مطلوب"
+
+#: cms/static/js/models/course.js cms/static/js/models/section.js
+msgid "You must specify a name"
+msgstr "يجب أن يتوفّر اسم لكلّ مجموعة."
 
 #: cms/static/js/models/course_update.js
 msgid "Action required: Enter a valid date."
@@ -6053,6 +6011,12 @@ msgid ""
 "<%- (fileExtensions) %> to upload."
 msgstr ""
 
+#: lms/templates/student_account/hinted_login.underscore
+#: lms/templates/student_account/institution_login.underscore
+#: lms/templates/student_account/institution_register.underscore
+msgid "or"
+msgstr "أو"
+
 #: cms/static/js/models/xblock_validation.js
 msgid "This unit has validation issues."
 msgstr ""
@@ -6169,6 +6133,11 @@ msgstr "تحميل ملف جديد"
 #: cms/static/js/views/assets.js
 msgid "Load Another File"
 msgstr "تحميل ملف آخر"
+
+#: cms/static/js/views/components/add_xblock.js
+#: cms/static/js/views/utils/xblock_utils.js
+msgid "Adding"
+msgstr ""
 
 #: cms/static/js/views/course_info_update.js
 msgid "Are you sure you want to delete this update?"
@@ -6349,6 +6318,10 @@ msgstr "جميع الحقوق محفوظة"
 
 #: cms/static/js/views/license.js
 msgid "You reserve all rights for your work"
+msgstr ""
+
+#: cms/static/js/views/license.js
+msgid "Creative Commons"
 msgstr ""
 
 #: cms/static/js/views/license.js
@@ -6550,6 +6523,14 @@ msgid "Change Manually"
 msgstr "التغيير يدويًّا "
 
 #: cms/static/js/views/move_xblock_list.js
+msgid "Sections"
+msgstr ""
+
+#: cms/static/js/views/move_xblock_list.js
+msgid "Subsections"
+msgstr ""
+
+#: cms/static/js/views/move_xblock_list.js
 msgid "Units"
 msgstr ""
 
@@ -6558,8 +6539,19 @@ msgid "Components"
 msgstr ""
 
 #: cms/static/js/views/move_xblock_list.js
+#: cms/templates/js/group-configuration-editor.underscore
+msgid "Groups"
+msgstr "المجموعة %s"
+
+#: cms/static/js/views/move_xblock_list.js
 msgid "This {parentCategory} has no {childCategory}"
 msgstr ""
+
+#: cms/static/js/views/move_xblock_list.js
+#: cms/templates/js/group-configuration-details.underscore
+#: cms/templates/js/partition-group-details.underscore
+msgid "Course Outline"
+msgstr "فهرس المساق"
 
 #: cms/static/js/views/paged_container.js
 msgid "Date added"
@@ -6605,10 +6597,18 @@ msgid "Inheriting Student Visibility"
 msgstr ""
 
 #: cms/static/js/views/pages/container_subviews.js
+msgid "Make Visible to Students"
+msgstr ""
+
+#: cms/static/js/views/pages/container_subviews.js
 msgid ""
 "If the unit was previously published and released to students, any changes "
 "you made to the unit when it was hidden will now be visible to students. Do "
 "you want to proceed?"
+msgstr ""
+
+#: cms/static/js/views/pages/container_subviews.js
+msgid "Making Visible to Students"
 msgstr ""
 
 #: cms/static/js/views/pages/course_outline.js
@@ -6618,6 +6618,14 @@ msgstr "فهرس المساق"
 #: cms/static/js/views/pages/course_outline.js
 msgid "There were errors reindexing course."
 msgstr "نأسف لحدوث أخطاء في إعادة فهرسة محتويات المساق."
+
+#: cms/static/js/views/pages/paged_container.js
+msgid "Hide Previews"
+msgstr ""
+
+#: cms/static/js/views/pages/paged_container.js
+msgid "Show Previews"
+msgstr ""
 
 #. Translators: sample result:
 #. "Showing 0-9 out of 25 total, filtered by Images, sorted by Date Added
@@ -6756,6 +6764,17 @@ msgstr ""
 msgid "Delete Page Confirmation"
 msgstr "تأكيد حذف الملف"
 
+#: cms/static/js/views/tabs.js
+msgid ""
+"Are you sure you want to delete this page? This action cannot be undone."
+msgstr "هل أنت واثق من رغبتك في حذف هذا التحديث؟"
+
+#: cms/static/js/views/uploads.js
+#: cms/templates/js/metadata-file-uploader-item.underscore
+#: cms/templates/js/video/metadata-translations-item.underscore
+msgid "Upload"
+msgstr "عذرًا، لم ينجح التحميل."
+
 #: cms/static/js/views/uploads.js
 msgid "We're sorry, there was an error"
 msgstr ""
@@ -6787,12 +6806,24 @@ msgid ""
 msgstr ""
 
 #: cms/static/js/views/utils/move_xblock_utils.js
+msgid "Undo move"
+msgstr ""
+
+#: cms/static/js/views/utils/move_xblock_utils.js
 msgid "Take me to the new location"
 msgstr "أرجو أخذي إلى الصفحة الرئيسية للمساق."
 
 #: cms/static/js/views/utils/xblock_utils.js
 msgid "Duplicating"
 msgstr "تعطيل"
+
+#: cms/static/js/views/utils/xblock_utils.js
+msgid "Undo moving"
+msgstr "التراجع عن التغييرات"
+
+#: cms/static/js/views/utils/xblock_utils.js
+msgid "Moving"
+msgstr ""
 
 #: cms/static/js/views/utils/xblock_utils.js
 msgid "Deleting this {xblock_type} is permanent and cannot be undone."
@@ -6813,6 +6844,22 @@ msgstr ""
 #: cms/static/js/views/utils/xblock_utils.js
 msgid "Yes, delete this {xblock_type}"
 msgstr ""
+
+#: cms/static/js/views/utils/xblock_utils.js
+msgid "Delete this {xblock_type}?"
+msgstr ""
+
+#: cms/static/js/views/utils/xblock_utils.js
+msgid "section"
+msgstr ""
+
+#: cms/static/js/views/utils/xblock_utils.js
+msgid "subsection"
+msgstr ""
+
+#: cms/templates/js/container-access.underscore
+msgid "unit"
+msgstr "وحدة"
 
 #: cms/static/js/views/validation.js
 msgid "You've made some changes"
@@ -6840,8 +6887,20 @@ msgstr "حفّظ التغييرات"
 msgid "Please select a file in .srt format."
 msgstr ""
 
+#: cms/static/js/views/video/transcripts/file_uploader.js
+msgid "Error: Uploading failed."
+msgstr "عذرًا، لم ينجح التحميل."
+
 #: cms/static/js/views/video/transcripts/message_manager.js
 msgid "Error: Import failed."
+msgstr "لقد فشلت عملية التصدير."
+
+#: cms/static/js/views/video/transcripts/message_manager.js
+msgid "Error: Replacing failed."
+msgstr ""
+
+#: cms/static/js/views/video/transcripts/message_manager.js
+msgid "Error: Choosing failed."
 msgstr "لقد فشلت عملية التصدير."
 
 #: cms/static/js/views/video/transcripts/metadata_videolist.js
@@ -6862,10 +6921,29 @@ msgstr ""
 
 #: cms/static/js/views/video/translations_editor.js
 msgid ""
+"Sorry, there was an error parsing the subtitles that you uploaded. Please "
+"check the format and try again."
+msgstr ""
+
+#: cms/static/js/views/video/translations_editor.js
+#: cms/static/js/views/video_transcripts.js
+msgid "Are you sure you want to remove this transcript?"
+msgstr "هل أنت واثق من رغبتك في حذف هذا التحديث؟"
+
+#: cms/static/js/views/video/translations_editor.js
+msgid ""
 "If you remove this transcript, the transcript will not be available for this"
 " component."
 msgstr ""
 "إذا أزلت هذا النص ، فلن يكون النص متاحاً لأي مكونات تستخدم هذا الفيديو."
+
+#: cms/static/js/views/video/translations_editor.js
+msgid "Remove Transcript"
+msgstr ""
+
+#: cms/static/js/views/video/translations_editor.js
+msgid "Upload translation"
+msgstr ""
 
 #: cms/static/js/views/video_thumbnail.js
 msgid "Add Thumbnail"
@@ -7013,6 +7091,15 @@ msgid ""
 "components that use this video."
 msgstr ""
 "إذا أزلت هذا النص ، فلن يكون النص متاحاً لأي مكونات تستخدم هذا الفيديو."
+
+#: cms/static/js/views/xblock_editor.js
+msgid "Editor"
+msgstr ""
+
+#: cms/static/js/views/xblock_editor.js
+#: lms/templates/instructor/instructor_dashboard_2/cohort-editor.underscore
+msgid "Settings"
+msgstr "تم تحديث الإعدادات"
 
 #: cms/static/js/views/xblock_outline.js
 msgid "New {component_type}"
@@ -8680,6 +8767,11 @@ msgstr "العودة إلى تسجيل الدخول"
 msgid "Register with Institution/Campus Credentials"
 msgstr "التسجيل باستخدام بيانات المؤسّسة/ الحرم الجامعي"
 
+#: lms/templates/student_account/institution_register.underscore
+#: lms/templates/student_account/register.underscore
+msgid "Create an Account"
+msgstr "إنشاء حساب"
+
 #: lms/templates/student_account/login.underscore
 msgid "First time here?"
 msgstr "لأول مرة هنا؟"
@@ -9591,10 +9683,6 @@ msgstr ""
 msgid "Create a free account in less than a minute."
 msgstr ""
 
-#: cms/templates/js/course-outline.underscore
-msgid "Timed Exam"
-msgstr "امتحان محدّد التوقيت"
-
 #: cms/templates/js/access-editor.underscore
 msgid "Limit Access"
 msgstr "الحدّ من صلاحية الوصول"
@@ -10080,6 +10168,10 @@ msgstr "جرّب خوض امتحان مراقَب"
 #: cms/templates/js/course-outline.underscore
 msgid "Proctored Exam"
 msgstr "امتحان مراقَب"
+
+#: cms/templates/js/course-outline.underscore
+msgid "Timed Exam"
+msgstr "مؤقّت"
 
 #: cms/templates/js/course-outline.underscore
 #: cms/templates/js/xblock-outline.underscore
@@ -11332,109 +11424,3 @@ msgstr ""
 #: cms/templates/js/video/transcripts/messages/transcripts-use-existing.underscore
 msgid "Use Current Transcript"
 msgstr "استخدم النص الحالي"
-
-#~ msgid ""
-#~ "This may be happening because of an error with our server or your internet "
-#~ "connection. Try refreshing the page or making sure you are online."
-#~ msgstr ""
-#~ "قد يُعزى هذا إلى حدوث مشكلة في الخادم لدينا أو في اتّصالك بالإنترنت. يُرجى "
-#~ "محاولة تحديث الصفحة أو التأكّد من اتّصالك بالإنترنت."
-
-#~ msgid "Choose new file"
-#~ msgstr "اختر الملف"
-
-#~ msgid "Organization:"
-#~ msgstr "ترقيم الصفحات"
-
-#~ msgid "Adding"
-#~ msgstr "عنوان رئيسي"
-
-#~ msgid "Creative Commons"
-#~ msgstr "إنشاء حساب"
-
-#~ msgid "Sections"
-#~ msgstr "الوصف"
-
-#~ msgid "Subsections"
-#~ msgstr "جميع الأقسام الفرعية"
-
-#~ msgid "Make Visible to Students"
-#~ msgstr "هذا المساق غير مرئي للطلاب."
-
-#~ msgid "Making Visible to Students"
-#~ msgstr "هذا المساق غير مرئي للطلاب."
-
-#~ msgid "Hide Previews"
-#~ msgstr "معاينة"
-
-#~ msgid "Show Previews"
-#~ msgstr "معاينة"
-
-#~ msgid "Undo move"
-#~ msgstr "تراجُع"
-
-#~ msgid "Moving"
-#~ msgstr "جاري الحذف"
-
-#~ msgid "Delete this {xblock_type}?"
-#~ msgstr "أتودّ حذف هذا الفريق؟"
-
-#~ msgid "section"
-#~ msgstr "الوصف"
-
-#~ msgid "subsection"
-#~ msgstr "جميع الأقسام الفرعية"
-
-#~ msgid "Error: Replacing failed."
-#~ msgstr "نأسف لحدوث خطأ في إرسال الرسالة."
-
-#~ msgid ""
-#~ "Sorry, there was an error parsing the subtitles that you uploaded. Please "
-#~ "check the format and try again."
-#~ msgstr ""
-#~ "عذراً ، حدث خطأ أثناء محاولة معالجة طلبك. الرجاء معاودة المحاولة في وقت "
-#~ "لاحق."
-
-#~ msgid "Remove Transcript"
-#~ msgstr "نص الفيديو"
-
-#~ msgid "Upload translation"
-#~ msgstr "الشرح"
-
-#~ msgid "Editor"
-#~ msgstr "تحرير"
-
-#~ msgid "Contact information"
-#~ msgstr "معلومات إضافية"
-
-#~ msgid ""
-#~ "There was an error in setting your goal, please reload the page and try "
-#~ "again."
-#~ msgstr "حدث خطأ ما. الرجاء إعادة تحميل الصفحة والمحاولة مرة أخرى."
-
-#~ msgid "Add a New Allowance"
-#~ msgstr "إضافة شعبة جديدة"
-
-#~ msgid " %(exam_display_name)s "
-#~ msgstr "شارك \"%(exam_display_name)s\" جائزتك"
-
-#~ msgid "Exam Type"
-#~ msgstr "النوع"
-
-#~ msgid "Additional Time (minutes)"
-#~ msgstr "فرص نقاط إضافية"
-
-#~ msgid "Username or Email"
-#~ msgstr "اسم المستخدم أو البريد الإلكتروني:"
-
-#~ msgid "Exam Name"
-#~ msgstr "الاسم"
-
-#~ msgid "Started At"
-#~ msgstr "تاريخ البدء"
-
-#~ msgid "Completed At"
-#~ msgstr "استُكملت العملية"
-
-#~ msgid " %(username)s "
-#~ msgstr "اسم المستخدم %(username)s"

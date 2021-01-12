@@ -20,20 +20,22 @@ jobs:
         with:
           python-version: 3.5
 
-      - name: Install OS requirements
-        run: |
-          sudo apt-get install libxmlsec1-dev pkg-config gettext
-          sudo apt-get update
-
       - name: Cache python requirements
         uses: actions/cache@v2
         id: cache-python-requirements
         with:
           path: /opt/hostedtoolcache/Python/
           key: |
-            ${{ hashFiles('requirements/edx/development.txt') }}
+            ${{ runner.os }}-${{ hashFiles('requirements/edx/development.txt') }}
+
+      - name: Install OS requirements
+        if: steps.cache-python-requirements.outputs.cache-hit != 'true'
+        run: |
+          sudo apt-get install libxmlsec1-dev pkg-config gettext
+          sudo apt-get update
 
       - name: Install pip requirements
+        if: steps.cache-python-requirements.outputs.cache-hit != 'true'
         run: |
           python3 -m pip install pip==20.0.2
           python3 -m pip install setuptools==50.3.0

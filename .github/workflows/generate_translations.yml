@@ -24,8 +24,9 @@ jobs:
         uses: actions/cache@v2
         id: cache-python-requirements
         with:
-          path: /opt/hostedtoolcache/Python/
-          key: 123456789abcd
+          path: ~/.cache/pip
+          key: |
+            ${{ runner.os }}-v1-${{ hashFiles('requirements/edx/development.txt') }}
 
       - name: Install OS requirements
         run: |

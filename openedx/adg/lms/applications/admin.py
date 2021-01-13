@@ -203,6 +203,13 @@ class UserApplicationADGAdmin(admin.ModelAdmin):
     list_filter = ('status', )
     list_per_page = 10
 
+    def get_queryset(self, request):
+        """
+        Override `get_queryset` method of BaseModelAdmin to show ADG admin only those applications which have been
+        submitted successfully.
+        """
+        return UserApplication.submitted_applications.all()
+
     def applicant_name(self, obj):
         return obj.user.profile.name
 

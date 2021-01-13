@@ -30,8 +30,9 @@ class ApplicationHub(TimeStampedModel):
         User, related_name='application_hub', on_delete=models.CASCADE, verbose_name=_('User'),
     )
     is_prerequisite_courses_passed = models.BooleanField(default=False, verbose_name=_('Prerequisite Courses Passed'), )
-    is_written_application_completed = models.BooleanField(default=False,
-                                                           verbose_name=_('Written Application Submitted'), )
+    is_written_application_completed = models.BooleanField(
+        default=False, verbose_name=_('Written Application Submitted'),
+    )
     is_application_submitted = models.BooleanField(default=False, verbose_name=_('Application Submitted'), )
     submission_date = models.DateField(null=True, blank=True, verbose_name=_('Submission Date'), )
 
@@ -105,6 +106,15 @@ class BusinessLine(TimeStampedModel):
         return '{}'.format(self.title)
 
 
+class SubmittedApplicationsManager(models.Manager):
+    """
+    Manager which returns all user applications which have been submitted successfully.
+    """
+
+    def get_queryset(self):
+        return super().get_queryset().filter(user__application_hub__is_application_submitted=True)
+
+
 class UserApplication(TimeStampedModel):
     """
     Model for status of all required parts of user application submission.
@@ -144,6 +154,9 @@ class UserApplication(TimeStampedModel):
         User, null=True, blank=True, on_delete=models.CASCADE, verbose_name=_('Reviewed By')
     )
     internal_admin_note = models.TextField(null=True, blank=True, verbose_name=_('Admin Note'))
+
+    objects = models.Manager()
+    submitted_applications = SubmittedApplicationsManager()
 
     class Meta:
         app_label = 'applications'

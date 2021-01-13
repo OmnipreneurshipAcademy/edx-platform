@@ -26,7 +26,7 @@ jobs:
         with:
           path: ~/.cache/pip
           key: |
-            ${{ runner.os }}-v1-${{ hashFiles('requirements/edx/development.txt') }}
+            ${{ hashFiles('requirements/edx/testing.txt') }}-${{ hashFiles('requirements/adg/base.txt') }}
 
       - name: Install OS requirements
         run: |

@@ -58,7 +58,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1a\n"
 "Report-Msgid-Bugs-To: openedx-translation@googlegroups.com\n"
-"POT-Creation-Date: 2021-01-12 11:57+0000\n"
+"POT-Creation-Date: 2021-01-12 12:54+0000\n"
 "PO-Revision-Date: 2020-10-27 19:12+0000\n"
 "Last-Translator: Rana Waqar <rana.waqar@arbisoft.com>, 2020\n"
 "Language-Team: Arabic (https://www.transifex.com/philanthropy-u/teams/113553/ar/)\n"
@@ -10321,12 +10321,86 @@ msgstr "ستشير العودة إلى هذه المراجعة أنّ المقا
 msgid "LMS Administration"
 msgstr "إدارة LMS"
 
+#: openedx/adg/lms/applications/admin.py
+msgid "Al-Dabbagh"
+msgstr ""
+
+#: openedx/adg/lms/applications/admin.py
+msgid "Date Received (MM/DD/YYYY)"
+msgstr ""
+
+#: openedx/adg/lms/applications/admin.py
+msgid "OPEN APPLICATIONS"
+msgstr ""
+
+#: openedx/adg/lms/applications/admin.py
+msgid "ACCEPTED APPLICATIONS"
+msgstr ""
+
+#: openedx/adg/lms/applications/admin.py
+msgid "WAITLISTED APPLICATIONS"
+msgstr ""
+
+#: openedx/adg/lms/applications/admin.py
+msgid "APPLICATIONS"
+msgstr ""
+
+#: openedx/adg/lms/applications/admin.py
+msgid "LinkedIn Profile"
+msgstr "الملف الشخصي للمتعلّم"
+
+#: openedx/adg/lms/applications/admin.py
+msgid "Man"
+msgstr "الإثنين"
+
+#: openedx/adg/lms/applications/admin.py
+msgid "Woman"
+msgstr ""
+
+#: openedx/adg/lms/applications/admin.py
+#: themes/edx-platform/adg/lms/templates/adg/lms/applications/contact_info.html
+msgid "Prefer not to answer"
+msgstr "أخرى/ أفضّل عدم الإفصاح"
+
+#: openedx/adg/lms/applications/admin.py
+msgid "Resume"
+msgstr ""
+
+#: openedx/adg/lms/applications/admin.py
+#: openedx/adg/lms/applications/models.py
+msgid "Cover Letter"
+msgstr ""
+
+#: openedx/adg/lms/applications/admin.py
+msgid "APPLICANT INFORMATION"
+msgstr ""
+
+#: openedx/adg/lms/applications/constants.py
+msgid "RESUME & COVER LETTER"
+msgstr ""
+
+#: openedx/adg/lms/applications/constants.py
+msgid "RESUME"
+msgstr ""
+
+#: openedx/adg/lms/applications/constants.py
+msgid "COVER LETTER"
+msgstr ""
+
+#: openedx/adg/lms/applications/constants.py
+msgid "SCORES"
+msgstr ""
+
 #: openedx/adg/lms/applications/forms.py
 msgid "Please enter a valid date"
 msgstr "يُرجى إدخال اسم المستخدم"
 
 #: openedx/adg/lms/applications/forms.py
 msgid "Sorry, the age limit for the program is 21-60"
+msgstr ""
+
+#: openedx/adg/lms/applications/forms.py
+msgid "Please make a decision before submitting."
 msgstr ""
 
 #: openedx/adg/lms/applications/helpers.py
@@ -10341,6 +10415,14 @@ msgstr ""
 #: openedx/adg/lms/applications/helpers.py
 #, python-brace-format
 msgid "File size must not exceed {size} MB"
+msgstr ""
+
+#: openedx/adg/lms/applications/helpers.py
+msgid "Present"
+msgstr "إعادة الضبط"
+
+#: openedx/adg/lms/applications/helpers.py
+msgid "to"
 msgstr ""
 
 #: openedx/adg/lms/applications/models.py
@@ -10390,7 +10472,7 @@ msgid "LinkedIn URL"
 msgstr "رابط ’LTI‘"
 
 #: openedx/adg/lms/applications/models.py
-msgid "Resume"
+msgid "Resume File"
 msgstr ""
 
 #: openedx/adg/lms/applications/models.py
@@ -10401,10 +10483,6 @@ msgstr ""
 
 #: openedx/adg/lms/applications/models.py
 msgid "Cover Letter File"
-msgstr ""
-
-#: openedx/adg/lms/applications/models.py
-msgid "Cover Letter"
 msgstr ""
 
 #: openedx/adg/lms/applications/models.py
@@ -10428,12 +10506,12 @@ msgid "Reviewed By"
 msgstr "المراجعات"
 
 #: openedx/adg/lms/applications/models.py
-msgid "User Application"
+msgid "Admin Note"
 msgstr ""
 
 #: openedx/adg/lms/applications/models.py
-msgid "User Applications"
-msgstr ""
+msgid "Application"
+msgstr "حالة التحقق"
 
 #: openedx/adg/lms/applications/models.py
 msgid "Start Month"
@@ -10471,9 +10549,9 @@ msgstr ""
 msgid "Doctoral Degree"
 msgstr "دكتوراه"
 
-#: openedx/adg/lms/applications/models.py
-msgid "Name of School / University"
-msgstr ""
+#: themes/edx-platform/adg/lms/templates/adg/lms/applications/experience.html
+msgid "School / University"
+msgstr "المدارس والشركاء"
 
 #: openedx/adg/lms/applications/models.py
 msgid "Degree Received"
@@ -10483,10 +10561,6 @@ msgstr "جرى تلقّي الإجابة."
 #: themes/edx-platform/adg/lms/templates/adg/lms/applications/experience.html
 msgid "Area of Study"
 msgstr ""
-
-#: openedx/adg/lms/applications/models.py
-msgid "Name of Organization"
-msgstr "اسم مؤسستك."
 
 #: openedx/adg/lms/applications/models.py
 msgid "Job Position / Title"
@@ -10502,14 +10576,6 @@ msgstr "الموقع الحالي في الفيديو."
 msgid "Job Responsibilities"
 msgstr ""
 
-#: lms/templates/instructor/instructor_dashboard_2/membership.html
-msgid "Admin"
-msgstr "مشرف"
-
-#: openedx/adg/lms/applications/models.py
-msgid "Note"
-msgstr "ملاحظات"
-
 #: openedx/adg/lms/applications/serializers.py
 msgid "Area of study is required for all degrees above High School Diploma"
 msgstr ""
@@ -10522,6 +10588,10 @@ msgstr "الفريق"
 #: openedx/adg/lms/branding_extension/helpers.py
 msgid "Terms"
 msgstr ""
+
+#: openedx/adg/lms/constants.py
+msgid "Are you a Saudi National?"
+msgstr "مشروط"
 
 #: openedx/adg/lms/registration_extension/constants.py
 msgid "Yanbu"
@@ -10799,10 +10869,6 @@ msgstr ""
 msgid "Birth Date"
 msgstr "سنة الميلاد"
 
-#: openedx/adg/lms/registration_extension/models.py
-msgid "Saudi National"
-msgstr "مشروط"
-
 #. Translators: This label appears above a field on the registration form
 #. which allows the user to input the Company
 #: openedx/adg/lms/registration_extension/models.py
@@ -10810,6 +10876,17 @@ msgstr "مشروط"
 #: openedx/core/djangoapps/user_authn/views/registration_form.py
 msgid "Company"
 msgstr "الشركة"
+
+#: lms/templates/instructor/instructor_dashboard_2/course_info.html
+#: themes/edx-platform/adg/lms/templates/adg/lms/applications/contact_info.html
+msgid "Yes"
+msgstr "نعم"
+
+#: openedx/adg/lms/registration_extension/models.py
+#: lms/templates/instructor/instructor_dashboard_2/course_info.html
+#: themes/edx-platform/adg/lms/templates/adg/lms/applications/contact_info.html
+msgid "No"
+msgstr "نوفمبر"
 
 #: openedx/core/djangoapps/ace_common/apps.py
 msgid "ACE Common"
@@ -19072,16 +19149,6 @@ msgid "Has the course started?"
 msgstr "هل بدأ المساق؟"
 
 #: lms/templates/instructor/instructor_dashboard_2/course_info.html
-#: themes/edx-platform/adg/lms/templates/adg/lms/applications/contact_info.html
-msgid "Yes"
-msgstr "نعم"
-
-#: lms/templates/instructor/instructor_dashboard_2/course_info.html
-#: themes/edx-platform/adg/lms/templates/adg/lms/applications/contact_info.html
-msgid "No"
-msgstr "لا"
-
-#: lms/templates/instructor/instructor_dashboard_2/course_info.html
 msgid "Has the course ended?"
 msgstr "هل انتهى المساق؟"
 
@@ -20036,6 +20103,10 @@ msgstr ""
 #: lms/templates/instructor/instructor_dashboard_2/membership.html
 msgid "Add Staff"
 msgstr "إضافة أعضاء إلى طاقم المساق"
+
+#: lms/templates/instructor/instructor_dashboard_2/membership.html
+msgid "Admin"
+msgstr "مشرف"
 
 #: lms/templates/instructor/instructor_dashboard_2/membership.html
 msgid ""
@@ -21867,14 +21938,6 @@ msgid "Contact information"
 msgstr "ضبط إعدادات التقييم"
 
 #: themes/edx-platform/adg/lms/templates/adg/lms/applications/contact_info.html
-msgid "Are you a Saudi National?"
-msgstr ""
-
-#: themes/edx-platform/adg/lms/templates/adg/lms/applications/contact_info.html
-msgid "Prefer not to answer"
-msgstr "تغيير إجابتك"
-
-#: themes/edx-platform/adg/lms/templates/adg/lms/applications/contact_info.html
 msgid "Phone Number"
 msgstr "رقم المساق"
 
@@ -22042,10 +22105,6 @@ msgstr ""
 #: themes/edx-platform/adg/lms/templates/adg/lms/applications/experience.html
 msgid "Education"
 msgstr "القسم الفرعي"
-
-#: themes/edx-platform/adg/lms/templates/adg/lms/applications/experience.html
-msgid "School / University"
-msgstr "المدارس والشركاء"
 
 #: themes/edx-platform/adg/lms/templates/adg/lms/applications/experience.html
 msgid "Date Started"
@@ -26798,3 +26857,9 @@ msgstr ""
 #: edx_proctoring_proctortrack/backends/proctortrack_rest.py
 msgid "Click on the \"Start Proctored Exam\" button below to continue."
 msgstr "أُنقر على زر \"بدء الامتحان المراقب\" في الأسفل للمتابعة."
+
+#~ msgid "Name of Organization"
+#~ msgstr "اسم مؤسستك."
+
+#~ msgid "Note"
+#~ msgstr "ملاحظات"

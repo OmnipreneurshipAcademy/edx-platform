@@ -25,8 +25,7 @@ jobs:
         id: cache-python-requirements
         with:
           path: /opt/hostedtoolcache/Python/
-          key: |
-            ${{ runner.os }}-${{ hashFiles('requirements/edx/development.txt') }}
+          key: 123456789abcd
 
       - name: Install OS requirements
         run: |
@@ -40,6 +39,7 @@ jobs:
           python3 -m pip install setuptools==50.3.0
           python3 -m pip install wheel==0.35.1
           pip install --disable-pip-version-check --exists-action w -r requirements/edx/development.txt
+
 
       - name: Clone adg-edx-theme repo
         uses: actions/checkout@v2

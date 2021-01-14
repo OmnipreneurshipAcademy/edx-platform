@@ -93,25 +93,3 @@ jobs:
         env:
           TX_TOKEN: ${{ secrets.TX_TOKEN }}
         run: tx push -s -t
-
-      - name: Post translation generated comment on PR
-        uses: mshick/add-pr-comment@v1
-        with:
-          message: |
-              New translations have been generated for the changed source. :white_check_mark:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          repo-token-user-login: 'github-actions[bot]'
-          allow-repeats: true
-        if: steps.commit-and-push-generated-files.outputs.committed == 'true'
-                && steps.commit-and-push-generated-files.outputs.pushed == 'true'
-
-      - name: Post no translations comment on PR
-        uses: mshick/add-pr-comment@v1
-        with:
-          message: |
-              No new translations have been found for the changed source! :v:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          repo-token-user-login: 'github-actions[bot]'
-          allow-repeats: true
-        if: steps.commit-and-push-generated-files.outputs.committed == 'false'
-              && steps.commit-and-push-generated-files.outputs.pushed == 'false'

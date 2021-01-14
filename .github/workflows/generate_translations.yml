@@ -4,7 +4,7 @@ on:
   pull_request:
     types: [ opened, synchronize, reopened ]
     branches:
-      - develop
+      - master
 
 jobs:
   generate-translations:
@@ -20,29 +20,20 @@ jobs:
         with:
           python-version: 3.5
 
-      - name: Cache python requirements
-        uses: actions/cache@v2
-        id: cache-python-requirements
-        with:
-          path: ~/.cache/pip
-          key: |
-            ${{ hashFiles('requirements/edx/testing.txt') }}-${{ hashFiles('requirements/adg/base.txt') }}
-
       - name: Install OS requirements
         run: |
           sudo apt-get install libxmlsec1-dev pkg-config gettext
           sudo apt-get update
 
       - name: Install pip requirements
-        if: steps.cache-python-requirements.outputs.cache-hit != 'true'
         run: |
           python3 -m pip install pip==20.0.2
           python3 -m pip install setuptools==50.3.0
           python3 -m pip install wheel==0.35.1
           pip install --disable-pip-version-check --exists-action w -r requirements/edx/development.txt
 
-
       - name: Clone adg-edx-theme repo
+        id: clone-theme-repo
         uses: actions/checkout@v2
         continue-on-error: true
         with:
@@ -50,6 +41,18 @@ jobs:
           path: ./themes
           ref: ${{ github.head_ref }}
           token: ${{ secrets.ADG_THEME_ACCESS_TOKEN }}
+
+      - name: Add comment if cloning fails
+        uses: mshick/add-pr-comment@v1
+        with:
+          message: |
+            Cloning failed. :x:
+            No branch ref `${{ github.head_ref }}` found on adg-edx-theme repo.
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          repo-token-user-login: 'github-actions[bot]'
+          allow-repeats: true
+        if: steps.clone-theme-repo.outcome == 'failure'
+
 
       - name: Pull latest translations
         id: pull-latest-translations

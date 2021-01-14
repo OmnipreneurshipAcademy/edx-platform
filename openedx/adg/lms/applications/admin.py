@@ -3,7 +3,15 @@ Registering models for applications app.
 """
 from django.contrib import admin
 
-from .models import ApplicationHub, BusinessLine, Education, UserApplication, WorkExperience
+from .models import (
+    ApplicationHub,
+    BusinessLine,
+    Education,
+    PrerequisiteCourse,
+    PrerequisiteCourseGroup,
+    UserApplication,
+    WorkExperience
+)
 
 
 @admin.register(ApplicationHub)
@@ -72,3 +80,13 @@ class BusinessLineAdmin(admin.ModelAdmin):
     list_display = ('id', 'title', 'logo', 'description',)
     list_filter = ('title',)
     search_fields = ('title',)
+
+
+class PrerequisiteCourseAdmin(admin.TabularInline):
+    model = PrerequisiteCourse
+
+
+@admin.register(PrerequisiteCourseGroup)
+class PrerequisiteCourseGroupAdmin(admin.ModelAdmin):
+    inlines = [PrerequisiteCourseAdmin, ]
+    list_display = ('name', 'prereq_course_count', 'open_prereq_courses_count',)

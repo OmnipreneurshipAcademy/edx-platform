@@ -53,7 +53,6 @@ jobs:
           allow-repeats: true
         if: steps.clone-theme-repo.outcome == 'failure'
 
-
       - name: Pull latest translations
         id: pull-latest-translations
         env:

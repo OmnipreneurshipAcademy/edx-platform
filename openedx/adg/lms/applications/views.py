@@ -1,7 +1,7 @@
 """
 All views for applications app
 """
-from django.contrib.auth.mixins import AccessMixin
+from django.contrib.auth.mixins import AccessMixin, LoginRequiredMixin
 from django.contrib.auth.views import redirect_to_login
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
@@ -9,10 +9,11 @@ from django.views import View
 from django.views.generic import TemplateView
 
 from openedx.adg.common.course_meta.models import CourseMeta
+from openedx.adg.lms.utils.date_utils import month_choices, year_choices
 from openedx.core.djangoapps.content.course_overviews.models import CourseOverview
 
 from .helpers import send_application_submission_confirmation_email
-from .models import ApplicationHub
+from .models import ApplicationHub, Education
 
 
 class RedirectToLoginOrRelevantPageMixin(AccessMixin):
@@ -135,3 +136,20 @@ class ApplicationSuccessView(RedirectToLoginOrRelevantPageMixin, TemplateView):
         context = super(ApplicationSuccessView, self).get_context_data(**kwargs)
         context['submission_date'] = self.request.user.application_hub.submission_date
         return context
+
+
+class ExperienceView(LoginRequiredMixin, TemplateView):
+
+    template_name = 'adg/lms/applications/experience.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        user_application = self.request.user.application
+        context['degree_types'] = Education.DEGREE_TYPES
+        context['month_choices'] = month_choices()
+        context['year_choices'] = year_choices()
+        context['user_application_id'] = user_application.id
+        context['is_work_experience_not_applicable'] = user_application.is_work_experience_not_applicable
+        return context
+

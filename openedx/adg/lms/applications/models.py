@@ -120,6 +120,8 @@ class UserApplication(TimeStampedModel):
         help_text=_('Accepted extensions: .pdf, .doc, .jpg, .png'),
     )
     cover_letter = models.TextField(blank=True, verbose_name=_('Cover Letter'), )
+    is_work_experience_not_applicable = models.BooleanField(verbose_name=_('Work Experience Not Applicable'),
+                                                            default=False)
 
     OPEN = 'open'
     ACCEPTED = 'accepted'

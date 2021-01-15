@@ -49,7 +49,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1a\n"
 "Report-Msgid-Bugs-To: openedx-translation@googlegroups.com\n"
-"POT-Creation-Date: 2021-01-14 11:14+0000\n"
+"POT-Creation-Date: 2021-01-15 11:59+0000\n"
 "PO-Revision-Date: 2020-10-27 19:11+0000\n"
 "Last-Translator: Imran Bashir <admin@omnipreneurshipacademy.com>, 2021\n"
 "Language-Team: Arabic (https://www.transifex.com/philanthropy-u/teams/113553/ar/)\n"
@@ -4980,7 +4980,6 @@ msgstr "لم نتمكّن من إنشاء حسابك. "
 
 #: lms/static/js/student_account/views/RegisterView.js
 #: lms/templates/student_account/register.underscore
-#: themes/edx-platform/adg/lms/templates/student_account/register.underscore
 msgid "Create Account"
 msgstr "إنشاء حساب "
 
@@ -5495,7 +5494,6 @@ msgid "CHANGE PASSWORD"
 msgstr ""
 
 #: openedx/adg/lms/static/components/student_account/PasswordResetConfirmation.jsx
-#: themes/edx-platform/adg/lms/templates/student_account/password_reset.underscore
 msgid "Password Reset"
 msgstr "كلمة المرور"
 
@@ -8731,8 +8729,6 @@ msgstr "نأسف لحدوث خطأ. يُرجى إعادة فتح الصفحة."
 
 #: lms/templates/student_account/hinted_login.underscore
 #: lms/templates/student_account/login.underscore
-#: themes/edx-platform/adg/lms/templates/student_account/login.underscore
-#: themes/edx-platform/adg/lms/templates/student_account/register.underscore
 msgid "Sign in"
 msgstr "تسجيل الدخول"
 
@@ -8781,23 +8777,19 @@ msgid "Create an Account."
 msgstr "إنشاء حساب."
 
 #: lms/templates/student_account/login.underscore
-#: themes/edx-platform/adg/lms/templates/student_account/login.underscore
 msgid "Sign in to continue learning as {email}"
 msgstr "تسجيل الدخول لمتابعة التعلم كـ {email}"
 
 #: lms/templates/student_account/login.underscore
-#: themes/edx-platform/adg/lms/templates/student_account/login.underscore
 msgid "Sign in to continue learning"
 msgstr "تسجيل الدخول لمتابعة التعلم"
 
 #: lms/templates/student_account/login.underscore
-#: themes/edx-platform/adg/lms/templates/student_account/login.underscore
 msgid ""
 "You already have an edX account with your {enterprise_name} email address."
 msgstr "لديك حساب edX سابق بعنوان بريدك الإلكتروني في {enterprise_name}."
 
 #: lms/templates/student_account/login.underscore
-#: themes/edx-platform/adg/lms/templates/student_account/login.underscore
 msgid ""
 "Going forward, your account information will be updated and maintained by "
 "{enterprise_name}."
@@ -8806,7 +8798,6 @@ msgstr ""
 "{enterprise_name}."
 
 #: lms/templates/student_account/login.underscore
-#: themes/edx-platform/adg/lms/templates/student_account/login.underscore
 msgid ""
 "You can view your information or unlink from {enterprise_name} anytime in "
 "your Account Settings."
@@ -8815,17 +8806,14 @@ msgstr ""
 "إعدادات حسابك."
 
 #: lms/templates/student_account/login.underscore
-#: themes/edx-platform/adg/lms/templates/student_account/login.underscore
 msgid "To continue learning with this account, sign in below."
 msgstr "لمتابعة التعلم باستخدام هذا الحساب ، قم بتسجيل الدخول أدناه."
 
 #: lms/templates/student_account/login.underscore
-#: themes/edx-platform/adg/lms/templates/student_account/login.underscore
 msgid "Sign In"
 msgstr "تسجيل الدخول"
 
 #: lms/templates/student_account/login.underscore
-#: themes/edx-platform/adg/lms/templates/student_account/login.underscore
 msgid ""
 "Sign in here using your email address and password, or use one of the "
 "providers listed below."
@@ -8834,27 +8822,22 @@ msgstr ""
 "أحد المزوِّدين المذكورين أدناه."
 
 #: lms/templates/student_account/login.underscore
-#: themes/edx-platform/adg/lms/templates/student_account/login.underscore
 msgid "Sign in here using your email address and password."
 msgstr "يُرجى تسجيل دخولك باستخدام عنوان بريدك الإلكتروني وكلمة المرور."
 
 #: lms/templates/student_account/login.underscore
-#: themes/edx-platform/adg/lms/templates/student_account/login.underscore
 msgid "If you do not yet have an account, use the button below to register."
 msgstr "إذا لم تكن تملك حسابًا بعد، يُرجى استخدام الزرّ أدناه للتسجيل."
 
 #: lms/templates/student_account/login.underscore
-#: themes/edx-platform/adg/lms/templates/student_account/login.underscore
 msgid "Use my university info"
 msgstr "استخدام معلومات جامعتي"
 
 #: lms/templates/student_account/login.underscore
-#: themes/edx-platform/adg/lms/templates/student_account/login.underscore
 msgid "or sign in with"
 msgstr "أو سجّل الدخول باستخدام"
 
 #: lms/templates/student_account/login.underscore
-#: themes/edx-platform/adg/lms/templates/student_account/login.underscore
 #, python-format
 msgid "Sign in with %(providerName)s"
 msgstr "يُرجى منك تسجيل دخولك باستخدام %(providerName)s"
@@ -8888,13 +8871,11 @@ msgid "Create an account using"
 msgstr "أنشئ حساباً باستخدام"
 
 #: lms/templates/student_account/register.underscore
-#: themes/edx-platform/adg/lms/templates/student_account/register.underscore
 #, python-format
 msgid "Create account using %(providerName)s."
 msgstr "أنشئ حساباً باستخدام %(providerName)s."
 
 #: lms/templates/student_account/register.underscore
-#: themes/edx-platform/adg/lms/templates/student_account/register.underscore
 msgid "Use my institution/campus credentials"
 msgstr "استخدام بياناتي لدى المؤسّسة/ الحرم الجامعي"
 
@@ -9643,45 +9624,6 @@ msgstr ""
 "{download_link_start} قم بتنزيل هذه الصورة (انقر بزر الفأرة الأيمن أو انقر "
 "فوق زر الخيار ، ثم احفظها باسم) {link_end} ثم {upload_link_start} حمّلها "
 "{link_end} إلى backpack."
-
-#: themes/edx-platform/adg/lms/templates/student_account/form_field.underscore
-msgid "Forgot password?"
-msgstr "استعادة كلمة المرور الخاصة بي"
-
-#: themes/edx-platform/adg/lms/templates/student_account/login.underscore
-#: themes/edx-platform/adg/lms/templates/student_account/register.underscore
-msgid "OR CONTINUE WITH"
-msgstr ""
-
-#: themes/edx-platform/adg/lms/templates/student_account/login.underscore
-msgid "New to the Omnipreneurship Academy?"
-msgstr ""
-
-#: themes/edx-platform/adg/lms/templates/student_account/login.underscore
-msgid "Create account"
-msgstr "إنشاء حساب"
-
-#: themes/edx-platform/adg/lms/templates/student_account/password_reset.underscore
-msgid ""
-"Please enter the email address you registered with. We will send you a "
-"password reset email."
-msgstr ""
-
-#: themes/edx-platform/adg/lms/templates/student_account/password_reset.underscore
-msgid "SEND"
-msgstr ""
-
-#: themes/edx-platform/adg/lms/templates/student_account/register.underscore
-msgid "Already have an account?"
-msgstr "هل لديك حساب مسبقاً؟"
-
-#: themes/edx-platform/adg/lms/templates/student_account/register.underscore
-msgid "Start learning with the Omnipreneurship Academy!"
-msgstr ""
-
-#: themes/edx-platform/adg/lms/templates/student_account/register.underscore
-msgid "Create a free account in less than a minute."
-msgstr ""
 
 #: cms/templates/js/access-editor.underscore
 msgid "Limit Access"
@@ -11424,3 +11366,12 @@ msgstr ""
 #: cms/templates/js/video/transcripts/messages/transcripts-use-existing.underscore
 msgid "Use Current Transcript"
 msgstr "استخدم النص الحالي"
+
+#~ msgid "Forgot password?"
+#~ msgstr "استعادة كلمة المرور الخاصة بي"
+
+#~ msgid "Create account"
+#~ msgstr "إنشاء حساب"
+
+#~ msgid "Already have an account?"
+#~ msgstr "هل لديك حساب مسبقاً؟"

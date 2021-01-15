@@ -261,6 +261,7 @@ class PrerequisiteCourseGroup(models.Model):
     """
     Model for course groups, for multilingual prereq courses
     """
+
     name = models.CharField(verbose_name=_('Course group name'), max_length=255, )
 
     class Meta:
@@ -287,6 +288,7 @@ class PrerequisiteCourse(models.Model):
     """
     Model for multilingual prereq courses
     """
+
     objects = models.Manager()
     open_prereq_course_manager = OpenPreRequisiteCourseManager()
     course = models.OneToOneField(
@@ -296,7 +298,7 @@ class PrerequisiteCourse(models.Model):
         on_delete=models.CASCADE,
     )
     prereq_course_group = models.ForeignKey(
-        to="PrerequisiteCourseGroup", related_name="prereq_courses", on_delete=models.CASCADE
+        to='PrerequisiteCourseGroup', related_name='prereq_courses', on_delete=models.CASCADE
     )
 
     class Meta:

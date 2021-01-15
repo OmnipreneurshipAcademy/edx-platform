@@ -93,7 +93,8 @@ class PrerequisiteCourseGroupFactory(factory.DjangoModelFactory):
     """
     Factory for Work experience model
     """
-    name = factory.Sequence(lambda n: "Course group #%s" % n)
+
+    name = factory.Sequence(lambda n: 'Course group #%s' % n)
 
     class Meta:
         model = PrerequisiteCourseGroup
@@ -103,6 +104,7 @@ class PrerequisiteCourseFactory(factory.DjangoModelFactory):
     """
     Factory for Work experience model
     """
+
     course = factory.SubFactory(CourseOverviewFactory)
     prereq_course_group = factory.SubFactory(PrerequisiteCourseGroupFactory)
 

@@ -58,8 +58,8 @@ def test_command_update_is_prerequisite_courses_passed_with_no_prerequisites():
 
 @pytest.mark.django_db
 @pytest.mark.parametrize('prereq_course_groups', [1], indirect=True)
-# pylint: disable=unused-argument
-def test_command_update_is_prerequisite_courses_no_users_to_be_checked_for_update(mocker, prereq_course_groups):
+@pytest.mark.usefixtures('prereq_course_groups')
+def test_command_update_is_prerequisite_courses_no_users_to_be_checked_for_update(mocker):
     """
     Test to check if management command issues a system exits upon empty list of users to be checked for update
     """
@@ -125,7 +125,7 @@ def test_get_users_with_active_course_enrollments_enroll_users_in_open_courses(p
     Assert that users actively enrolled in open courses are filtered and returned
     """
     users = UserFactory.create_batch(3)
-    user_ids = [user.id for user in users]
+    user_ids = get_user_ids(users)
     prereq_course_group = prereq_course_groups.pop()
     open_course_keys = prereq_course_group.course_keys()
     CourseEnrollmentFactory(user=users[0], course_id=open_course_keys[0], is_active=True)
@@ -221,7 +221,7 @@ def test_check_passed_prereq_courses_all_passed(mocker, prereq_course_groups):
 
 
 @pytest.mark.django_db
-@pytest.mark.parametrize('prereq_course_groups', [2, 0], ids=['two_groups', 'empty_group_array'], indirect=True)
+@pytest.mark.parametrize('prereq_course_groups', [2], indirect=True)
 def test_check_passed_prereq_courses_all_not_passed(mocker, caplog, prereq_course_groups):
     """
     Assert that user have not passed prereq courses, if all course groups are not passed

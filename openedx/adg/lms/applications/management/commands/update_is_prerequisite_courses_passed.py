@@ -91,8 +91,8 @@ class Command(BaseCommand):
         Returns:
             None
         """
-        for user_id in users_to_be_checked_for_update:
-            user = User.objects.get(id=user_id)
+        users = User.objects.filter(id__in=users_to_be_checked_for_update)
+        for user in users:
             self.check_passed_prereq_courses(user, prereq_course_groups)
 
     def check_passed_prereq_courses(self, user, prereq_course_groups):
@@ -104,22 +104,12 @@ class Command(BaseCommand):
         Returns:
             None
         """
-
-        def _log_message():
-            """
-            Log message and exit
-            """
-            logger.info('{username} has not yet passed all the pre-reqs'.format(username=user.username))
-
-        if prereq_course_groups:
-            for prereq_course_group in prereq_course_groups:
-                if self.is_user_failed_in_course_group(user, prereq_course_group):
-                    _log_message()
-                    break
-            else:
-                self.update_application_hub(user)
+        for prereq_course_group in prereq_course_groups:
+            if self.is_user_failed_in_course_group(user, prereq_course_group):
+                logger.info('{username} has not yet passed all the pre-reqs'.format(username=user.username))
+                break
         else:
-            _log_message()
+            self.update_application_hub(user)
 
     def is_user_failed_in_course_group(self, user, prereq_course_group):
         """

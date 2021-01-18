@@ -152,4 +152,3 @@ class ExperienceView(LoginRequiredMixin, TemplateView):
         context['user_application_id'] = user_application.id
         context['is_work_experience_not_applicable'] = user_application.is_work_experience_not_applicable
         return context
-

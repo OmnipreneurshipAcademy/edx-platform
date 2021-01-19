@@ -40,26 +40,21 @@ class Command(BaseCommand):
         Returns:
             A list of user ids who should be checked for the update
         """
-        # Exclude users who passed courses or do not have application
-        users_to_be_checked_for_update = self.filter_user_by_application_hub_state()
+        users_to_be_checked_for_update = self.get_users_with_pre_reqs_not_marked_as_passed()
 
         for prereq_course_group in prereq_course_groups:
-            # Get user with valid course enrollment in prereq courses for current group
-            user_ids = self.get_users_with_active_course_enrollments(
+            users_to_be_checked_for_update = self.get_users_with_active_course_enrollments(
                 users_to_be_checked_for_update, prereq_course_group
             )
 
-            # Keep users who have active enrolments in each course group
-            users_to_be_checked_for_update = list(set(users_to_be_checked_for_update).intersection(user_ids))
-
         return users_to_be_checked_for_update
 
-    def filter_user_by_application_hub_state(self):
+    def get_users_with_pre_reqs_not_marked_as_passed(self):
         """
-        Get users who does not have associated application hub and if they have, then they have not passed all prereq
+        Get users who do not have associated application hub and if they have, then they have not passed all prereq
         courses
         Returns:
-            A querySet for users who should be checked further
+            A querySet for user ids whose pre req courses are not yet marked as passed
         """
         return User.objects.filter(
             Q(application_hub__isnull=True) | Q(application_hub__is_prerequisite_courses_passed=False),
@@ -68,7 +63,7 @@ class Command(BaseCommand):
     def get_users_with_active_course_enrollments(self, users_to_be_checked_for_update, prereq_course_group):
         """
         Filter users from provided user ids. Filtered users that enrolled in one or more courses from course group
-        and has not un-enrollment course
+        and has not unenrolled course
         Args:
             users_to_be_checked_for_update: List of user ids
             prereq_course_group: PrerequisiteCourseGroup model object
@@ -93,9 +88,9 @@ class Command(BaseCommand):
         """
         users = User.objects.filter(id__in=users_to_be_checked_for_update)
         for user in users:
-            self.check_passed_prereq_courses(user, prereq_course_groups)
+            self.check_passed_prereq_courses_and_update_application_hub(user, prereq_course_groups)
 
-    def check_passed_prereq_courses(self, user, prereq_course_groups):
+    def check_passed_prereq_courses_and_update_application_hub(self, user, prereq_course_groups):
         """
         Check passed prereq courses for a particular user and update application hub if all prereq courses are passed
         Args:
@@ -128,12 +123,9 @@ class Command(BaseCommand):
             course_passed = course_grade and course_grade.passed
 
             if course_passed:
-                is_failed = False
-                break
-        else:
-            is_failed = True
+                return False
 
-        return is_failed
+        return True
 
     def update_application_hub(self, user):
         """

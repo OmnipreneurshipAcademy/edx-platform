@@ -298,7 +298,7 @@ class PrerequisiteCourse(models.Model):
         on_delete=models.CASCADE,
     )
     prereq_course_group = models.ForeignKey(
-        to='PrerequisiteCourseGroup', related_name='prereq_courses', on_delete=models.CASCADE
+        PrerequisiteCourseGroup, related_name='prereq_courses', on_delete=models.CASCADE
     )
 
     class Meta:

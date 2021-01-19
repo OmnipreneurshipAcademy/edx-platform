@@ -75,11 +75,11 @@ def test_get_minimal_users_to_be_checked_for_update(mocker):
     Assert that common user ids are returned which means users with valid enrollment in each course group
     """
     user_ids = [100, 200, 300, 400, 500]
-    side_effect_list = [[100, 200, 300], [200, 300, 400], [100, 200, 300, 500]]
+    side_effect_list = [[100, 200, 300, 500], [200, 300, 500], [200, 300]]
 
     prereq_course_groups = [Mock(), Mock(), Mock()]
     mocker.patch.object(
-        command_module.Command, 'filter_user_by_application_hub_state', return_value=user_ids
+        command_module.Command, 'get_users_with_pre_reqs_not_marked_as_passed', return_value=user_ids
     )
     mocker.patch.object(
         command_module.Command, 'get_users_with_active_course_enrollments', side_effect=side_effect_list
@@ -100,20 +100,20 @@ def test_filter_user_by_application_passed_courses():
     ApplicationHubFactory(is_prerequisite_courses_passed=True)
 
     command = command_module.Command()
-    filtered_user_ids = command.filter_user_by_application_hub_state()
+    filtered_user_ids = command.get_users_with_pre_reqs_not_marked_as_passed()
 
     assert sorted(filtered_user_ids) == [incomplete_application.user.id]
 
 
 @pytest.mark.django_db
-def test_filter_user_by_application_hub_state_no_application_hub():
+def test_get_users_with_pre_reqs_not_marked_as_passed_no_application_hub():
     """
     Assert that users without applications hub are returned
     """
     users = UserFactory.create_batch(2)
 
     command = command_module.Command()
-    filtered_user_ids = command.filter_user_by_application_hub_state()
+    filtered_user_ids = command.get_users_with_pre_reqs_not_marked_as_passed()
 
     assert sorted(filtered_user_ids) == get_user_ids(users)
 
@@ -182,7 +182,9 @@ def test_check_users_for_application_update_successfully(mocker, prereq_course_g
     """
     users = UserFactory.create_batch(2)
     user_ids = get_user_ids(users)
-    mock_check_passed_prereq_courses = mocker.patch.object(command_module.Command, 'check_passed_prereq_courses')
+    mock_check_passed_prereq_courses = mocker.patch.object(
+        command_module.Command, 'check_passed_prereq_courses_and_update_application_hub'
+    )
 
     command = command_module.Command()
     command.check_users_for_application_update(user_ids, prereq_course_groups)
@@ -196,7 +198,9 @@ def test_check_users_for_application_update_empty_user_list(mocker):
     """
     Assert that no user is check for application update
     """
-    mock_check_passed_prereq_courses = mocker.patch.object(command_module.Command, 'check_passed_prereq_courses')
+    mock_check_passed_prereq_courses = mocker.patch.object(
+        command_module.Command, 'check_passed_prereq_courses_and_update_application_hub'
+    )
 
     command = command_module.Command()
     command.check_users_for_application_update([], mocker.ANY)
@@ -206,7 +210,7 @@ def test_check_users_for_application_update_empty_user_list(mocker):
 
 @pytest.mark.django_db
 @pytest.mark.parametrize('prereq_course_groups', [2], indirect=True)
-def test_check_passed_prereq_courses_all_passed(mocker, prereq_course_groups):
+def test_check_passed_prereq_courses_and_update_application_hub_all_passed(mocker, prereq_course_groups):
     """
     Assert that user have passed all prereq courses, if all course groups are passed
     """
@@ -215,14 +219,14 @@ def test_check_passed_prereq_courses_all_passed(mocker, prereq_course_groups):
     mock_update_application_hub = mocker.patch.object(command_module.Command, 'update_application_hub')
 
     command = command_module.Command()
-    command.check_passed_prereq_courses(user, prereq_course_groups)
+    command.check_passed_prereq_courses_and_update_application_hub(user, prereq_course_groups)
 
     mock_update_application_hub.assert_called_once_with(user)
 
 
 @pytest.mark.django_db
 @pytest.mark.parametrize('prereq_course_groups', [2], indirect=True)
-def test_check_passed_prereq_courses_all_not_passed(mocker, caplog, prereq_course_groups):
+def test_check_passed_prereq_courses_and_update_application_hub_all_not_passed(mocker, caplog, prereq_course_groups):
     """
     Assert that user have not passed prereq courses, if all course groups are not passed
     """
@@ -231,7 +235,7 @@ def test_check_passed_prereq_courses_all_not_passed(mocker, caplog, prereq_cours
 
     caplog.set_level(logging.INFO)
     command = command_module.Command()
-    command.check_passed_prereq_courses(user, prereq_course_groups)
+    command.check_passed_prereq_courses_and_update_application_hub(user, prereq_course_groups)
 
     assert '{username} has not yet passed'.format(username=user.username) in caplog.messages[0]
 

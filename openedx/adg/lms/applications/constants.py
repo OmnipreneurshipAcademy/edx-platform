@@ -5,7 +5,7 @@ from datetime import datetime
 
 from django.utils.translation import ugettext_lazy as _
 
-MINIMUM_YEAR_OPTION = 1900
+MINIMUM_YEAR_OPTION = 1940
 MAXIMUM_YEAR_OPTION = datetime.today().year
 LOGO_IMAGE_MAX_SIZE = 200 * 1024
 ALLOWED_LOGO_EXTENSIONS = ('png', 'jpg', 'svg')

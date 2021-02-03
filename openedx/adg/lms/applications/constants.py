@@ -5,14 +5,6 @@ from datetime import datetime
 
 from django.utils.translation import ugettext_lazy as _
 
-MINIMUM_YEAR_OPTION = 1900
-MAXIMUM_YEAR_OPTION = datetime.today().year
-LOGO_IMAGE_MAX_SIZE = 200 * 1024
-ALLOWED_LOGO_EXTENSIONS = ('png', 'jpg', 'svg')
-MAXIMUM_AGE_LIMIT = 60
-MINIMUM_AGE_LIMIT = 21
-RESUME_FILE_MAX_SIZE = 4 * 1024 * 1024
-
 # Fieldset titles for application review admin page
 
 RESUME_AND_COVER_LETTER = _('RESUME & COVER LETTER')
@@ -38,3 +30,11 @@ COVER_LETTER_FILE_DISPLAY = 'cover_letter_file_display'
 RESUME_DISPLAY = 'resume_display'
 COVER_LETTER_TEXT = 'cover_letter'
 PREREQUISITES = 'prerequisites'
+
+MINIMUM_YEAR_OPTION = 1900
+MAXIMUM_YEAR_OPTION = datetime.today().year
+LOGO_IMAGE_MAX_SIZE = 200 * 1024
+ALLOWED_LOGO_EXTENSIONS = ('png', 'jpg', 'svg')
+MAXIMUM_AGE_LIMIT = 60
+MINIMUM_AGE_LIMIT = 21
+RESUME_FILE_MAX_SIZE = 4 * 1024 * 1024

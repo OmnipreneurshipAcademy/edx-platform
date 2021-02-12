@@ -26,7 +26,7 @@ class RedirectToLoginOrRelevantPageMixin(AccessMixin):
     def dispatch(self, request, *args, **kwargs):
         """
         Redirects to login page for unauthenticated users. Runs `handle_no_permission` if preconditions are not
-        satisfied. Runs the view normally for authenticated user with proper conditions satisfied.
+        satisfied. Runs the view normally for authenticated user with proper conditions satisfied. 
         """
         if not request.user.is_authenticated:
             return redirect_to_login(request.get_full_path(), self.get_login_url(), self.get_redirect_field_name())

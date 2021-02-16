@@ -1,6 +1,6 @@
 """
 All workable urls for applications app
-A View can be import from .views files
+A view can be import from .views files
 """
 from django.urls import path
 

@@ -1,5 +1,5 @@
 """
-All views for applications app
+All the views for applications app
 """
 from django.contrib.auth.mixins import AccessMixin
 from django.contrib.auth.views import redirect_to_login

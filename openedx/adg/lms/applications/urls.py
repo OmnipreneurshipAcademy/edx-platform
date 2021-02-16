@@ -1,7 +1,7 @@
 """
 All workable urls for applications app
 A view can be import from .views file
-'path' function is imported from django urls
+A 'path' function is imported from django urls
 """
 from django.urls import path
 

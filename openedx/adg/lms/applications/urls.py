@@ -1,5 +1,5 @@
 """
-All urls for applications app
+All workable urls for applications app
 """
 from django.urls import path
 

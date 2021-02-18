@@ -1,5 +1,5 @@
 """
-Forms for applications app.
+All the Forms for applications app.
 """
 from datetime import date
 

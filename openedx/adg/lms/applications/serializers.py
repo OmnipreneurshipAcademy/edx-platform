@@ -1,5 +1,5 @@
 """
-Serializers for applications app
+All the Serializers for applications app
 """
 from rest_framework import serializers
 from django.utils.translation import ugettext as _

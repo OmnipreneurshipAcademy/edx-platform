@@ -1,5 +1,5 @@
 """
-All models for applications app
+All the models for applications app
 """
 from datetime import date, datetime
 

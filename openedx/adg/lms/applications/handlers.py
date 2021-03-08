@@ -1,6 +1,7 @@
 """
 handler methods for applications
 """
+import logging
 
 from django.contrib.auth.models import Group
 from django.db.models.signals import post_delete, pre_save
@@ -9,12 +10,16 @@ from django.dispatch import receiver
 from .models import BusinessLine
 
 
+logger = logging.getLogger(__name__)
+
+
 @receiver(pre_save, sender=BusinessLine)
 def update_business_line_group(instance, **kwargs):  # pylint: disable=unused-argument
     """
     Add user group on creating a Business Line
     Modify user group on updating a Business Line
     """
+    logger.info(f'Updating business line of the group: {instance.title}')
     if instance.pk is None:
         instance.group = Group.objects.create(name=instance.title)
     else:

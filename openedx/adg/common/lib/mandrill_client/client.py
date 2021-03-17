@@ -71,6 +71,6 @@ class MandrillClient(object):
         """
         log.info(f'Sending email using template: {template}, account: {email} and context: {context} using mandrill')
 
-        template = add_user_preferred_language_to_template_slug(template)
+        template = add_user_preferred_language_to_template_slug(template, email)
         email_data = EmailData(template, email, context)
         self._send_mail(email_data)

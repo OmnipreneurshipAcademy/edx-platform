@@ -20,6 +20,8 @@ def add_user_preferred_language_to_template_slug(template, email):
 
     user_pref = UserPreference.objects.filter(user__email=email, key='pref-lang').first()
     user_lang = user_pref.value if user_pref else None
+
     if user_lang and user_lang != settings.LANGUAGE_CODE:
         return '{}-{}'.format(template, user_lang)
+
     return template

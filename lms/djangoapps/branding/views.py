@@ -33,18 +33,8 @@ log = logging.getLogger(__name__)
 @cache_if_anonymous()
 def index(request):
     """
-    Redirects to main page -- info page if user authenticated, or marketing if not
+    Redirects to marketing page
     """
-    if request.user.is_authenticated:
-        # Only redirect to dashboard if user has
-        # courses in their dashboard. Otherwise UX is a bit cryptic.
-        # In this case, we want to have the user stay on a course catalog
-        # page to make it easier to browse for courses (and register)
-        if configuration_helpers.get_value(
-                'ALWAYS_REDIRECT_HOMEPAGE_TO_DASHBOARD_FOR_AUTHENTICATED_USER',
-                settings.FEATURES.get('ALWAYS_REDIRECT_HOMEPAGE_TO_DASHBOARD_FOR_AUTHENTICATED_USER', True)):
-            return redirect('dashboard')
-
     enable_mktg_site = configuration_helpers.get_value(
         'ENABLE_MKTG_SITE',
         settings.FEATURES.get('ENABLE_MKTG_SITE', False)

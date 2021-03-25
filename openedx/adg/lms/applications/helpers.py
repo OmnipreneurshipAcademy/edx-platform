@@ -268,3 +268,10 @@ def get_extra_context_for_application_review_page(application):
     }
 
     return extra_context
+
+
+
+def test_helper():
+    print('THIS is a very very very very very long test helper that spans over 120 characters of a line to test the quality workflow')
+
+

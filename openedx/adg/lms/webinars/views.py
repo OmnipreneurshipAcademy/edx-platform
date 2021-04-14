@@ -41,7 +41,7 @@ class WebinarRegistrationView(LoginRequiredMixin, SingleObjectMixin, View):
             HttpResponse: On success redirect to webinar page otherwise through HTTP error code as per nature
             of error i.e. 404 or 500
         """
-        self.object = self.get_object()
+        self.object = self.get_object()  # pylint: disable=attribute-defined-outside-init
         is_registering = action == 'register'
         user = request.user
 

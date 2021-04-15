@@ -106,7 +106,7 @@ def validate_email_list(emails):
     return False, emails
 
 
-def webinar_emails_for_panelist_co_hosts_and_presenter(webinar):
+def webinar_emails_for_panelists_co_hosts_and_presenter(webinar):
     """
     Given a webinar, generate a list of emails for co-hosts, panelists, and presenter
 

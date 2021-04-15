@@ -13,7 +13,7 @@ from .forms import WebinarForm
 from .helpers import (
     remove_emails_duplicate_in_other_list,
     send_webinar_emails,
-    webinar_emails_for_panelist_co_hosts_and_presenter
+    webinar_emails_for_panelists_co_hosts_and_presenter
 )
 from .models import CancelledWebinar, Webinar, WebinarRegistration
 
@@ -102,7 +102,7 @@ class WebinarAdmin(WebinarAdminBase):
                     webinar_invitation_recipients, registered_users
                 )
         else:
-            webinar_invitation_recipients += webinar_emails_for_panelist_co_hosts_and_presenter(webinar)
+            webinar_invitation_recipients += webinar_emails_for_panelists_co_hosts_and_presenter(webinar)
 
         send_webinar_emails(
             MandrillClient.WEBINAR_CREATED,

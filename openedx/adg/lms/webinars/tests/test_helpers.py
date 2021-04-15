@@ -14,10 +14,19 @@ from openedx.adg.lms.webinars.helpers import (
     send_webinar_emails,
     send_webinar_registration_email,
     validate_email_list,
-    webinar_emails_for_panelist_co_hosts_and_presenter
+    webinar_emails_for_panelists_co_hosts_and_presenter
 )
 
 from .factories import WebinarFactory, WebinarRegistrationFactory
+from .constants import (
+    VALID_EMAIL_ADDRESSES,
+    INVALID_EMAIL_ADDRESSES,
+    PANELIST_1,
+    PANELIST_2,
+    CO_HOST_1,
+    CO_HOST_2,
+    PRESENTER
+)
 
 
 @pytest.mark.django_db
@@ -128,8 +137,8 @@ def test_send_webinar_registration_email(mocker):
 
 @pytest.mark.parametrize(
     'emails , expected_error', [
-            ('test1@exmaple.com,test2@example.com', False),
-            ('test1@exmaple.com,test2.example.com', True)
+            (VALID_EMAIL_ADDRESSES, False),
+            (INVALID_EMAIL_ADDRESSES, True)
         ]
     )
 def test_validate_email_list(emails, expected_error):
@@ -142,21 +151,21 @@ def test_validate_email_list(emails, expected_error):
 @pytest.mark.django_db
 @pytest.mark.parametrize(
     'panelists, co_hosts, presenter, expected_emails', [
-            (['pl1@eg.com', 'pl2@eg.com'], [], 'presenter@eg.com', ['pl1@eg.com', 'pl2@eg.com', 'presenter@eg.com']),
-            ([], ['ch1@eg.com', 'ch2@eg.com'], 'presenter@eg.com', ['ch1@eg.com', 'ch2@eg.com', 'presenter@eg.com']),
-            ([], [], 'presenter@eg.com', ['presenter@eg.com']),
+            ([PANELIST_1, PANELIST_2], [], PRESENTER, [PANELIST_1, PANELIST_2, PRESENTER]),
+            ([], [CO_HOST_1, CO_HOST_2], PRESENTER, [CO_HOST_1, CO_HOST_2, PRESENTER]),
+            ([], [], PRESENTER, [PRESENTER]),
             (
-                ['pl1@eg.com', 'pl2@eg.com'],
-                ['ch1@eg.com', 'ch2@eg.com'],
-                'presenter@eg.com',
-                ['pl1@eg.com', 'pl2@eg.com', 'ch1@eg.com', 'ch2@eg.com', 'presenter@eg.com']
+                [PANELIST_1, PANELIST_2],
+                [CO_HOST_1, CO_HOST_2],
+                PRESENTER,
+                [PANELIST_1, PANELIST_2, CO_HOST_1, CO_HOST_2, PRESENTER]
             ),
 
         ]
     )
-def test_webinar_emails_for_panelist_co_hosts_and_presenter(webinar, panelists, co_hosts, presenter, expected_emails):
+def test_webinar_emails_for_panelists_co_hosts_and_presenter(webinar, panelists, co_hosts, presenter, expected_emails):
     """
-    Test if 'webinar_emails_for_panelist_co_hosts_and_presenter' returns the list of webinar related emails
+    Test if 'webinar_emails_for_panelists_co_hosts_and_presenter' returns the list of webinar related emails
     """
     panelist_emails = factory.Iterator(panelists)
     panelist_users = UserFactory.create_batch(len(panelists), email=panelist_emails)
@@ -167,7 +176,7 @@ def test_webinar_emails_for_panelist_co_hosts_and_presenter(webinar, panelists, 
     webinar.co_hosts.add(*co_host_users)
 
     webinar.presenter = UserFactory(email=presenter)
-    assert sorted(webinar_emails_for_panelist_co_hosts_and_presenter(webinar)) == sorted(expected_emails)
+    assert sorted(webinar_emails_for_panelists_co_hosts_and_presenter(webinar)) == sorted(expected_emails)
 
 
 @pytest.mark.django_db
@@ -186,6 +195,6 @@ def test_webinar_emails_for_panelist_co_hosts_and_presenter(webinar, panelists, 
     )
 def test_remove_emails_duplicate_in_other_list(emails, reference_emails, expected_emails):
     """
-    Test that only the list of emails that are not present in reference list of emails are return
+    Test that only the list of emails that are not present in reference list of emails are returned
     """
     assert sorted(remove_emails_duplicate_in_other_list(emails, reference_emails)) == sorted(expected_emails)

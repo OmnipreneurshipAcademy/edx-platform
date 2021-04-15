@@ -138,34 +138,27 @@ def test_send_update_emails_to_registrants_in_webinar_update(webinar_admin_insta
 
 
 @pytest.mark.django_db
-def test_save_related_send_update_emails(request, webinar_admin_instance, webinar, mocker):
+@pytest.mark.parametrize('update', (True, False))
+def test_save_related_send_emails(request, webinar_admin_instance, webinar, mocker, update):
     """
-     Test that upon updating webinar, emails for updated invites are send.
+    Test that upon creating/updating webinar, emails for invites/updated invites are sent.
     """
     mock_send_webinar_emails = mocker.patch('openedx.adg.lms.webinars.admin.send_webinar_emails')
     mock_form_class = mocker.patch('openedx.adg.lms.webinars.forms.WebinarForm')
+
     request.method = 'POST'
     mock_form_class.instance = webinar
-    user = UserFactory()
-    WebinarRegistrationFactory(user=user, webinar=webinar)
-    WebinarAdmin.save_related(webinar_admin_instance, request, mock_form_class, [], True)
-    mock_send_webinar_emails.assert_has_calls([
-        call(MandrillClient.WEBINAR_UPDATED, webinar.title, webinar.description, webinar.start_time, [user.email]),
-        call(MandrillClient.WEBINAR_CREATED, webinar.title, webinar.description, webinar.start_time, [])
-    ])
 
-
-@pytest.mark.django_db
-def test_save_related_send_invite_emails(request, webinar_admin_instance, webinar, mocker):
-    """
-     Test that upon creating webinar emails for only invites are send.
-    """
-
-    mock_send_webinar_emails = mocker.patch('openedx.adg.lms.webinars.admin.send_webinar_emails')
-    mock_form_class = mocker.patch('openedx.adg.lms.webinars.forms.WebinarForm')
-    request.method = 'POST'
-    mock_form_class.instance = webinar
-    WebinarAdmin.save_related(webinar_admin_instance, request, mock_form_class, [], False)
-    mock_send_webinar_emails.assert_called_once_with(
-        MandrillClient.WEBINAR_CREATED, webinar.title, webinar.description, webinar.start_time, []
-    )
+    if update:
+        user = UserFactory()
+        WebinarRegistrationFactory(user=user, webinar=webinar)
+        WebinarAdmin.save_related(webinar_admin_instance, request, mock_form_class, [], update)
+        mock_send_webinar_emails.assert_has_calls([
+            call(MandrillClient.WEBINAR_UPDATED, webinar.title, webinar.description, webinar.start_time, [user.email]),
+            call(MandrillClient.WEBINAR_CREATED, webinar.title, webinar.description, webinar.start_time, [])
+        ])
+    else:
+        WebinarAdmin.save_related(webinar_admin_instance, request, mock_form_class, [], update)
+        mock_send_webinar_emails.assert_called_once_with(
+            MandrillClient.WEBINAR_CREATED, webinar.title, webinar.description, webinar.start_time, []
+        )

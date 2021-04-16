@@ -86,10 +86,10 @@ class WebinarAdmin(WebinarAdminBase):
             )
 
         if change:
+            registered_users = list(
+                webinar.registrations.filter(is_registered=True).values_list('user__email', flat=True)
+            )
             if form.cleaned_data.get('send_update_emails_to_registrants'):
-                registered_users = list(
-                    webinar.registrations.filter(is_registered=True).values_list('user__email', flat=True)
-                )
                 send_webinar_emails(
                     MandrillClient.WEBINAR_UPDATED,
                     webinar.title,
@@ -98,9 +98,9 @@ class WebinarAdmin(WebinarAdminBase):
                     list(set(registered_users))
                 )
 
-                webinar_invitation_recipients = remove_emails_duplicate_in_other_list(
-                    webinar_invitation_recipients, registered_users
-                )
+            webinar_invitation_recipients = remove_emails_duplicate_in_other_list(
+                webinar_invitation_recipients, registered_users
+            )
         else:
             webinar_invitation_recipients += webinar_emails_for_panelists_co_hosts_and_presenter(webinar)
 

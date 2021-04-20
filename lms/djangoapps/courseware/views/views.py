@@ -268,16 +268,14 @@ def courses(request):
     # Add marketable programs to the context.
     programs_list = get_programs_with_type(request.site, include_hidden=False)
 
-    # Get upcoming webinars to display them on `learn` page
-    upcoming_webinars = Webinar.objects.filter(status=Webinar.UPCOMING).order_by('start_time')
-
+    # Add upcoming webinars in context to display them on `learn` page.
     return render_to_response(
         "courseware/courses.html",
         {
             'courses': courses_list,
             'course_discovery_meanings': course_discovery_meanings,
             'programs_list': programs_list,
-            'webinars': upcoming_webinars,
+            'webinars': Webinar.objects.filter(status=Webinar.UPCOMING).order_by('start_time'),
         }
     )
 

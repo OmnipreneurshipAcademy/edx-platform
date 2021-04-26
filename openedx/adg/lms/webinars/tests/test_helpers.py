@@ -281,7 +281,9 @@ def test_cancel_reminders_for_given_webinars(webinar, mocker):
     Tests `cancel_all_reminders` is called for the webinar to cancel reminder emails.
     """
     mock_cancel_reminders = mocker.patch('openedx.adg.lms.webinars.helpers.cancel_all_reminders')
+
     cancel_reminders_for_given_webinars([webinar])
+
     mock_cancel_reminders.assert_called_once()
 
 

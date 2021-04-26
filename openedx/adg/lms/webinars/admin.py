@@ -12,7 +12,9 @@ from openedx.adg.lms.applications.admin import adg_admin_site
 from .forms import WebinarForm
 from .helpers import (
     remove_emails_duplicate_in_other_list,
+    schedule_webinar_reminders,
     send_webinar_emails,
+    update_webinar_team_registrations,
     webinar_emails_for_panelists_co_hosts_and_presenter
 )
 from .models import CancelledWebinar, Webinar, WebinarRegistration
@@ -76,6 +78,9 @@ class WebinarAdmin(WebinarAdminBase):
         """
         Extension of save_related for webinar to send emails when object is created or modified.
         """
+        if change and any(field in form.changed_data for field in ['co_hosts', 'presenter', 'panelists']):
+            update_webinar_team_registrations(form)
+
         super(WebinarAdmin, self).save_related(request, form, formsets, change)
 
         webinar = form.instance
@@ -93,9 +98,7 @@ class WebinarAdmin(WebinarAdminBase):
             if form.cleaned_data.get('send_update_emails_to_registrants'):
                 send_webinar_emails(
                     MandrillClient.WEBINAR_UPDATED,
-                    webinar.title,
-                    webinar.description,
-                    webinar.start_time,
+                    webinar,
                     list(set(registered_users))
                 )
 
@@ -103,13 +106,15 @@ class WebinarAdmin(WebinarAdminBase):
                 webinar_invitation_recipients, registered_users
             )
         else:
-            webinar_invitation_recipients += webinar_emails_for_panelists_co_hosts_and_presenter(webinar)
+            webinar_team_emails = webinar_emails_for_panelists_co_hosts_and_presenter(webinar)
+            webinar_invitation_recipients += webinar_team_emails
+
+            WebinarRegistration.create_team_registrations(User.objects.filter(email__in=webinar_team_emails), webinar)
+            schedule_webinar_reminders(list(set(webinar_team_emails)), webinar)
 
         send_webinar_emails(
             MandrillClient.WEBINAR_CREATED,
-            webinar.title,
-            webinar.description,
-            webinar.start_time,
+            webinar,
             list(set(webinar_invitation_recipients)),
         )
 
@@ -150,8 +155,14 @@ class WebinarRegistrationAdmin(admin.ModelAdmin):
     Model admin for webinar registration
     """
 
-    list_display = ('webinar', 'user', 'is_registered',)
+    list_display = ('webinar', 'user', 'is_registered', 'is_team_member_registration',)
     search_fields = ('webinar',)
+
+    def has_add_permission(self, request):
+        return False
+
+    def has_change_permission(self, request, obj=None):
+        return False
 
 
 admin.site.register(Webinar, WebinarAdmin)

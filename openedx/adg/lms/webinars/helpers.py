@@ -130,39 +130,6 @@ def schedule_webinar_reminders(user_emails, webinar):
         )
 
 
-def reschedule_webinar_reminders(registrations, send_at, msg_id_field_name):
-    """
-    Reschedules reminders using the given field for msg ids.
-
-    Args:
-        registrations (list): List of webinar registrations.
-        send_at (str): String containing time to schedule an email at.
-        msg_id_field_name (str): String containing field name for the mandrill msg ids.
-
-    Returns:
-        None
-    """
-    for registration in registrations:
-        MandrillClient().reschedule_email(getattr(registration, msg_id_field_name), send_at)
-
-
-def cancel_webinar_reminders(registrations, msg_id_field_name):
-    """
-    Cancels reminders for webinar
-
-    Args:
-        registrations (list): List of webinar registrations.
-        msg_id_field_name (str): String containing field name for the mandrill msg ids.
-
-    Returns:
-        None
-    """
-    for registration in registrations:
-        msg_id = getattr(registration, msg_id_field_name)
-        if msg_id:
-            MandrillClient().cancel_scheduled_email(msg_id)
-
-
 def save_scheduled_reminder_ids(mandrill_response, template_name, webinar_id):
     """
     Saves mandrill msg ids of the reminders for a webinar registration.
@@ -289,6 +256,8 @@ def cancel_all_reminders(registrations):
     Returns:
         None
     """
+    from openedx.adg.lms.webinars.models import WebinarRegistration
+
     msg_id_map = {
         'starting_soon_msg_ids': [],
         'one_week_before_msg_ids': [],
@@ -297,12 +266,18 @@ def cancel_all_reminders(registrations):
     for registration in registrations:
         if registration.starting_soon_mandrill_reminder_id:
             msg_id_map['starting_soon_msg_ids'].append(registration.starting_soon_mandrill_reminder_id)
+            registration.starting_soon_mandrill_reminder_id = ''
 
         if registration.week_before_mandrill_reminder_id:
             msg_id_map['one_week_before_msg_ids'].append(registration.week_before_mandrill_reminder_id)
+            registration.week_before_mandrill_reminder_id = ''
 
     if msg_id_map['starting_soon_msg_ids']:
         task_cancel_mandrill_emails.delay(msg_id_map['starting_soon_msg_ids'])
 
     if msg_id_map['one_week_before_msg_ids']:
         task_cancel_mandrill_emails.delay(msg_id_map['one_week_before_msg_ids'])
+
+    WebinarRegistration.objects.bulk_update(
+        registrations, ['starting_soon_mandrill_reminder_id', 'week_before_mandrill_reminder_id'], batch_size=999
+    )

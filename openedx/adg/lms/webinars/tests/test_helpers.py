@@ -13,9 +13,7 @@ from openedx.adg.lms.webinars.constants import ONE_WEEK_REMINDER_ID_FIELD_NAME, 
 from openedx.adg.lms.webinars.helpers import (
     cancel_all_reminders,
     cancel_reminders_for_given_webinars,
-    cancel_webinar_reminders,
     remove_emails_duplicate_in_other_list,
-    reschedule_webinar_reminders,
     save_scheduled_reminder_ids,
     send_cancellation_emails_for_given_webinars,
     send_webinar_emails,
@@ -232,47 +230,6 @@ def test_save_scheduled_reminder_ids(template, msg_id_field_name, webinar_regist
 
     webinar_registration.refresh_from_db()
     assert getattr(webinar_registration, msg_id_field_name) == FAKE_MANDRILL_MSG_ID
-
-
-@pytest.mark.django_db
-@pytest.mark.parametrize(
-    'msg_id_field_name, msg_id', [
-        (STARTING_SOON_REMINDER_ID_FIELD_NAME, ''),
-        (ONE_WEEK_REMINDER_ID_FIELD_NAME, FAKE_MANDRILL_MSG_ID),
-    ]
-)
-def test_cancel_webinar_reminders(msg_id_field_name, msg_id, mocker, webinar_registration):
-    """
-    Tests cancel_webinar_reminders method is calling client method to cancel scheduled email.
-    """
-    mock_client = mocker.patch('openedx.adg.lms.webinars.helpers.MandrillClient')
-    setattr(webinar_registration, msg_id_field_name, msg_id)
-
-    cancel_webinar_reminders([webinar_registration], msg_id_field_name)
-
-    if msg_id:
-        mock_client.assert_called_once()
-    else:
-        mock_client.assert_not_called()
-
-
-@pytest.mark.django_db
-@pytest.mark.parametrize(
-    'msg_id_field_name, msg_id', [
-        (STARTING_SOON_REMINDER_ID_FIELD_NAME, FAKE_MANDRILL_MSG_ID),
-        (ONE_WEEK_REMINDER_ID_FIELD_NAME, FAKE_MANDRILL_MSG_ID),
-    ]
-)
-def test_reschedule_webinar_reminders(msg_id_field_name, msg_id, mocker, webinar_registration):
-    """
-    Tests reschedule_webinar_reminders method is calling client method to reschedule emails.
-    """
-    mock_client = mocker.patch('openedx.adg.lms.webinars.helpers.MandrillClient')
-    setattr(webinar_registration, msg_id_field_name, msg_id)
-
-    reschedule_webinar_reminders([webinar_registration], '2021-04-12 12:12:12', msg_id_field_name)
-
-    mock_client.assert_called_once()
 
 
 @pytest.mark.django_db

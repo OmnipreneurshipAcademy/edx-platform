@@ -15,7 +15,7 @@ from model_utils.models import TimeStampedModel
 from openedx.adg.lms.applications.helpers import validate_file_size
 from openedx.core.djangoapps.theming.helpers import get_current_request
 
-from .constants import ALLOWED_BANNER_EXTENSIONS, BANNER_MAX_SIZE, WEBINARS_TIME_FORMAT
+from .constants import ALLOWED_BANNER_EXTENSIONS, BANNER_MAX_SIZE
 from .helpers import cancel_reminders_for_given_webinars, send_cancellation_emails_for_given_webinars
 from .managers import WebinarRegistrationManager
 
@@ -140,10 +140,6 @@ class Webinar(TimeStampedModel):
         """
         from openedx.adg.lms.webinars.tasks import task_reschedule_webinar_reminders
 
-        old_values = getattr(self, '_loaded_values', {})
-        if old_values and old_values.get('start_time') != self.start_time:
-            task_reschedule_webinar_reminders.delay(self.id, self.start_time.strftime(WEBINARS_TIME_FORMAT))
-
         request = get_current_request()
         if request:
             if hasattr(self, 'created_by'):
@@ -151,9 +147,13 @@ class Webinar(TimeStampedModel):
             else:
                 self.created_by = request.user
 
-        return super(Webinar, self).save(
+        super(Webinar, self).save(
             force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields
         )
+
+        old_values = getattr(self, '_loaded_values', {})
+        if old_values and old_values.get('start_time') != self.start_time:
+            task_reschedule_webinar_reminders.delay(self.id)
 
     def webinar_team(self):
         return set(chain(self.co_hosts.all(), self.panelists.all(), {self.presenter}))

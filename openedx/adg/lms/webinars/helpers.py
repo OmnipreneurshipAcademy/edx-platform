@@ -246,11 +246,13 @@ def update_webinar_team_registrations(webinar_form):
         cancel_all_reminders(registrations)
 
 
-def cancel_all_reminders(registrations):
+def cancel_all_reminders(registrations, is_rescheduling=False):
     """
-    Cancels reminders by extracting msg ids from the given registrations.
+    Cancels reminders by extracting msg ids from the given registrations. In case the `is_rescheduling` is `True`, we
+    will not run the task `task_cancel_mandrill_emails` asynchronously.
 
     Args:
+        is_rescheduling (bool): It shows whether we are rescheduling emails or just cancelling them.
         registrations (list): List of registrations for which reminders will be cancelled.
 
     Returns:
@@ -272,10 +274,11 @@ def cancel_all_reminders(registrations):
             msg_id_map['one_week_before_msg_ids'].append(registration.week_before_mandrill_reminder_id)
             registration.week_before_mandrill_reminder_id = ''
 
-    if msg_id_map['starting_soon_msg_ids']:
+    if is_rescheduling:
+        task_cancel_mandrill_emails(msg_id_map['starting_soon_msg_ids'])
+        task_cancel_mandrill_emails(msg_id_map['one_week_before_msg_ids'])
+    else:
         task_cancel_mandrill_emails.delay(msg_id_map['starting_soon_msg_ids'])
-
-    if msg_id_map['one_week_before_msg_ids']:
         task_cancel_mandrill_emails.delay(msg_id_map['one_week_before_msg_ids'])
 
     WebinarRegistration.objects.bulk_update(

@@ -32,16 +32,20 @@ def add_user_preferred_language_to_template_slug(template, email):
     return template
 
 
-def mandrill_exception_handler(email_func):
+def mandrill_exception_handler_decorator(raise_exception):
     """
     Exception handler decorator for mandrill client
     """
-    def exception_handler(*args, **kwargs):
-        try:
-            result = email_func(*args, **kwargs)
-            log.info(result)
-            return result
-        except mandrill.Error as e:
-            log.error(f'A mandrill error occurred: {e.__class__} - {e}')
-            raise
-    return exception_handler
+    def mandrill_exception_handler(email_func):
+        def exception_handler(*args, **kwargs):
+            try:
+                result = email_func(*args, **kwargs)
+                log.info(result)
+                return result
+            except mandrill.Error as e:
+                log.error(f'A mandrill error occurred: {e.__class__} - {e}')
+
+                if raise_exception:
+                    raise
+        return exception_handler
+    return mandrill_exception_handler

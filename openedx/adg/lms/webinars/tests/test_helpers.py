@@ -245,22 +245,25 @@ def test_cancel_reminders_for_given_webinars(webinar, mocker):
 
 
 @pytest.mark.parametrize(
-    'msg_id_field_name, msg_id', [
-        (STARTING_SOON_REMINDER_ID_FIELD_NAME, FAKE_MANDRILL_MSG_ID),
-        (ONE_WEEK_REMINDER_ID_FIELD_NAME, FAKE_MANDRILL_MSG_ID),
+    'msg_id_field_name, msg_id, is_rescheduling', [
+        (STARTING_SOON_REMINDER_ID_FIELD_NAME, FAKE_MANDRILL_MSG_ID, True),
+        (ONE_WEEK_REMINDER_ID_FIELD_NAME, FAKE_MANDRILL_MSG_ID, False),
     ]
 )
 @pytest.mark.django_db
-def test_cancel_all_reminders(msg_id, msg_id_field_name, webinar_registration, mocker):
+def test_cancel_all_reminders(msg_id, msg_id_field_name, webinar_registration, mocker, is_rescheduling):
     """
     Tests `task_cancel_mandrill_emails` is called to cancel reminder emails.
     """
     mock_task_cancel_reminders = mocker.patch('openedx.adg.lms.webinars.helpers.task_cancel_mandrill_emails')
 
     setattr(webinar_registration, msg_id_field_name, msg_id)
-    cancel_all_reminders([webinar_registration])
+    cancel_all_reminders([webinar_registration], is_rescheduling)
 
-    mock_task_cancel_reminders.delay.assert_called_once()
+    if is_rescheduling:
+        assert mock_task_cancel_reminders.call_count == 2
+    else:
+        assert mock_task_cancel_reminders.delay.call_count == 2
 
 
 @pytest.mark.django_db

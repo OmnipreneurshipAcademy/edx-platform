@@ -7,7 +7,7 @@ import mandrill
 from django.conf import settings
 
 from .email_data import EmailData
-from .helpers import mandrill_exception_handler
+from .helpers import mandrill_exception_handler_decorator
 
 log = logging.getLogger(__name__)
 
@@ -39,7 +39,7 @@ class MandrillClient(object):
     def __init__(self):
         self.mandrill_client = mandrill.Mandrill(settings.MANDRILL_API_KEY)
 
-    @mandrill_exception_handler
+    @mandrill_exception_handler_decorator(False)
     def cancel_scheduled_email(self, msg_id):
         """
         Calls the mandrill API to cancel a scheduled email.
@@ -52,7 +52,7 @@ class MandrillClient(object):
         """
         return self.mandrill_client.messages.cancel_scheduled(msg_id)
 
-    @mandrill_exception_handler
+    @mandrill_exception_handler_decorator(True)
     def reschedule_email(self, msg_id, send_at):
         """
         Calls mandrill API to reschedule an email.
@@ -66,7 +66,7 @@ class MandrillClient(object):
         """
         return self.mandrill_client.messages.reschedule(msg_id, send_at)
 
-    @mandrill_exception_handler
+    @mandrill_exception_handler_decorator(True)
     def list_scheduled_emails(self, email):
         """
         Lists all scheduled messages for an email address.
@@ -79,7 +79,7 @@ class MandrillClient(object):
         """
         return self.mandrill_client.messages.list_scheduled(email)
 
-    @mandrill_exception_handler
+    @mandrill_exception_handler_decorator(True)
     def _send_mail(self, email_data, send_at=None):
         """
         Calls the mandrill API for the specific template and email

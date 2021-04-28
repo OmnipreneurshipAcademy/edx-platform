@@ -110,7 +110,7 @@ class WebinarAdmin(WebinarAdminBase):
             webinar_invitation_recipients += webinar_team_emails
 
             WebinarRegistration.create_team_registrations(User.objects.filter(email__in=webinar_team_emails), webinar)
-            schedule_webinar_reminders(list(set(webinar_team_emails)), webinar)
+            schedule_webinar_reminders(list(set(webinar_team_emails)), webinar.to_dict())
 
         send_webinar_emails(
             MandrillClient.WEBINAR_CREATED,

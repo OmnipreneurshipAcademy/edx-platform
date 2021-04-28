@@ -64,7 +64,7 @@ class WebinarRegistrationView(LoginRequiredMixin, SingleObjectMixin, View):
             if is_registering:
                 send_webinar_registration_email(self.object, user.email)
                 if not registration.is_team_member_registration:
-                    schedule_webinar_reminders([user.email], self.object)
+                    schedule_webinar_reminders([user.email], self.object.to_dict())
 
             elif not created and not registration.is_team_member_registration:
                 cancel_all_reminders([registration])

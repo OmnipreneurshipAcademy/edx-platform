@@ -9,7 +9,11 @@ from mock import Mock
 
 from common.djangoapps.student.tests.factories import UserFactory
 from openedx.adg.common.lib.mandrill_client.client import MandrillClient
-from openedx.adg.lms.webinars.constants import ONE_WEEK_REMINDER_ID_FIELD_NAME, STARTING_SOON_REMINDER_ID_FIELD_NAME
+from openedx.adg.lms.webinars.constants import (
+    ONE_WEEK_REMINDER_ID_FIELD_NAME,
+    STARTING_SOON_REMINDER_ID_FIELD_NAME,
+    WEBINARS_TIME_FORMAT
+)
 from openedx.adg.lms.webinars.helpers import (
     cancel_all_reminders,
     cancel_reminders_for_given_webinars,
@@ -50,7 +54,7 @@ def test_send_webinar_emails(mocker):
         'webinar_id': webinar.id,
         'webinar_title': webinar.title,
         'webinar_description': webinar.description,
-        'webinar_start_time': webinar.start_time.strftime("%B %d, %Y %I:%M %p %Z")
+        'webinar_start_time': webinar.start_time.strftime(WEBINARS_TIME_FORMAT)
     }
     mocked_task_send_mandrill_email.delay.assert_called_with("test_slug", ["t1@eg.com"], expected_context, None)
 
@@ -115,7 +119,7 @@ def test_send_cancellation_emails_for_given_webinars(
         'webinar_id': webinar.id,
         'webinar_title': webinar.title,
         'webinar_description': webinar.description,
-        'webinar_start_time': webinar.start_time.strftime("%B %d, %Y %I:%M %p %Z")
+        'webinar_start_time': webinar.start_time.strftime(WEBINARS_TIME_FORMAT)
     }
 
     actual_template, actual_email_addresses, actual_context, _ = mocked_task_send_mandrill_email.delay.call_args.args

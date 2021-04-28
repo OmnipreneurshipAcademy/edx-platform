@@ -15,7 +15,7 @@ from model_utils.models import TimeStampedModel
 from openedx.adg.lms.applications.helpers import validate_file_size
 from openedx.core.djangoapps.theming.helpers import get_current_request
 
-from .constants import ALLOWED_BANNER_EXTENSIONS, BANNER_MAX_SIZE
+from .constants import ALLOWED_BANNER_EXTENSIONS, BANNER_MAX_SIZE, WEBINARS_TIME_FORMAT
 from .helpers import cancel_reminders_for_given_webinars, send_cancellation_emails_for_given_webinars
 from .managers import WebinarRegistrationManager
 
@@ -96,6 +96,15 @@ class Webinar(TimeStampedModel):
     def __str__(self):
         return self.title
 
+    def to_dict(self):
+        return {
+            'webinar_id': self.id,
+            'webinar_title': self.title,
+            'webinar_description': self.description,
+            'webinar_start_time': self.start_time.strftime(WEBINARS_TIME_FORMAT),
+            'webinar_meeting_link': self.meeting_link,
+        }
+
     def clean(self):
         """
         Adding custom validation on start & end time and banner size
@@ -153,7 +162,7 @@ class Webinar(TimeStampedModel):
 
         old_values = getattr(self, '_loaded_values', {})
         if old_values and old_values.get('start_time') != self.start_time:
-            task_reschedule_webinar_reminders.delay(self.id)
+            task_reschedule_webinar_reminders.delay(self.to_dict())
 
     def webinar_team(self):
         return set(chain(self.co_hosts.all(), self.panelists.all(), {self.presenter}))

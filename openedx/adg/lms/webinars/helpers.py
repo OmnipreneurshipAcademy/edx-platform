@@ -1,17 +1,16 @@
 """
 Helpers for webinars app
 """
-from datetime import timedelta
+from datetime import datetime, timedelta
 from itertools import chain
 
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
-from django.utils.timezone import now
 
 from openedx.adg.common.lib.mandrill_client.client import MandrillClient
 from openedx.adg.common.lib.mandrill_client.tasks import task_cancel_mandrill_emails, task_send_mandrill_email
 
-from .constants import ONE_WEEK_REMINDER_ID_FIELD_NAME, STARTING_SOON_REMINDER_ID_FIELD_NAME
+from .constants import ONE_WEEK_REMINDER_ID_FIELD_NAME, STARTING_SOON_REMINDER_ID_FIELD_NAME, WEBINARS_TIME_FORMAT
 
 
 def send_webinar_emails(template_slug, webinar, recipient_emails, send_at=None):
@@ -101,32 +100,32 @@ def send_webinar_registration_email(webinar, email):
     })
 
 
-def schedule_webinar_reminders(user_emails, webinar):
+def schedule_webinar_reminders(user_emails, email_context):
     """
     Schedule reminders for a webinar on mandrill.
 
     Args:
         user_emails (list): List of user emails to schedule reminders.
-        webinar (Webinar): The webinar for which reminders will be scheduled.
+        email_context (dict): Webinar reminders context.
 
     Returns:
         None
     """
-    send_webinar_emails(
+    webinar_start_time = datetime.strptime(email_context['webinar_start_time'], WEBINARS_TIME_FORMAT)
+
+    task_send_mandrill_email.delay(
         MandrillClient.WEBINAR_TWO_HOURS_REMINDER,
-        webinar,
         user_emails,
-        webinar.start_time - timedelta(hours=2),
+        email_context,
+        webinar_start_time - timedelta(hours=2),
     )
 
-    week_before_webinar_start_time = webinar.start_time - timedelta(days=7)
-
-    if week_before_webinar_start_time > now():
-        send_webinar_emails(
+    if (webinar_start_time - timedelta(days=6)) > datetime.now():
+        task_send_mandrill_email.delay(
             MandrillClient.WEBINAR_ONE_WEEK_REMINDER,
-            webinar,
             user_emails,
-            week_before_webinar_start_time,
+            email_context,
+            webinar_start_time - timedelta(days=7),
         )
 
 
@@ -235,7 +234,7 @@ def update_webinar_team_registrations(webinar_form):
 
     if newly_added_members:
         WebinarRegistration.create_team_registrations(newly_added_members, webinar)
-        schedule_webinar_reminders([user.email for user in newly_added_members], webinar)
+        schedule_webinar_reminders([user.email for user in newly_added_members], webinar.to_dict())
 
     if removed_members:
         WebinarRegistration.remove_team_registrations(removed_members, webinar)

@@ -8,19 +8,18 @@ from openedx.adg.lms.webinars.models import Webinar
 
 
 @task()
-def task_reschedule_webinar_reminders(webinar_id):
+def task_reschedule_webinar_reminders(webinar_data):
     """
     Reschedules all the webinar reminders.
 
     Args:
-        webinar_id (int): Webinar Id for which reminders will be rescheduled.
-        new_start_time (str): String containing time in format ("MM/DD/YYYY, HH:MM:SS")
+        webinar_data (dict): Dict containing webinar data.
 
     Returns:
         None
     """
-    webinar = Webinar.objects.get(id=webinar_id)
+    webinar = Webinar.objects.get(id=webinar_data['webinar_id'])
     registrations = webinar.registrations.webinar_team_and_active_user_registrations()
 
     cancel_all_reminders(registrations, is_rescheduling=True)
-    schedule_webinar_reminders(list(registrations.values_list('user__email', flat=True)), webinar)
+    schedule_webinar_reminders(list(registrations.values_list('user__email', flat=True)), webinar_data)

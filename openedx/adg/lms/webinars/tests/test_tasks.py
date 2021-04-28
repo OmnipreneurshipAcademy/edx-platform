@@ -18,7 +18,7 @@ def test_task_send_mandrill_email_successfully(mocker, webinar):
 
     WebinarRegistrationFactory(webinar=webinar)
 
-    task_reschedule_webinar_reminders(webinar.id)
+    task_reschedule_webinar_reminders(webinar.to_dict())
 
     mock_cancel_reminders.assert_called_once()
     mock_schedule_reminders.assert_called_once()

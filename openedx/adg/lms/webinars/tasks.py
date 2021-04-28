@@ -22,5 +22,5 @@ def task_reschedule_webinar_reminders(webinar_id):
     webinar = Webinar.objects.get(id=webinar_id)
     registrations = webinar.registrations.webinar_team_and_active_user_registrations()
 
-    cancel_all_reminders(registrations)
+    cancel_all_reminders(registrations, is_rescheduling=True)
     schedule_webinar_reminders(list(registrations.values_list('user__email', flat=True)), webinar)

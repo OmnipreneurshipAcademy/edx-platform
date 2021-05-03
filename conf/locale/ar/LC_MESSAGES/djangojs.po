@@ -51,7 +51,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1a\n"
 "Report-Msgid-Bugs-To: openedx-translation@googlegroups.com\n"
-"POT-Creation-Date: 2021-04-27 07:47+0000\n"
+"POT-Creation-Date: 2021-05-03 12:01+0000\n"
 "PO-Revision-Date: 2020-10-27 19:11+0000\n"
 "Last-Translator: Imran Bashir <admin@omnipreneurshipacademy.com>, 2021\n"
 "Language-Team: Arabic (https://www.transifex.com/philanthropy-u/teams/113553/ar/)\n"
@@ -5814,7 +5814,7 @@ msgid "File extension not allowed!"
 msgstr ""
 
 #: themes/edx-platform/adg/lms/static/js/applications/contact_info_validations.js
-msgid "Phone number can only contain numbers"
+msgid "Phone number can only contain numbers."
 msgstr ""
 
 #: themes/edx-platform/adg/lms/static/js/applications/contact_info_validations.js
@@ -5823,7 +5823,7 @@ msgstr ""
 
 #: themes/edx-platform/adg/lms/static/js/applications/education_experience.js
 msgid ""
-"It will remove your existing work experiences, Do you want to continue?"
+"It will remove your existing work experiences. Do you want to continue?"
 msgstr ""
 
 #: themes/edx-platform/adg/lms/static/js/applications/education_experience.js
@@ -5859,6 +5859,26 @@ msgstr "لايمكن أن يسبق تاريخ الاستحقاق تاريخ ال
 
 #: themes/edx-platform/adg/lms/static/js/common/forms_handler.js
 msgid "Please save the previous record first to add a new form"
+msgstr ""
+
+#: themes/edx-platform/adg/lms/static/js/webinars/admin/webinar_submission.js
+msgid "The existing webinar event will be updated."
+msgstr ""
+
+#: themes/edx-platform/adg/lms/static/js/webinars/admin/webinar_submission.js
+msgid "A new webinar event will be created."
+msgstr ""
+
+#: themes/edx-platform/adg/lms/static/js/webinars/admin/webinar_submission.js
+msgid "Are you sure you want to proceed?"
+msgstr "هل أنت واثق من أنّك تودّ حذف هذا المنشور؟"
+
+#: themes/edx-platform/adg/lms/static/js/webinars/admin/webinar_submission.js
+msgid "YES, SUBMIT"
+msgstr ""
+
+#: themes/edx-platform/adg/lms/static/js/webinars/admin/webinar_submission.js
+msgid "KEEP EDITING"
 msgstr ""
 
 #: cms/static/cms/js/main.js

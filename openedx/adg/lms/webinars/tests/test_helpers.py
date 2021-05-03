@@ -9,10 +9,12 @@ from mock import Mock
 
 from common.djangoapps.student.tests.factories import UserFactory
 from openedx.adg.common.lib.mandrill_client.client import MandrillClient
+from openedx.adg.lms.helpers import convert_date_time_zone_and_format
 from openedx.adg.lms.webinars.constants import (
     ONE_WEEK_REMINDER_ID_FIELD_NAME,
     STARTING_SOON_REMINDER_ID_FIELD_NAME,
-    WEBINARS_TIME_FORMAT
+    WEBINAR_DATE_TIME_FORMAT,
+    WEBINAR_DEFAULT_TIME_ZONE
 )
 from openedx.adg.lms.webinars.helpers import (
     cancel_all_reminders,
@@ -54,7 +56,11 @@ def test_send_webinar_emails(mocker):
         'webinar_id': webinar.id,
         'webinar_title': webinar.title,
         'webinar_description': webinar.description,
-        'webinar_start_time': webinar.start_time.strftime(WEBINARS_TIME_FORMAT)
+        'webinar_start_time': convert_date_time_zone_and_format(
+            webinar.start_time,
+            WEBINAR_DEFAULT_TIME_ZONE,
+            WEBINAR_DATE_TIME_FORMAT
+        )
     }
     mocked_task_send_mandrill_email.delay.assert_called_with("test_slug", ["t1@eg.com"], expected_context, None)
 
@@ -119,7 +125,11 @@ def test_send_cancellation_emails_for_given_webinars(
         'webinar_id': webinar.id,
         'webinar_title': webinar.title,
         'webinar_description': webinar.description,
-        'webinar_start_time': webinar.start_time.strftime(WEBINARS_TIME_FORMAT)
+        'webinar_start_time': convert_date_time_zone_and_format(
+            webinar.start_time,
+            WEBINAR_DEFAULT_TIME_ZONE,
+            WEBINAR_DATE_TIME_FORMAT
+        )
     }
 
     actual_template, actual_email_addresses, actual_context, _ = mocked_task_send_mandrill_email.delay.call_args.args
@@ -144,7 +154,7 @@ def test_send_webinar_registration_email(mocker):
         'webinar_title': webinar.title,
         'webinar_description': webinar.description,
         'webinar_link': webinar.meeting_link,
-        'webinar_start_time': 'Jan 01, 2020 01:10 PM GMT',
+        'webinar_start_time': 'Wednesday, January 01, 2020 04:10 PM AST',
     })
 
 

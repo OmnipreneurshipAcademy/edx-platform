@@ -13,9 +13,17 @@ from django.utils.translation import ugettext_lazy as _
 from model_utils.models import TimeStampedModel
 
 from openedx.adg.lms.applications.helpers import validate_file_size
+from openedx.adg.lms.helpers import convert_date_time_zone_and_format
 from openedx.core.djangoapps.theming.helpers import get_current_request
 
-from .constants import ALLOWED_BANNER_EXTENSIONS, BANNER_MAX_SIZE, WEBINARS_TIME_FORMAT
+from .constants import (
+    ALLOWED_BANNER_EXTENSIONS,
+    BANNER_MAX_SIZE,
+    WEBINAR_DATE_FORMAT,
+    WEBINAR_DATE_TIME_FORMAT,
+    WEBINAR_DEFAULT_TIME_ZONE,
+    WEBINAR_TIME_FORMAT
+)
 from .helpers import cancel_reminders_for_given_webinars, send_cancellation_emails_for_given_webinars
 from .managers import WebinarRegistrationManager
 
@@ -55,7 +63,7 @@ class Webinar(TimeStampedModel):
         help_text=_('Accepted extensions: .png, .jpg, .jpeg, .svg'),
     )
 
-    language = models.CharField(verbose_name=_('Language'), choices=settings.LANGUAGES, max_length=2,)
+    language = models.CharField(verbose_name=_('Language'), choices=settings.LANGUAGES, max_length=2, )
 
     co_hosts = models.ManyToManyField(User, verbose_name=_('Co-Hosts'), blank=True, related_name='webinar_co_hosts', )
     panelists = models.ManyToManyField(
@@ -101,7 +109,7 @@ class Webinar(TimeStampedModel):
             'webinar_id': self.id,
             'webinar_title': self.title,
             'webinar_description': self.description,
-            'webinar_start_time': self.start_time.strftime(WEBINARS_TIME_FORMAT),
+            'webinar_start_time': self.start_date_time_default,
             'webinar_meeting_link': self.meeting_link,
         }
 
@@ -167,6 +175,17 @@ class Webinar(TimeStampedModel):
     def webinar_team(self):
         return set(chain(self.co_hosts.all(), self.panelists.all(), {self.presenter}))
 
+    @property
+    def start_date_time_default(self):
+        return convert_date_time_zone_and_format(self.start_time, WEBINAR_DEFAULT_TIME_ZONE, WEBINAR_DATE_TIME_FORMAT)
+
+    @property
+    def start_date_default(self):
+        return convert_date_time_zone_and_format(self.start_time, WEBINAR_DEFAULT_TIME_ZONE, WEBINAR_DATE_FORMAT)
+
+    @property
+    def start_time_default(self):
+        return convert_date_time_zone_and_format(self.start_time, WEBINAR_DEFAULT_TIME_ZONE, WEBINAR_TIME_FORMAT)
 
 class CancelledWebinar(Webinar):
     """
@@ -189,7 +208,7 @@ class WebinarRegistration(TimeStampedModel):
         User, verbose_name=_('Registered User'), on_delete=models.CASCADE, related_name='webinar_registrations',
     )
 
-    is_registered = models.BooleanField(default=False, verbose_name=_('Registered'),)
+    is_registered = models.BooleanField(default=False, verbose_name=_('Registered'), )
     is_team_member_registration = models.BooleanField(
         default=False, verbose_name=_('Is Presenter, Co-Host, or Panelist'),
     )

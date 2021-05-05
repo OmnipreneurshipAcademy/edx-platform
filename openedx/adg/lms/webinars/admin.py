@@ -60,6 +60,7 @@ class WebinarAdmin(WebinarAdminBase):
     """
 
     list_filter = ('start_time', 'language', ActiveWebinarStatusFilter)
+    raw_id_fields = ('presenter', 'co_hosts', 'panelists')
     readonly_fields = ('created_by', 'modified_by', 'status',)
 
     form = WebinarForm
@@ -120,6 +121,12 @@ class WebinarAdmin(WebinarAdminBase):
     def get_queryset(self, request):
         qs = super(WebinarAdmin, self).get_queryset(request)
         return qs.filter(~Q(status=Webinar.CANCELLED))
+
+    def change_view(self, request, object_id, form_url='', extra_context=None):
+        if '_saveasnew' in request.POST:
+            request.POST = request.POST.copy()
+            request.POST['status'] = Webinar.UPCOMING
+        return self.changeform_view(request, object_id, form_url, extra_context)
 
 
 class CancelledWebinarAdmin(WebinarAdminBase):

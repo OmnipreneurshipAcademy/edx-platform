@@ -52,7 +52,7 @@ def test_send_webinar_emails(mocker, template_slug):
         'webinar_id': webinar.id,
         'webinar_title': webinar.title,
         'webinar_description': webinar.description,
-        'webinar_start_time': webinar.start_date_time_default,
+        'webinar_start_time': webinar.start_date_time_AST,
         'webinar_link': webinar.meeting_link,
     }
 
@@ -122,8 +122,8 @@ def test_send_cancellation_emails_for_given_webinars(
         'webinar_id': webinar.id,
         'webinar_title': webinar.title,
         'webinar_description': webinar.description,
-        'webinar_start_time': webinar.start_date_time_default,
-        'link': webinar.meeting_link,
+        'webinar_start_time': webinar.start_date_time_AST,
+        'webinar_link': webinar.meeting_link,
     }
 
     actual_template, actual_email_addresses, actual_context, _ = mocked_task_send_mandrill_email.delay.call_args.args

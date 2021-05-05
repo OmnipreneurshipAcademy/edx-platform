@@ -33,7 +33,7 @@ def send_webinar_emails(template_slug, webinar, recipient_emails, send_at=None):
         'webinar_id': webinar.id,
         'webinar_title': webinar.title,
         'webinar_description': webinar.description,
-        'webinar_start_time': webinar.start_date_time_default,
+        'webinar_start_time': webinar.start_date_time_AST,
         'webinar_link': webinar.meeting_link,
     }
 
@@ -118,7 +118,7 @@ def send_webinar_registration_email(webinar, email):
         'webinar_title': webinar.title,
         'webinar_description': webinar.description,
         'webinar_link': webinar.meeting_link,
-        'webinar_start_time': webinar.start_date_time_default
+        'webinar_start_time': webinar.start_date_time_AST
     })
 
 

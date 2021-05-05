@@ -109,7 +109,7 @@ class Webinar(TimeStampedModel):
             'webinar_id': self.id,
             'webinar_title': self.title,
             'webinar_description': self.description,
-            'webinar_start_time': self.start_date_time_default,
+            'webinar_start_time': self.start_date_time_AST,
             'webinar_meeting_link': self.meeting_link,
         }
 
@@ -176,16 +176,35 @@ class Webinar(TimeStampedModel):
         return set(chain(self.co_hosts.all(), self.panelists.all(), {self.presenter}))
 
     @property
-    def start_date_time_default(self):
+    def start_date_time_AST(self):
+        """
+        AST (Arabian standard time UTC+3) is a TimeZone
+
+        Returns:
+            Formatted AST date time string
+        """
         return convert_date_time_zone_and_format(self.start_time, WEBINAR_DEFAULT_TIME_ZONE, WEBINAR_DATE_TIME_FORMAT)
 
     @property
-    def start_date_default(self):
+    def start_date_AST(self):
+        """
+        AST (Arabian standard time UTC+3) is a TimeZone
+
+        Returns:
+            Formatted AST date  string
+        """
         return convert_date_time_zone_and_format(self.start_time, WEBINAR_DEFAULT_TIME_ZONE, WEBINAR_DATE_FORMAT)
 
     @property
-    def start_time_default(self):
+    def start_time_AST(self):
+        """
+        AST (Arabian standard time UTC+3) is a TimeZone
+
+        Returns:
+            Formatted AST time string
+        """
         return convert_date_time_zone_and_format(self.start_time, WEBINAR_DEFAULT_TIME_ZONE, WEBINAR_TIME_FORMAT)
+
 
 class CancelledWebinar(Webinar):
     """

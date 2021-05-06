@@ -12,10 +12,13 @@ from openedx.adg.lms.applications.admin import adg_admin_site
 
 from .forms import WebinarForm
 from .helpers import (
+    get_newly_added_and_removed_team_members,
+    get_webinar_invitees_emails,
+    get_webinar_update_recipients_emails,
     remove_emails_duplicate_in_other_list,
+    remove_team_registrations_and_cancel_reminders,
     schedule_webinar_reminders,
     send_webinar_emails,
-    update_webinar_team_registrations,
     webinar_emails_for_panelists_co_hosts_and_presenter
 )
 from .models import CancelledWebinar, Webinar, WebinarRegistration
@@ -71,52 +74,64 @@ class WebinarAdmin(WebinarAdminBase):
         """
         fields = super().get_fields(request, obj)
         if not obj:
-            fields.remove('send_update_emails_to_registrants')
+            fields.remove('send_update_emails')
         return fields
 
     def save_related(self, request, form, formsets, change):
         """
         Extension of save_related for webinar to send emails when object is created or modified.
         """
+        new_members = []
+        removed_members = []
         if change and any(field in form.changed_data for field in ['co_hosts', 'presenter', 'panelists']):
-            update_webinar_team_registrations(form)
+            new_members, removed_members = get_newly_added_and_removed_team_members(form)
 
-        super(WebinarAdmin, self).save_related(request, form, formsets, change)
+        super().save_related(request, form, formsets, change)
 
         webinar = form.instance
 
-        webinar_invitation_recipients = form.cleaned_data.get('invites_by_email_address', [])
-        if form.cleaned_data.get('invite_all_platform_users'):
-            webinar_invitation_recipients += list(
-                User.objects.exclude(email='').values_list('email', flat=True)
-            )
+        webinar_invitees_emails = get_webinar_invitees_emails(form)
 
         if change:
-            registered_users = list(
-                webinar.registrations.filter(is_registered=True).values_list('user__email', flat=True)
-            )
-            if form.cleaned_data.get('send_update_emails_to_registrants'):
+            if removed_members:
+                remove_team_registrations_and_cancel_reminders(removed_members, webinar)
+
+            webinar_update_recipients_emails = []
+            if new_members or webinar_invitees_emails or form.cleaned_data.get('send_update_emails'):
+                webinar_update_recipients_emails = get_webinar_update_recipients_emails(webinar)
+
+            if form.cleaned_data.get('send_update_emails'):
                 send_webinar_emails(
                     MandrillClient.WEBINAR_UPDATED,
                     webinar,
-                    list(set(registered_users))
+                    webinar_update_recipients_emails
                 )
 
-            webinar_invitation_recipients = remove_emails_duplicate_in_other_list(
-                webinar_invitation_recipients, registered_users
+            if new_members:
+                WebinarRegistration.create_team_registrations(new_members, webinar)
+
+                new_member_emails = [user.email for user in new_members]
+                schedule_webinar_reminders(new_member_emails, webinar.to_dict())
+
+                webinar_invitees_emails += new_member_emails
+
+            webinar_invitees_emails = remove_emails_duplicate_in_other_list(
+                webinar_invitees_emails, webinar_update_recipients_emails
             )
+
         else:
             webinar_team_emails = webinar_emails_for_panelists_co_hosts_and_presenter(webinar)
-            webinar_invitation_recipients += webinar_team_emails
+            webinar_invitees_emails += webinar_team_emails
 
             WebinarRegistration.create_team_registrations(User.objects.filter(email__in=webinar_team_emails), webinar)
-            schedule_webinar_reminders(list(set(webinar_team_emails)), webinar.to_dict())
+            schedule_webinar_reminders(webinar_team_emails, webinar.to_dict())
 
-        send_webinar_emails(
-            MandrillClient.WEBINAR_CREATED,
-            webinar,
-            list(set(webinar_invitation_recipients)),
-        )
+        if webinar_invitees_emails:
+            send_webinar_emails(
+                MandrillClient.WEBINAR_CREATED,
+                webinar,
+                list(set(webinar_invitees_emails)),
+            )
 
     def get_queryset(self, request):
         qs = super(WebinarAdmin, self).get_queryset(request)

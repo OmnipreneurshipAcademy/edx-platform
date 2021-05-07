@@ -24,7 +24,11 @@ from .constants import (
     WEBINAR_DEFAULT_TIME_ZONE,
     WEBINAR_TIME_FORMAT
 )
-from .helpers import cancel_reminders_for_given_webinars, send_cancellation_emails_for_given_webinars
+from .helpers import (
+    cancel_all_reminders,
+    cancel_reminders_for_given_webinars,
+    send_cancellation_emails_for_given_webinars
+)
 from .managers import WebinarRegistrationManager
 
 
@@ -200,6 +204,21 @@ class Webinar(TimeStampedModel):
             Formatted AST time string
         """
         return convert_date_time_zone_and_format(self.start_time, WEBINAR_DEFAULT_TIME_ZONE, WEBINAR_TIME_FORMAT)
+
+    def remove_team_registrations_and_cancel_reminders(self, removed_members):
+        """
+        Given a list of team members of the webinar, remove their team registrations and cancel all reminder emails
+
+        Args:
+            removed_members (list): List of team members whose registrations are to be removed and reminders cancelled
+
+        Returns:
+            None
+        """
+        WebinarRegistration.remove_team_registrations(removed_members, self)
+
+        registrations = self.registrations.filter(user__in=removed_members, is_registered=False)
+        cancel_all_reminders(registrations)
 
 
 class CancelledWebinar(Webinar):

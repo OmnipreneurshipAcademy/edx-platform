@@ -18,7 +18,6 @@ from openedx.adg.lms.webinars.helpers import (
     get_webinar_invitees_emails,
     get_webinar_update_recipients_emails,
     remove_emails_duplicate_in_other_list,
-    remove_team_registrations_and_cancel_reminders,
     save_scheduled_reminder_ids,
     send_cancellation_emails_for_given_webinars,
     send_webinar_emails,
@@ -26,7 +25,6 @@ from openedx.adg.lms.webinars.helpers import (
     validate_email_list,
     webinar_emails_for_panelists_co_hosts_and_presenter
 )
-from openedx.adg.lms.webinars.models import WebinarRegistration
 
 from .constants import (
     CO_HOST_1,
@@ -323,32 +321,6 @@ def test_get_webinar_update_recipients_emails(webinar):
     actual_emails = set(get_webinar_update_recipients_emails(webinar))
 
     assert expected_emails == actual_emails
-
-
-@pytest.mark.django_db
-def test_remove_team_registrations_and_cancel_reminders(webinar, mocker):
-    """
-    Test that the function `test_remove_team_registrations_and_cancel_reminders` removes team registrations and cancels
-    reminders of removed members of a webinar
-    """
-    mock_cancel_all_reminders = mocker.patch('openedx.adg.lms.webinars.helpers.cancel_all_reminders')
-
-    user_1 = UserFactory()
-    user_2 = UserFactory()
-    WebinarRegistrationFactory(
-        user=user_1, webinar=webinar, is_registered=False, is_team_member_registration=True
-    )
-    WebinarRegistrationFactory(
-        user=user_2, webinar=webinar, is_registered=False, is_team_member_registration=True
-    )
-
-    removed_members = [user_1, user_2]
-    remove_team_registrations_and_cancel_reminders(removed_members, webinar)
-
-    assert not WebinarRegistration.objects.get(user=user_1).is_team_member_registration
-    assert not WebinarRegistration.objects.get(user=user_2).is_team_member_registration
-
-    mock_cancel_all_reminders.assert_called_once()
 
 
 @pytest.mark.django_db

@@ -17,7 +17,6 @@ from .helpers import (
     get_webinar_invitees_emails,
     get_webinar_update_recipients_emails,
     remove_emails_duplicate_in_other_list,
-    remove_team_registrations_and_cancel_reminders,
     schedule_webinar_reminders,
     send_webinar_emails,
     webinar_emails_for_panelists_co_hosts_and_presenter
@@ -95,7 +94,7 @@ class WebinarAdmin(WebinarAdminBase):
 
         if change:
             if removed_members:
-                remove_team_registrations_and_cancel_reminders(removed_members, webinar)
+                webinar.remove_team_registrations_and_cancel_reminders(removed_members)
 
             webinar_update_recipients_emails = []
             if new_members or webinar_invitees_emails or form.cleaned_data.get(SEND_UPDATE_EMAILS_FIELD):

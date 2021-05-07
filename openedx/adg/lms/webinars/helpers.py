@@ -257,27 +257,6 @@ def get_newly_added_and_removed_team_members(webinar_form):
     return new_members, removed_members
 
 
-def remove_team_registrations_and_cancel_reminders(removed_members, webinar):
-    """
-    Given a list of team members against a webinar, remove their team registrations and cancel all reminder emails
-
-    Args:
-        removed_members (list): List of team members whose registrations are to be removed and reminders cancelled
-        webinar (Webinar): Webinar instance
-
-    Returns:
-        None
-    """
-    from openedx.adg.lms.webinars.models import WebinarRegistration
-
-    WebinarRegistration.remove_team_registrations(removed_members, webinar)
-
-    registrations = WebinarRegistration.objects.filter(
-        webinar=webinar, user__in=removed_members, is_registered=False
-    )
-    cancel_all_reminders(registrations)
-
-
 def cancel_all_reminders(registrations, is_rescheduling=False):
     """
     Cancels reminders by extracting msg ids from the given registrations. In case the `is_rescheduling` is `True`, we

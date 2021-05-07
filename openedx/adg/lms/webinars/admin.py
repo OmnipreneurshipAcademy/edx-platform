@@ -10,6 +10,7 @@ from django.utils.translation import ugettext_lazy as _
 from openedx.adg.common.lib.mandrill_client.client import MandrillClient
 from openedx.adg.lms.applications.admin import adg_admin_site
 
+from .constants import SEND_UPDATE_EMAILS_FIELD
 from .forms import WebinarForm
 from .helpers import (
     get_newly_added_and_removed_team_members,
@@ -74,7 +75,7 @@ class WebinarAdmin(WebinarAdminBase):
         """
         fields = super().get_fields(request, obj)
         if not obj:
-            fields.remove('send_update_emails')
+            fields.remove(SEND_UPDATE_EMAILS_FIELD)
         return fields
 
     def save_related(self, request, form, formsets, change):
@@ -97,10 +98,10 @@ class WebinarAdmin(WebinarAdminBase):
                 remove_team_registrations_and_cancel_reminders(removed_members, webinar)
 
             webinar_update_recipients_emails = []
-            if new_members or webinar_invitees_emails or form.cleaned_data.get('send_update_emails'):
+            if new_members or webinar_invitees_emails or form.cleaned_data.get(SEND_UPDATE_EMAILS_FIELD):
                 webinar_update_recipients_emails = get_webinar_update_recipients_emails(webinar)
 
-            if form.cleaned_data.get('send_update_emails'):
+            if form.cleaned_data.get(SEND_UPDATE_EMAILS_FIELD):
                 send_webinar_emails(
                     MandrillClient.WEBINAR_UPDATED,
                     webinar,

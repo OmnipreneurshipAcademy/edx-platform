@@ -68,6 +68,17 @@ class WebinarAdmin(WebinarAdminBase):
 
     form = WebinarForm
 
+    def __init__(self, model, admin_site):
+        """
+        Extend constructor to create instance variable for old webinar state to be stored in.
+
+        When an existing webinar is updated, its old state is lost after the ModelAdmin's `save_model` method is
+        executed. We want to store the old state before it is overridden so that it can be accessed in `save_related`
+        method, which is executed after `save_model` method.
+        """
+        super().__init__(model, admin_site)
+        self.old_webinar = None
+
     def get_fields(self, request, obj=None):
         """
         Override `get_fields` to dynamically set fields to be rendered.
@@ -77,14 +88,25 @@ class WebinarAdmin(WebinarAdminBase):
             fields.remove(SEND_UPDATE_EMAILS_FIELD)
         return fields
 
+    def save_model(self, request, obj, form, change):
+        """
+        Extension of `save_model` to capture the old webinar state prior to updation
+        """
+        if change:
+            self.old_webinar = Webinar.objects.get(id=obj.id)
+
+        super().save_model(request, obj, form, change)
+
     def save_related(self, request, form, formsets, change):
         """
-        Extension of save_related for webinar to send emails when object is created or modified.
+        Extension of `save_related` for webinar to send emails when webinar is created or modified.
         """
         new_members = []
         removed_members = []
         if change and any(field in form.changed_data for field in ['co_hosts', 'presenter', 'panelists']):
-            new_members, removed_members = get_newly_added_and_removed_team_members(form)
+            # The below method `get_newly_added_and_removed_team_members` must be called before
+            # `super().save_related(...)` for correct results.
+            new_members, removed_members = get_newly_added_and_removed_team_members(form, self.old_webinar)
 
         super().save_related(request, form, formsets, change)
 
@@ -97,33 +119,40 @@ class WebinarAdmin(WebinarAdminBase):
                 webinar.remove_team_registrations_and_cancel_reminders(removed_members)
 
             webinar_update_recipients_emails = []
+            # Webinar update recipients are to be fetched for both the cases i.e. in case of sending out invitation
+            # emails or update emails. Before sending invitation emails, we need to verify that we are not sending an
+            # invite to an already registered user, or an already added team member.
             if new_members or webinar_invitees_emails or form.cleaned_data.get(SEND_UPDATE_EMAILS_FIELD):
                 webinar_update_recipients_emails = get_webinar_update_recipients_emails(webinar)
 
             if form.cleaned_data.get(SEND_UPDATE_EMAILS_FIELD):
-                send_webinar_emails(
-                    MandrillClient.WEBINAR_UPDATED,
-                    webinar,
-                    webinar_update_recipients_emails
-                )
+                if webinar_update_recipients_emails:
+                    send_webinar_emails(
+                        MandrillClient.WEBINAR_UPDATED,
+                        webinar,
+                        webinar_update_recipients_emails
+                    )
 
             if new_members:
-                WebinarRegistration.create_team_registrations(new_members, webinar)
+                webinar.create_team_registrations(new_members)
 
                 new_member_emails = [user.email for user in new_members]
                 schedule_webinar_reminders(new_member_emails, webinar.to_dict())
 
                 webinar_invitees_emails += new_member_emails
 
+            # Remove registered users and team members from invitation emails list (if any are present)
             webinar_invitees_emails = remove_emails_duplicate_in_other_list(
                 webinar_invitees_emails, webinar_update_recipients_emails
             )
 
         else:
+            # The below method `webinar_emails_for_panelists_co_hosts_and_presenter` must be called after
+            # `super().save_related(...)` has been called for updated results.
             webinar_team_emails = webinar_emails_for_panelists_co_hosts_and_presenter(webinar)
             webinar_invitees_emails += webinar_team_emails
 
-            WebinarRegistration.create_team_registrations(User.objects.filter(email__in=webinar_team_emails), webinar)
+            webinar.create_team_registrations(User.objects.filter(email__in=webinar_team_emails))
             schedule_webinar_reminders(webinar_team_emails, webinar.to_dict())
 
         if webinar_invitees_emails:

@@ -330,7 +330,6 @@ def test_get_newly_added_and_removed_team_members(webinar):
     from a webinar form
     """
     mock_webinar_form = Mock()
-    mock_webinar_form.instance = webinar
 
     users = UserFactory.create_batch(8)
     webinar.presenter = users[0]
@@ -346,7 +345,7 @@ def test_get_newly_added_and_removed_team_members(webinar):
     expected_new_members = set(users[5:8])
     expected_removed_members = {users[0], users[2], users[4]}
 
-    actual_new_members, actual_removed_members = get_newly_added_and_removed_team_members(mock_webinar_form)
+    actual_new_members, actual_removed_members = get_newly_added_and_removed_team_members(mock_webinar_form, webinar)
 
     assert expected_new_members == set(actual_new_members)
     assert expected_removed_members == set(actual_removed_members)

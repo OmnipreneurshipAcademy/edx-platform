@@ -235,20 +235,23 @@ def remove_emails_duplicate_in_other_list(email_list, reference_email_list):
     return [email for email in email_list if email not in reference_email_list]
 
 
-def get_newly_added_and_removed_team_members(webinar_form):
+def get_newly_added_and_removed_team_members(webinar_form, old_webinar):
     """
-    Gets a list of newly added and removed co-hosts, panelists and presenter
+    Returns a list of newly added and removed co-hosts, panelists and presenter
 
-    Args:
+    Arguments:
         webinar_form (Form): Model form with updated data.
+        old_webinar (Webinar): Old webinar state prior to updation.
 
     Returns:
         new_members (list): list of newly added co-hosts, panelists and presenter
         removed_members (list): list of removed co-hosts, panelists and presenter
     """
-    webinar = webinar_form.instance
     cleaned_data = webinar_form.cleaned_data
-    old_team = webinar.webinar_team()
+
+    old_team = old_webinar.webinar_co_hosts_and_panelists()
+    old_team.add(old_webinar.presenter)
+
     new_team = set(chain(cleaned_data['co_hosts'], cleaned_data['panelists'], {cleaned_data['presenter']}))
 
     new_members = list(new_team - old_team)
@@ -318,7 +321,8 @@ def get_webinar_invitees_emails(webinar_form):
 
 def get_webinar_update_recipients_emails(webinar):
     """
-    Get emails of all update recipients of a given webinar
+    Get emails of all update recipients of a given webinar. Update recipients correspond to registered users or webinar
+    team members (presenter/co-hosts/panelists).
 
     Arguments:
         webinar (Webinar): Webinar instance

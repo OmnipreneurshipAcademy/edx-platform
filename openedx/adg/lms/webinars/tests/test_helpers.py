@@ -235,8 +235,9 @@ def test_save_scheduled_reminder_ids(template, msg_id_field_name, webinar_regist
             'email': webinar_registration.user.email
         }
     ]
+    webinar_reminders_context = {'webinar_id': webinar_registration.webinar.id}
 
-    save_scheduled_reminder_ids(mandrill_response, template, webinar_registration.webinar.id)
+    save_scheduled_reminder_ids(mandrill_response, template, webinar_reminders_context)
 
     webinar_registration.refresh_from_db()
     assert getattr(webinar_registration, msg_id_field_name) == FAKE_MANDRILL_MSG_ID

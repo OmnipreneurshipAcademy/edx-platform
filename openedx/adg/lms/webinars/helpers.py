@@ -141,6 +141,7 @@ def schedule_webinar_reminders(user_emails, email_context):
         user_emails,
         email_context,
         webinar_start_time - timedelta(hours=2),
+        save_mandrill_msg_ids=True
     )
 
     if (webinar_start_time - timedelta(days=6)) > datetime.now():
@@ -149,17 +150,18 @@ def schedule_webinar_reminders(user_emails, email_context):
             user_emails,
             email_context,
             webinar_start_time - timedelta(days=7),
+            save_mandrill_msg_ids=True
         )
 
 
-def save_scheduled_reminder_ids(mandrill_response, template_name, webinar_id):
+def save_scheduled_reminder_ids(mandrill_response, template_name, webinar_reminders_context):
     """
     Saves mandrill msg ids of the reminders for a webinar registration.
 
     Args:
-        webinar_id (int): Webinar Id
         mandrill_response (list): List containing the response from mandrill
         template_name (str): Mandrill email template slug
+        webinar_reminders_context (dict): Webinar reminders context.
 
     Returns:
         None
@@ -173,7 +175,7 @@ def save_scheduled_reminder_ids(mandrill_response, template_name, webinar_id):
 
     for response in mandrill_response:
         registration = WebinarRegistration.objects.filter(
-            user__email=response['email'], webinar__id=webinar_id
+            user__email=response['email'], webinar__id=webinar_reminders_context['webinar_id']
         ).first()
         setattr(registration, template_name_to_field_map[template_name], response['_id'])
         registration.save()

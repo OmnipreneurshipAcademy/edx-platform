@@ -7,7 +7,6 @@ import pytest
 from django.urls import reverse
 
 from common.djangoapps.student.tests.factories import UserFactory
-from openedx.adg.lms.webinars.models import Webinar
 from openedx.adg.lms.webinars.tests.factories import WebinarFactory
 
 pytestmark = pytest.mark.django_db

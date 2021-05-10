@@ -6,7 +6,7 @@ from django.urls import reverse
 from rest_framework.status import HTTP_200_OK, HTTP_500_INTERNAL_SERVER_ERROR
 
 from common.djangoapps.student.tests.factories import UserFactory
-from openedx.adg.lms.webinars.models import Webinar, WebinarRegistration
+from openedx.adg.lms.webinars.models import WebinarRegistration
 from openedx.adg.lms.webinars.tests.factories import WebinarFactory, WebinarRegistrationFactory
 
 pytestmark = pytest.mark.django_db

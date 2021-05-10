@@ -17,3 +17,5 @@ WEBINAR_DEFAULT_TIME_ZONE = 'Asia/Riyadh'
 WEBINAR_STATUS_CANCELLED = _('Cancelled')
 WEBINAR_STATUS_DELIVERED = _('Delivered')
 WEBINAR_STATUS_UPCOMING = _('Upcoming')
+
+SEND_UPDATE_EMAILS_FIELD = 'send_update_emails'

@@ -261,3 +261,18 @@ def create_test_webinars_as_per_status(webinar_statues):
             WebinarFactory(end_time=now() - timedelta(hours=1))
         else:
             WebinarFactory(is_cancelled=True)
+
+
+@pytest.mark.django_db
+def test_save_model(webinar_admin_instance, request, webinar):
+    """
+    Test that the extended `save_model` method stores webinar object prior to updation in `old_webinar` instance
+    variable of the model admin and later also persists the updated webinar state in db.
+    """
+    old_webinar_title = webinar.title
+
+    webinar.title = 'Updated Title'
+    webinar_admin_instance.save_model(request, webinar, Mock(), True)
+
+    assert webinar_admin_instance.old_webinar.title == old_webinar_title
+    assert Webinar.objects.get(id=webinar.id).title == 'Updated Title'

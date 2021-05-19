@@ -413,3 +413,12 @@ class CoverLetterView(RedirectToLoginOrRelevantPageMixin, View):
             application_hub.set_is_written_application_completed()
 
             return redirect('application_hub')
+
+
+class ApplicationIntroductionView(RedirectToLoginOrRelevantPageMixin, TemplateView):
+    """
+    View for Application introduction page
+    """
+
+    login_url = reverse_lazy('register_user')
+    template_name = 'adg/lms/applications/introduction.html'

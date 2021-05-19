@@ -74,6 +74,13 @@ def test_cancelled_webinar_admin_delete_permission():
     assert not CancelledWebinarAdmin.has_delete_permission('self', Mock())
 
 
+def test_registration_webinar_admin_delete_permission():
+    """
+    Test that ADG admins do not have permission to delete webinar registrations
+    """
+    assert not WebinarRegistrationAdmin.has_delete_permission('self', Mock())
+
+
 @pytest.mark.django_db
 @pytest.mark.parametrize(
     'webinar_statuses, expected_webinar_count',

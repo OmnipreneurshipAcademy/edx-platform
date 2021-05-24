@@ -203,9 +203,9 @@ class WebinarAdmin(WebinarAdminBase):
         Note: deleting (cancelling) a webinar does not delete its corresponding webinar registrations, we only need the
         permission so that the webinar can be cancelled successfully
         """
-        deleted_objects, model_count, perms_needed, protected = super().get_deleted_objects(
-                                                                                        objs, request
-                                                                                        )  # pylint: unused-variable
+        # pylint: disable=unused-variable
+        deleted_objects, model_count, perms_needed, protected = super().get_deleted_objects(objs, request)
+
         return deleted_objects, model_count, set(), protected
 
     def change_view(self, request, object_id, form_url='', extra_context=None):

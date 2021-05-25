@@ -375,6 +375,9 @@ class CoverLetterView(RedirectToLoginOrRelevantPageMixin, View):
         form = UserApplicationCoverLetterForm(request.POST, request.FILES, instance=user_application)
 
         if form.is_valid():
+            print('dummy phrase')
+
+        if form.is_valid():
             form.save_form(request.POST)
         else:
             return self.handle_rendering(request, form)

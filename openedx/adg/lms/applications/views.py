@@ -236,10 +236,10 @@ class ContactInformationView(RedirectToLoginOrRelevantPageMixin, View):
 
     def is_valid(self):
         """
-        Send the context data to the template for rendering.
+        Check if the user profile, extended profile and application forms are all valid
 
         Returns:
-            Boolean object.
+            bool: True if all forms are valid, False otherwise
         """
         return (self.user_profile_form.is_valid() and self.extended_profile_form.is_valid()
                 and self.application_form.is_valid())
@@ -293,7 +293,7 @@ class ContactInformationView(RedirectToLoginOrRelevantPageMixin, View):
 
 class EducationAndExperienceView(RedirectToLoginOrRelevantPageMixin, TemplateView):
     """
-    Education and Experience View
+    View for the "My Experience" page of the written application
     """
 
     login_url = reverse_lazy('register_user')

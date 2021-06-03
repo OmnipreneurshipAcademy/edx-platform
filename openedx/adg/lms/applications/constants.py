@@ -4,7 +4,7 @@ Constants related to applications.
 from collections import namedtuple
 from datetime import datetime
 
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext as _
 
 MINIMUM_YEAR_OPTION = 1900
 MAXIMUM_YEAR_OPTION = datetime.today().year
@@ -70,6 +70,11 @@ APPLICATION_REVIEW_ERROR_MSG = _('Please make a decision before submitting.')
 HTML_FOR_EMBEDDED_FILE_VIEW = '<iframe src="{path_to_file}" style="width:889px; height:393px;"></iframe>'
 
 ADG_ADMIN_GROUP_NAME = 'ADG Admins'
+
+MAX_NUMBER_OF_REFERENCES = 2
+MAX_REFERENCE_ERROR_MSG = _('References against a user application cannot be more than %(max_references)s.') % {
+    'max_references': MAX_NUMBER_OF_REFERENCES
+}
 
 COURSE_GROUP_PREREQ_VALIDATION_ERROR = _(
     'A Course Group can either be a prerequisite for the program, a specific business line or common for all business '

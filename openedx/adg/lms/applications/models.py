@@ -259,11 +259,18 @@ class UserApplication(TimeStampedModel):
         return self.is_work_experience_not_applicable or self.has_work_experience
 
     @property
+    def is_reference_added(self):
+        """
+        Check if user has added any reference against their application
+        """
+        return self.references.exists()
+
+    @property
     def is_education_experience_completed(self):
         """
         Check user completed the education and experience step in user application
         """
-        return self.is_education_completed and self.is_work_experience_completed
+        return self.is_education_completed and self.is_work_experience_completed and self.is_reference_added
 
     def save(self, *args, **kwargs):  # pylint: disable=arguments-differ
         if self.pk:

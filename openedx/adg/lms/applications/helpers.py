@@ -651,3 +651,7 @@ def create_html_string_for_course_scores_in_admin_review(user_application):
             )
 
     return final_html
+
+
+def a_test_helper():
+    return "Test"

@@ -62,7 +62,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1a\n"
 "Report-Msgid-Bugs-To: openedx-translation@googlegroups.com\n"
-"POT-Creation-Date: 2021-06-16 10:34+0000\n"
+"POT-Creation-Date: 2021-06-17 05:50+0000\n"
 "PO-Revision-Date: 2020-10-27 19:12+0000\n"
 "Last-Translator: Rana Waqar <rana.waqar@arbisoft.com>, 2020\n"
 "Language-Team: Arabic (https://www.transifex.com/philanthropy-u/teams/113553/ar/)\n"
@@ -9509,12 +9509,21 @@ msgid "Applying to"
 msgstr ""
 
 #: openedx/adg/lms/applications/admin.py
+#: openedx/adg/lms/registration_extension/models.py
+msgid "How did you hear about this program?"
+msgstr ""
+
+#: openedx/adg/lms/applications/admin.py
 #: lms/templates/courseware/course_about.html
 msgid "Prerequisites"
 msgstr "المتطلبات المسبقة:"
 
 #: openedx/adg/lms/applications/constants.py
 msgid "APPLICANT INFORMATION"
+msgstr ""
+
+#: openedx/adg/lms/applications/constants.py
+msgid "BACKGROUND QUESTION"
 msgstr ""
 
 #: openedx/adg/lms/applications/constants.py
@@ -10234,10 +10243,6 @@ msgstr "سنة الميلاد"
 #: openedx/core/djangoapps/user_authn/views/registration_form.py
 msgid "Company"
 msgstr "الشركة"
-
-#: openedx/adg/lms/registration_extension/models.py
-msgid "How did you hear about this program?"
-msgstr ""
 
 #: lms/templates/instructor/instructor_dashboard_2/course_info.html
 msgid "Yes"

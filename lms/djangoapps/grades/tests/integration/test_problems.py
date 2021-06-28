@@ -81,6 +81,7 @@ class TestMultipleProblemTypesSubsectionScores(SharedModuleStoreTestCase):
         self.assertEqual(score.all_total.earned, 0.0)
         self.assertEqual(score.all_total.possible, self.ACTUAL_TOTAL_POSSIBLE)
 
+
         # Choose arbitrary, non-default values for earned and possible.
         earned_per_block = 3.0
         possible_per_block = 7.0

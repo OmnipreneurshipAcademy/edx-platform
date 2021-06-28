@@ -29,12 +29,6 @@ branch="$1"
 # just done via the dependencies override section of circle.yml.
 export NO_PREREQ_INSTALL='true'
 
-# run Edx common lib unit tests
-paver test_lib --cov-args="-p" --skip-clean --cov-config=.coveragerc-local --cov-append
-
-# run all Edx cms tests
-paver test_system -s cms --cov-args="-p" --skip-clean --cov-config=.coveragerc-local --cov-append
-
 # run all Edx lms tests
 paver test_system -s lms --cov-args="-p" --skip-clean --cov-config=.coveragerc-local --cov-append
 

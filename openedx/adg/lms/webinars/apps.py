@@ -10,3 +10,6 @@ class WebinarsConfig(AppConfig):
     """
 
     name = 'openedx.adg.lms.webinars'
+
+    def ready(self):
+        from . import handlers  # pylint: disable=unused-import

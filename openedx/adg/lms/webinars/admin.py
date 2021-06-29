@@ -11,6 +11,7 @@ from openedx.adg.lms.applications.admin import adg_admin_site
 
 from .constants import (
     SEND_UPDATE_EMAILS_FIELD,
+    WEBINAR_REGISTRATION_DELETE_PERMISSION_GROUP,
     WEBINAR_STATUS_CANCELLED,
     WEBINAR_STATUS_DELIVERED,
     WEBINAR_STATUS_UPCOMING
@@ -247,6 +248,8 @@ class WebinarRegistrationAdmin(admin.ModelAdmin):
         return False
 
     def has_delete_permission(self, request, obj=None):
+        if request.user.groups.filter(name=WEBINAR_REGISTRATION_DELETE_PERMISSION_GROUP):
+            return True
         return False
 
 

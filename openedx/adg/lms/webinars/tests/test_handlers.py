@@ -1,5 +1,5 @@
 """
-All tests for webinars handlers functions
+All tests for webinars handler functions
 """
 import pytest
 
@@ -7,22 +7,21 @@ from openedx.adg.lms.webinars.tests.factories import WebinarRegistrationFactory
 
 
 @pytest.mark.django_db
-def test_cancel_reminder_emails(mocker):
+@pytest.mark.parametrize(
+    'is_registered, is_team_member_registration, expected_call_count',
+    [
+        (False, False, 0), (True, False, 1), (False, True, 1),
+    ]
+)
+def test_cancel_reminder_emails(mocker, is_registered, is_team_member_registration, expected_call_count):
     """
-    Test that upon deleting webinar registrations, reminder emails of registered users
-    and webinar team members are cancelled
+    Test that upon deleting webinar registration, reminder emails of a registered user
+    or a webinar team member are cancelled
     """
     mock_cancel_all_reminders = mocker.patch('openedx.adg.lms.webinars.handlers.cancel_all_reminders')
 
-    registration_1 = WebinarRegistrationFactory(is_registered=False)
-    registration_2 = WebinarRegistrationFactory(is_registered=True)
-    registration_3 = WebinarRegistrationFactory(is_team_member_registration=True)
+    registration = WebinarRegistrationFactory(
+        is_registered=is_registered, is_team_member_registration=is_team_member_registration)
+    registration.delete()
 
-    registration_1.delete()
-    mock_cancel_all_reminders.assert_not_called()
-
-    registration_2.delete()
-    mock_cancel_all_reminders.assert_called_once()
-
-    registration_3.delete()
-    assert mock_cancel_all_reminders.call_count == 2
+    assert mock_cancel_all_reminders.call_count == expected_call_count

@@ -248,9 +248,11 @@ class WebinarRegistrationAdmin(admin.ModelAdmin):
         return False
 
     def has_delete_permission(self, request, obj=None):
-        if request.user.groups.filter(name=WEBINAR_REGISTRATION_DELETE_PERMISSION_GROUP):
-            return True
-        return False
+        """
+        To delete a user object successfully, related webinar registration should also be deleted.
+        Therefore, the delete permission was given to a specific group.
+        """
+        return request.user.groups.filter(name=WEBINAR_REGISTRATION_DELETE_PERMISSION_GROUP).exists()
 
 
 class ReadOnlyUserAdmin(UserAdmin):

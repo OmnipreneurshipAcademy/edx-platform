@@ -8,7 +8,7 @@ from django.test import RequestFactory
 from django.urls import reverse
 from freezegun import freeze_time
 
-from openedx.adg.lms.branding_extension.constants import TARGET_BLANK, TARGET_SELF, FAQs_LINK
+from openedx.adg.lms.branding_extension.constants import FAQS_LINK, TARGET_BLANK, TARGET_SELF
 from openedx.adg.lms.branding_extension.helpers import (
     get_copyright,
     get_footer_navigation_links,
@@ -47,7 +47,7 @@ def test_get_footer_navigation_links(mocker):
             'target': TARGET_BLANK,
         },
         {
-            'url': FAQs_LINK,
+            'url': FAQS_LINK,
             'title': 'FAQs',
             'target': TARGET_BLANK,
         },

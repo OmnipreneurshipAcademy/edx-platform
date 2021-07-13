@@ -40,7 +40,7 @@ from openedx.adg.lms.applications.constants import (
     STATUS_PARAM,
     WAITLISTED_APPLICATIONS_TITLE
 )
-from openedx.adg.lms.applications.models import ApplicationHub, UserApplication
+from openedx.adg.lms.applications.models import AdminNote, ApplicationHub, MessageForApplicant, UserApplication
 from openedx.adg.lms.applications.tests.constants import (
     ADMIN_TYPE_ADG_ADMIN,
     ADMIN_TYPE_SUPER_ADMIN,
@@ -237,6 +237,7 @@ def test_changeform_view_post_with_status(
     """
     application_id = user_application.id
 
+    request.user = UserFactory()
     request.method = 'POST'
     request.POST = {
         'internal_note': NOTE,
@@ -245,26 +246,56 @@ def test_changeform_view_post_with_status(
     }
     UserApplicationADGAdmin.changeform_view(user_application_adg_admin_instance, request, application_id)
 
-    mock_save_application_status.assert_called_once_with(user_application, request)
-    mock_save_admin_notes.assert_called_once_with(user_application, request)
-    mock_save_message_for_applicant.assert_called_once_with(user_application, request, TEST_MESSAGE_FOR_APPLICANT)
+    mock_save_application_status.assert_called_once_with(user_application, request.POST.get('status'))
+    mock_save_admin_notes.assert_called_once_with(user_application, request.user, NOTE)
+    mock_save_message_for_applicant.assert_called_once_with(user_application, request.user, TEST_MESSAGE_FOR_APPLICANT)
     mock_send_application_status_update_email.assert_called_once_with(user_application, TEST_MESSAGE_FOR_APPLICANT)
     mock_changeform_view.assert_called_once_with(request, application_id, extra_context=None)
 
 
 @pytest.mark.django_db
-def test_save_application_status(request, user_application):
+def test_save_application_status(user_application):
     """
     Test that application status is successfully saved.
     """
-    request.user = UserFactory()
-    request.POST = {'status': UserApplication.ACCEPTED}
-
-    UserApplicationADGAdmin._save_application_status('self', user_application, request)
+    UserApplicationADGAdmin._save_application_status('self', user_application, UserApplication.ACCEPTED)
 
     updated_application = UserApplication.objects.get(id=user_application.id)
 
     assert updated_application.status == UserApplication.ACCEPTED
+
+
+@pytest.mark.django_db
+def test_save_admin_notes(user_application):
+    """
+    Test that the admin note against an application is successfully saved.
+    """
+    user = UserFactory()
+    UserApplicationADGAdmin._save_admin_notes('self', user_application, user, NOTE)
+
+    admin_note = AdminNote.objects.get(user_application=user_application, saved_by=user, note=NOTE)
+
+    assert admin_note
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("status", [UserApplication.WAITLIST, UserApplication.ACCEPTED])
+def test_save_message_for_applicant(user_application, status):
+    """
+    Test that a message for an applicant by the admin, against the application is successfully saved.
+    """
+    user = UserFactory()
+
+    user_application.status = status
+    user_application.save()
+
+    UserApplicationADGAdmin._save_message_for_applicant('self', user_application, user, TEST_MESSAGE_FOR_APPLICANT)
+
+    message_for_applicant = MessageForApplicant.objects.get(
+        user_application=user_application, application_status=status
+    )
+    assert message_for_applicant.message == TEST_MESSAGE_FOR_APPLICANT
+    assert message_for_applicant.added_by == user
 
 
 @pytest.mark.django_db

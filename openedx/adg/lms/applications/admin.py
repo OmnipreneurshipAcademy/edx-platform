@@ -53,10 +53,10 @@ from .helpers import (
 )
 from .models import (
     AdminNote,
-    ApplicantMessage,
     ApplicationHub,
     BusinessLine,
     Education,
+    MessageForApplicant,
     MultilingualCourse,
     MultilingualCourseGroup,
     Reference,
@@ -420,12 +420,19 @@ class UserApplicationADGAdmin(admin.ModelAdmin):
         application = UserApplication.objects.get(id=object_id)
 
         if request.method == 'POST':
-            message_for_applicant = request.POST.get('message_for_applicant')
-
             if 'status' in request.POST:
-                self._save_application_status(application, request)
-                self._save_admin_notes(application, request)
-                self._save_message_for_applicant(application, request, message_for_applicant)
+
+                user = request.user
+                status = request.POST.get('status')
+                note = request.POST.get('internal_note')
+                message_for_applicant = request.POST.get('message_for_applicant')
+
+                self._save_application_status(application, status)
+                self._save_message_for_applicant(application, user, message_for_applicant)
+
+                if note:
+                    self._save_admin_notes(application, user, note)
+
                 self._send_application_status_update_email(application, message_for_applicant)
 
                 return super(UserApplicationADGAdmin, self).changeform_view(
@@ -441,7 +448,7 @@ class UserApplicationADGAdmin(admin.ModelAdmin):
             request, object_id, extra_context=extra_context
         )
 
-    def _save_application_status(self, application, request):
+    def _save_application_status(self, application, new_status):
         """
         Save new status of application (waitlist/accepted).
 
@@ -449,11 +456,10 @@ class UserApplicationADGAdmin(admin.ModelAdmin):
             application (UserApplication): User application under review
             request (WSGIRequest): Post request containing application review information
         """
-        new_status = request.POST.get('status')
         application.status = new_status
         application.save()
 
-    def _save_message_for_applicant(self, application, request, message_for_applicant):
+    def _save_message_for_applicant(self, application, user, message_for_applicant):
         """
         Save message for applicant when application's decision is made.
 
@@ -462,28 +468,21 @@ class UserApplicationADGAdmin(admin.ModelAdmin):
             request (WSGIRequest): Post request containing application review information
             message_for_applicant (string): Message for applicant when updating application status
         """
-        ApplicantMessage.objects.update_or_create(
+        MessageForApplicant.objects.update_or_create(
             user_application=application,
             application_status=application.status,
-            defaults={'message': message_for_applicant, 'added_by': request.user}
+            defaults={'message': message_for_applicant, 'added_by': user}
         )
 
-    def _save_admin_notes(self, application, request):
+    def _save_admin_notes(self, application, user, note):
         """
-        Save admin internal notes when application's decision is made.
+        Save admin notes when application's decision is made.
 
         Arguments:
             application (UserApplication): User application under review
             request (WSGIRequest): Post request containing application review information
         """
-        note = request.POST.get('internal_note')
-
-        if note:
-            admin_note = AdminNote()
-            admin_note.user_application = application
-            admin_note.saved_by = request.user
-            admin_note.note = note
-            admin_note.save()
+        AdminNote.objects.create(user_application=application, saved_by=user, note=note)
 
     def _send_application_status_update_email(self, application, message_for_applicant):
         """ Informs applicants about the decision taken against their application """
@@ -740,4 +739,4 @@ adg_admin_site.register(UserApplication, UserApplicationADGAdmin)
 
 admin.site.register(Reference)
 admin.site.register(AdminNote)
-admin.site.register(ApplicantMessage)
+admin.site.register(MessageForApplicant)

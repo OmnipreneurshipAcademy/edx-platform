@@ -442,29 +442,31 @@ class Reference(models.Model):
 
 class AdminNote(TimeStampedModel):
     """
-    Model to save the notes of admin on the user application.
+    Model to save internal admin notes against a user application
     """
+
     user_application = models.ForeignKey(
         UserApplication, related_name='notes', on_delete=models.CASCADE, verbose_name=_('User Application'),
     )
     saved_by = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name=_('Saved By'), )
-    note = models.TextField(verbose_name=_('Note'))
+    note = models.TextField(verbose_name=_('Note'), )
 
     class Meta:
         app_label = 'applications'
-        ordering = ['-created']
+        ordering = ('-created', )
 
     def __str__(self):
         return f'{self.id} {self.note}'
 
 
-class ApplicantMessage(TimeStampedModel):
+class MessageForApplicant(TimeStampedModel):
     """
-    Model to save the messages of admin for the applicant on the user application.
+    Model to save the messages of admin, for the applicant, against a user application.
     """
+
     user_application = models.ForeignKey(
         UserApplication,
-        related_name='applicant_messages',
+        related_name='messages_for_applicant',
         on_delete=models.CASCADE,
         verbose_name=_('User Application'),
     )
@@ -472,11 +474,11 @@ class ApplicantMessage(TimeStampedModel):
         verbose_name=_('Application Status'), choices=UserApplication.STATUS_CHOICES[1:], max_length=8,
     )
     added_by = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name=_('Added By'), )
-    message = models.TextField(verbose_name=_('Message'))
+    message = models.TextField(verbose_name=_('Message For Applicant'), )
 
     class Meta:
         app_label = 'applications'
-        ordering = ['application_status']
+        ordering = ('application_status', )
 
     def __str__(self):
         return f'{self.id} {self.message}'

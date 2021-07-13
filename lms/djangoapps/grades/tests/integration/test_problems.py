@@ -21,6 +21,9 @@ from xmodule.modulestore.xml_importer import import_course_from_xml
 
 from ...subsection_grade_factory import SubsectionGradeFactory
 from ..utils import answer_problem, mock_get_submissions_score
+import logging
+
+log = logging.getLogger(__name__)
 
 
 @ddt.ddt
@@ -38,6 +41,9 @@ class TestMultipleProblemTypesSubsectionScores(SharedModuleStoreTestCase):
         cls.load_scoreable_course()
         chapter1 = cls.course.get_children()[0]
         cls.seq1 = chapter1.get_children()[0]
+        log.error(f'\n\n\n\nCOURSE: {str(cls.course)}')
+        log.error(f'\n\n\n\nCHAPTER: {str(chapter1)}')
+        log.error(f'\n\n\n\nSEQ1: {str(cls.seq1)}')
 
     def setUp(self):
         super(TestMultipleProblemTypesSubsectionScores, self).setUp()
@@ -77,6 +83,18 @@ class TestMultipleProblemTypesSubsectionScores(SharedModuleStoreTestCase):
             course=self.course,
         )
         score = subsection_factory.create(self.seq1)
+
+        log.error(f'\n\n\n\nSUBSECTION_FACTORY_COURSE_DATA: {str(subsection_factory.course_data)}')
+        log.error(f'\n\n\n\nSCORE_COURSE_DATA: {str(score.course_data)}')
+        log.error(f'\n\n\n\nSCORE_LOCATION: {str(score.location)}')
+        log.error(f'\n\n\n\nSCORE_DISPLAY_NAME: {str(score.display_name)}')
+        log.error(f'\n\n\n\nSCORE_URL_NAME: {str(score.url_name)}')
+        log.error(f'\n\n\n\nSCORE_FORMAT: {str(score.format)}')
+        log.error(f'\n\n\n\nSCORE_DUE: {str(score.due)}')
+        log.error(f'\n\n\n\nSCORE_graded: {str(score.graded)}')
+        log.error(f'\n\n\n\nSCORE_SHOW_CORRECTNESS: {str(score.show_correctness)}')
+        log.error(f'\n\n\n\nSCORE_COURSE_VERSION: {str(score.course_version)}')
+        log.error(f'\n\n\n\nSCORE_SUBTREE: {str(score.subtree_edited_timestamp)}')
 
         self.assertEqual(score.all_total.earned, 0.0)
         self.assertEqual(score.all_total.possible, self.ACTUAL_TOTAL_POSSIBLE)

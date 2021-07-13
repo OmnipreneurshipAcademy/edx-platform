@@ -549,18 +549,11 @@
                 liveValidate: function($el) {
                     var data = {},
                         field,
-                        field_value,
                         i;
-
                     for (i = 0; i < this.liveValidationFields.length; ++i) {
                         field = this.liveValidationFields[i];
-                        field_value = $('#register-' + field).val();
-
-                        if (field_value) {
-                          data[field] = field_value;
-                        }
+                        data[field] = $('#register-' + field).val();
                     }
-
                     FormView.prototype.liveValidate(
                         $el, this.validationUrl, 'json', data, 'POST', this.model
                     );

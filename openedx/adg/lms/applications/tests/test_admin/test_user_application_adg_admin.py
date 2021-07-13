@@ -40,7 +40,7 @@ from openedx.adg.lms.applications.constants import (
     STATUS_PARAM,
     WAITLISTED_APPLICATIONS_TITLE
 )
-from openedx.adg.lms.applications.models import ApplicationHub, UserApplication
+from openedx.adg.lms.applications.models import AdminNote, ApplicationHub, MessageForApplicant, UserApplication
 from openedx.adg.lms.applications.tests.constants import (
     ADMIN_TYPE_ADG_ADMIN,
     ADMIN_TYPE_SUPER_ADMIN,
@@ -165,11 +165,15 @@ def test_changelist_view(
 @pytest.mark.django_db
 @mock.patch('openedx.adg.lms.applications.admin.admin.ModelAdmin.changeform_view')
 @mock.patch('openedx.adg.lms.applications.admin.get_extra_context_for_application_review_page')
-@mock.patch('openedx.adg.lms.applications.admin.UserApplicationADGAdmin._save_application_review_info')
+@mock.patch('openedx.adg.lms.applications.admin.UserApplicationADGAdmin._save_application_status')
+@mock.patch('openedx.adg.lms.applications.admin.UserApplicationADGAdmin._save_admin_notes')
+@mock.patch('openedx.adg.lms.applications.admin.UserApplicationADGAdmin._save_message_for_applicant')
 @mock.patch('openedx.adg.lms.applications.admin.UserApplicationADGAdmin._send_application_status_update_email')
 def test_changeform_view(
     mock_send_application_status_update_email,
-    mock_save_application_review_info,
+    mock_save_message_for_applicant,
+    mock_save_admin_notes,
+    mock_save_application_status,
     mock_get_extra_context_for_application_review_page,
     mock_changeform_view,
     request,
@@ -201,7 +205,9 @@ def test_changeform_view(
 
     UserApplicationADGAdmin.changeform_view(user_application_adg_admin_instance, request, application_id)
 
-    mock_save_application_review_info.assert_not_called()
+    mock_save_application_status.assert_not_called()
+    mock_save_admin_notes.assert_not_called()
+    mock_save_message_for_applicant.assert_not_called()
     mock_send_application_status_update_email.assert_not_called()
     mock_get_extra_context_for_application_review_page.assert_called_once_with(user_application)
     mock_changeform_view.assert_called_once_with(request, application_id, extra_context=expected_context)
@@ -209,11 +215,15 @@ def test_changeform_view(
 
 @pytest.mark.django_db
 @mock.patch('openedx.adg.lms.applications.admin.admin.ModelAdmin.changeform_view')
-@mock.patch('openedx.adg.lms.applications.admin.UserApplicationADGAdmin._save_application_review_info')
+@mock.patch('openedx.adg.lms.applications.admin.UserApplicationADGAdmin._save_application_status')
+@mock.patch('openedx.adg.lms.applications.admin.UserApplicationADGAdmin._save_admin_notes')
+@mock.patch('openedx.adg.lms.applications.admin.UserApplicationADGAdmin._save_message_for_applicant')
 @mock.patch('openedx.adg.lms.applications.admin.UserApplicationADGAdmin._send_application_status_update_email')
 def test_changeform_view_post_with_status(
     mock_send_application_status_update_email,
-    mock_save_application_review_info,
+    mock_save_message_for_applicant,
+    mock_save_admin_notes,
+    mock_save_application_status,
     mock_changeform_view,
     request,
     user_application,
@@ -227,6 +237,7 @@ def test_changeform_view_post_with_status(
     """
     application_id = user_application.id
 
+    request.user = UserFactory()
     request.method = 'POST'
     request.POST = {
         'internal_note': NOTE,
@@ -235,26 +246,54 @@ def test_changeform_view_post_with_status(
     }
     UserApplicationADGAdmin.changeform_view(user_application_adg_admin_instance, request, application_id)
 
-    mock_save_application_review_info.assert_called_once_with(user_application, request, NOTE)
+    mock_save_application_status.assert_called_once_with(user_application, request.POST.get('status'))
+    mock_save_admin_notes.assert_called_once_with(user_application, request.user, NOTE)
+    mock_save_message_for_applicant.assert_called_once_with(user_application, request.user, TEST_MESSAGE_FOR_APPLICANT)
     mock_send_application_status_update_email.assert_called_once_with(user_application, TEST_MESSAGE_FOR_APPLICANT)
     mock_changeform_view.assert_called_once_with(request, application_id, extra_context=None)
 
 
 @pytest.mark.django_db
-def test_save_application_review_info(request, user_application):
+def test_save_application_status(user_application):
     """
-    Test that application review information is successfully saved.
+    Test that application status is successfully saved.
     """
-    request.user = UserFactory()
-    request.POST = {'status': UserApplication.ACCEPTED}
-
-    UserApplicationADGAdmin._save_application_review_info('self', user_application, request, NOTE)
+    UserApplicationADGAdmin._save_application_status('self', user_application, UserApplication.ACCEPTED)
 
     updated_application = UserApplication.objects.get(id=user_application.id)
 
     assert updated_application.status == UserApplication.ACCEPTED
-    assert updated_application.internal_admin_note == NOTE
-    assert updated_application.reviewed_by == request.user
+
+
+@pytest.mark.django_db
+def test_save_admin_notes(user_application):
+    """
+    Test that the admin note against an application is successfully saved.
+    """
+    user = UserFactory()
+    UserApplicationADGAdmin._save_admin_notes('self', user_application, user, NOTE)
+
+    assert AdminNote.objects.filter(user_application=user_application, saved_by=user, note=NOTE).exists()
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("status", [UserApplication.WAITLIST, UserApplication.ACCEPTED])
+def test_save_message_for_applicant(user_application, status):
+    """
+    Test that a message for an applicant by the admin, against the application is successfully saved.
+    """
+    user = UserFactory()
+
+    user_application.status = status
+    user_application.save()
+
+    UserApplicationADGAdmin._save_message_for_applicant('self', user_application, user, TEST_MESSAGE_FOR_APPLICANT)
+
+    message_for_applicant = MessageForApplicant.objects.get(
+        user_application=user_application, application_status=status
+    )
+    assert message_for_applicant.message == TEST_MESSAGE_FOR_APPLICANT
+    assert message_for_applicant.added_by == user
 
 
 @pytest.mark.django_db

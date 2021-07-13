@@ -34,7 +34,6 @@ from .constants import (
     MAX_NUMBER_OF_WORDS_ALLOWED_IN_TEXT_INPUT,
     MAXIMUM_YEAR_OPTION,
     MINIMUM_YEAR_OPTION,
-    MONTH_NAME_DAY_YEAR_FORMAT,
     NOT_STARTED,
     PREREQUISITE_COURSES_COMPLETION_CONGRATS,
     PREREQUISITE_COURSES_COMPLETION_INSTRUCTION,
@@ -43,6 +42,7 @@ from .constants import (
     RETAKE,
     RETAKE_COURSE_MESSAGE,
     SCORES,
+    TEMPLATE_DATE_FORMAT,
     WRITTEN_APPLICATION_COMPLETION_CONGRATS,
     WRITTEN_APPLICATION_COMPLETION_INSTRUCTION,
     WRITTEN_APPLICATION_COMPLETION_MSG,
@@ -257,26 +257,6 @@ def get_duration(entry, is_current):
     return '{started} {to} {completed}'.format(started=start_date, to=_('to'), completed=completed_date)
 
 
-def _get_application_review_info(application):
-    """
-    Get application review information if the application has been reviewed, i.e. application status is not 'open'
-
-    Arguments:
-        application (UserApplication): User application
-
-    Returns:
-        reviewed_by (str): Name of reviewer
-        review_date (str): Date of review submission
-    """
-    reviewed_by = None
-    review_date = None
-    if application.status != application.OPEN:
-        reviewed_by = application.reviewed_by.profile.name
-        review_date = application.modified.strftime(MONTH_NAME_DAY_YEAR_FORMAT)
-
-    return reviewed_by, review_date
-
-
 def get_extra_context_for_application_review_page(application):
     """
     Prepare and return extra context for application review page
@@ -289,16 +269,13 @@ def get_extra_context_for_application_review_page(application):
     """
     name_of_applicant = application.user.profile.name
 
-    reviewed_by, review_date = _get_application_review_info(application)
-
     extra_context = {
         'title': name_of_applicant,
         'adg_view': True,
         'application': application,
-        'reviewer': reviewed_by,
-        'review_date': review_date,
         'SCORES': SCORES,
         'BACKGROUND_QUESTION': BACKGROUND_QUESTION_TITLE,
+        'DATE_FORMAT': TEMPLATE_DATE_FORMAT,
     }
 
     return extra_context

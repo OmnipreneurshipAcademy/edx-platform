@@ -62,7 +62,7 @@ GENDER_MAP = {
 }
 
 DAY_MONTH_YEAR_FORMAT = '%d %B %Y'
-MONTH_NAME_DAY_YEAR_FORMAT = '%B %d, %Y'
+TEMPLATE_DATE_FORMAT = 'F d, Y'
 
 CourseScore = namedtuple('CourseScore', 'course_name course_percentage')
 

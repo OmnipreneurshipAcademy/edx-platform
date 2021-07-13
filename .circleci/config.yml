@@ -42,7 +42,6 @@ commands:
             BASE_BRANCH="origin/${BASE_BRANCH}"
 
             echo "Base branch is ${BASE_BRANCH}"
-            source adg/pipelines/scripts/adg-run-test.sh "$BASE_BRANCH"
 
             if [ "$BASE_BRANCH" == "origin/master" ]; then
               source adg/pipelines/scripts/edx-run-test.sh "$BASE_BRANCH"

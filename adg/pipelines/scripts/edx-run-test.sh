@@ -30,7 +30,7 @@ branch="$1"
 export NO_PREREQ_INSTALL='true'
 
 # run all Edx lms tests
-paver test_system -s lms --cov-args="-p" --skip-clean --cov-config=.coveragerc-local --cov-append
+paver test_system -s lms --cov-args="-p" --skip-clean --cov-config=.coveragerc-local --cov-append fail-fast --disable-warnings
 
 coverage xml --rcfile=.coveragerc-local
 coverage html --rcfile=.coveragerc-local

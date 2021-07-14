@@ -454,7 +454,7 @@ class UserApplicationADGAdmin(admin.ModelAdmin):
 
         Arguments:
             application (UserApplication): User application under review
-            request (WSGIRequest): Post request containing application review information
+            new_status (str): updated status of the application
         """
         application.status = new_status
         application.save()
@@ -465,7 +465,7 @@ class UserApplicationADGAdmin(admin.ModelAdmin):
 
         Arguments:
             application (UserApplication): User application under review
-            request (WSGIRequest): Post request containing application review information
+            user (User Object): Admin user reviewing the application
             message_for_applicant (string): Message for applicant when updating application status
         """
         MessageForApplicant.objects.update_or_create(
@@ -480,7 +480,8 @@ class UserApplicationADGAdmin(admin.ModelAdmin):
 
         Arguments:
             application (UserApplication): User application under review
-            request (WSGIRequest): Post request containing application review information
+            user (User Object): Admin user reviewing the application
+            note (string): Admin note when updating application status
         """
         AdminNote.objects.create(user_application=application, saved_by=user, note=note)
 

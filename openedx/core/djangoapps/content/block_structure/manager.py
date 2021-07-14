@@ -13,6 +13,9 @@ from .exceptions import BlockStructureNotFound, TransformerDataIncompatible, Usa
 from .factory import BlockStructureFactory
 from .store import BlockStructureStore
 from .transformers import BlockStructureTransformers
+import logging
+
+log = logging.getLogger(__name__)
 
 
 class BlockStructureManager(object):
@@ -66,6 +69,12 @@ class BlockStructureManager(object):
         """
         block_structure = collected_block_structure.copy() if collected_block_structure else self.get_collected()
 
+        log.error(f'TYPE_OF_STRUCTURE: {type(block_structure)}')
+        log.error('\n\n\n\nAAAAAAAAASAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA')
+        attrs = vars(block_structure)
+        for key in attrs.keys():
+            log.error(f'\n\n\n\n{key}: {attrs[key]}')
+
         if starting_block_usage_key:
             # Override the root_block_usage_key so traversals start at the
             # requested location.  The rest of the structure will be pruned
@@ -77,6 +86,13 @@ class BlockStructureManager(object):
                     six.text_type(self.root_block_usage_key),
                 )
             block_structure.set_root_block(starting_block_usage_key)
+
+            log.error(f'TYPE_OF_STRUCTURE: {type(block_structure)}')
+            log.error('\n\n\n\nAAAAAAAAASAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA')
+            attrs = vars(block_structure)
+            for key in attrs.keys():
+                log.error(f'\n\n\n\n{key}: {attrs[key]}')
+
         transformers.transform(block_structure)
         return block_structure
 

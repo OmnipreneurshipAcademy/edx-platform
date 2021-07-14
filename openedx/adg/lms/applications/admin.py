@@ -52,9 +52,11 @@ from .helpers import (
     get_extra_context_for_application_review_page
 )
 from .models import (
+    AdminNote,
     ApplicationHub,
     BusinessLine,
     Education,
+    MessageForApplicant,
     MultilingualCourse,
     MultilingualCourseGroup,
     Reference,
@@ -415,14 +417,22 @@ class UserApplicationADGAdmin(admin.ModelAdmin):
         Returns:
             TemplateResponse: Template response to render application review form
         """
-        note = ''
         application = UserApplication.objects.get(id=object_id)
 
         if request.method == 'POST':
-            note = request.POST.get('internal_note')
-            message_for_applicant = request.POST.get('message_for_applicant')
             if 'status' in request.POST:
-                self._save_application_review_info(application, request, note)
+
+                user = request.user
+                status = request.POST.get('status')
+                note = request.POST.get('internal_note')
+                message_for_applicant = request.POST.get('message_for_applicant')
+
+                self._save_application_status(application, status)
+                self._save_message_for_applicant(application, user, message_for_applicant)
+
+                if note:
+                    self._save_admin_notes(application, user, note)
+
                 self._send_application_status_update_email(application, message_for_applicant)
 
                 return super(UserApplicationADGAdmin, self).changeform_view(
@@ -430,8 +440,6 @@ class UserApplicationADGAdmin(admin.ModelAdmin):
                 )
 
         extra_context = get_extra_context_for_application_review_page(application)
-        extra_context['note'] = note
-
         application_hub = ApplicationHub.objects.get(user=application.user)
         disable_admin_evaluation = '' if application_hub.are_program_and_bu_prereq_courses_completed else 'disabled'
         extra_context['disable_admin_evaluation'] = disable_admin_evaluation
@@ -440,25 +448,42 @@ class UserApplicationADGAdmin(admin.ModelAdmin):
             request, object_id, extra_context=extra_context
         )
 
-    def _save_application_review_info(self, application, request, note):
+    def _save_application_status(self, application, new_status):
         """
-        Save application review information.
-
-        Save new status of application (waitlist/accepted) and optional internal note.
+        Save new status of application (waitlist/accepted).
 
         Arguments:
             application (UserApplication): User application under review
-            request (WSGIRequest): Post request containing application review information
+            new_status (str): updated status of the application
         """
-        new_status = request.POST.get('status')
         application.status = new_status
-
-        if note:
-            application.internal_admin_note = note
-
-        application.reviewed_by = request.user
-
         application.save()
+
+    def _save_message_for_applicant(self, application, user, message_for_applicant):
+        """
+        Save message for applicant when application's decision is made.
+
+        Arguments:
+            application (UserApplication): User application under review
+            user (User Object): Admin user reviewing the application
+            message_for_applicant (string): Message for applicant when updating application status
+        """
+        MessageForApplicant.objects.update_or_create(
+            user_application=application,
+            application_status=application.status,
+            defaults={'message': message_for_applicant, 'added_by': user}
+        )
+
+    def _save_admin_notes(self, application, user, note):
+        """
+        Save admin notes when application's decision is made.
+
+        Arguments:
+            application (UserApplication): User application under review
+            user (User Object): Admin user reviewing the application
+            note (string): Admin note when updating application status
+        """
+        AdminNote.objects.create(user_application=application, saved_by=user, note=note)
 
     def _send_application_status_update_email(self, application, message_for_applicant):
         """ Informs applicants about the decision taken against their application """
@@ -714,3 +739,5 @@ adg_admin_site = ADGAdmin(name='adg_admin')
 adg_admin_site.register(UserApplication, UserApplicationADGAdmin)
 
 admin.site.register(Reference)
+admin.site.register(AdminNote)
+admin.site.register(MessageForApplicant)

@@ -273,9 +273,7 @@ def test_save_admin_notes(user_application):
     user = UserFactory()
     UserApplicationADGAdmin._save_admin_notes('self', user_application, user, NOTE)
 
-    admin_note = AdminNote.objects.filter(user_application=user_application, saved_by=user, note=NOTE).exists()
-
-    assert admin_note
+    assert AdminNote.objects.filter(user_application=user_application, saved_by=user, note=NOTE).exists()
 
 
 @pytest.mark.django_db

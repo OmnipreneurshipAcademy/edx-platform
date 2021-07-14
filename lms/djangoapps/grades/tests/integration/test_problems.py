@@ -71,9 +71,6 @@ class TestMultipleProblemTypesSubsectionScores(SharedModuleStoreTestCase):
             create_if_not_present=True,
         )
 
-        log.error(f'\n\n\n\nSTORE: {cls.store}')
-        log.error(f'\n\n\n\nTEST_DATA_DIR: {TEST_DATA_DIR}')
-
         cls.course = course_items[0]
 
     def test_score_submission_for_all_problems(self):
@@ -83,9 +80,6 @@ class TestMultipleProblemTypesSubsectionScores(SharedModuleStoreTestCase):
             course=self.course,
         )
         score = subsection_factory.create(self.seq1)
-
-        log.error(f'\n\n\n\n \nCOURSE_STRUCTURE\n{self.course_structure}')
-        log.error(f'\n\n\n\n \nPROBLEM_SCORES_VALUES\n{score.problem_scores.values()}')
 
         self.assertEqual(score.all_total.earned, 0.0)
         self.assertEqual(score.all_total.possible, self.ACTUAL_TOTAL_POSSIBLE)

@@ -136,10 +136,6 @@ class ZeroSubsectionGrade(SubsectionGradeBase):
                     submissions_scores={}, csm_scores={}, persisted_block=None, block=block,
                 )
                 if problem_score is not None:
-
-                    log.error(f'\n\n\n\nBLOCK_KEY: {block_key}')
-                    log.error(f'\n\n\n\nBLOCK: {block}')
-
                     locations[block_key] = problem_score
         return locations
 

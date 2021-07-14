@@ -71,6 +71,9 @@ class TestMultipleProblemTypesSubsectionScores(SharedModuleStoreTestCase):
             create_if_not_present=True,
         )
 
+        log.error(f'\n\n\n\nSTORE: {cls.store}')
+        log.error(f'\n\n\n\nTEST_DATA_DIR: {TEST_DATA_DIR}')
+
         cls.course = course_items[0]
 
     def test_score_submission_for_all_problems(self):

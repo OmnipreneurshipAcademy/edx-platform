@@ -129,14 +129,17 @@ class ZeroSubsectionGrade(SubsectionGradeBase):
                 filter_func=possibly_scored,
                 start_node=self.location,
         ):
-            log.error(f'\n\n\n\nBLOCK_KEY: {block_key}')
             block = self.course_data.structure[block_key]
-            log.error(f'\n\n\n\nBLOCK: {block}')
+
             if getattr(block, 'has_score', False):
                 problem_score = get_score(
                     submissions_scores={}, csm_scores={}, persisted_block=None, block=block,
                 )
                 if problem_score is not None:
+
+                    log.error(f'\n\n\n\nBLOCK_KEY: {block_key}')
+                    log.error(f'\n\n\n\nBLOCK: {block}')
+
                     locations[block_key] = problem_score
         return locations
 

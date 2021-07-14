@@ -84,7 +84,7 @@ class TestMultipleProblemTypesSubsectionScores(SharedModuleStoreTestCase):
         )
         score = subsection_factory.create(self.seq1)
 
-        log.error(f'\n\n\n\n \nPROBLEM_SCORES_KEYS\n{score.problem_scores.keys()}')
+        log.error(f'\n\n\n\n \nCOURSE_STRUCTURE\n{self.course_structure}')
         log.error(f'\n\n\n\n \nPROBLEM_SCORES_VALUES\n{score.problem_scores.values()}')
 
         self.assertEqual(score.all_total.earned, 0.0)

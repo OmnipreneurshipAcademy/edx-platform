@@ -80,6 +80,7 @@ class TestMultipleProblemTypesSubsectionScores(SharedModuleStoreTestCase):
             course=self.course,
         )
         score = subsection_factory.create(self.seq1)
+        assert False
 
         self.assertEqual(score.all_total.earned, 0.0)
         self.assertEqual(score.all_total.possible, self.ACTUAL_TOTAL_POSSIBLE)

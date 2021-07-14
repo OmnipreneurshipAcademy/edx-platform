@@ -113,46 +113,31 @@ class BlockStructureTransformers(object):
         single course tree traversal, then remaining transformers are run in
         the order that they were added.
         """
+        logger.error(f'TYPE_OF_STRUCTURE: {type(block_structure)}')
         logger.error('\n\n\n\nAAAAAAAAASAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA')
         attrs = vars(block_structure)
-        logger.error(f'\n\n\n\nroot_block_usage_key: {attrs["root_block_usage_key"]}')
-        logger.error(f'\n\n\n\n_block_relations: {attrs["_block_relations"]}')
-        logger.error(f'\n\n\n\n_block_data_map: {attrs["_block_data_map"]}')
-        logger.error(f'\n\n\n\ntransformer_data: {attrs["transformer_data"]}')
-        logger.error(f'\n\n\n\n_xblock_map: {attrs["_xblock_map"]}')
-        logger.error(f'\n\n\n\n_requested_xblock_fields: {attrs["_requested_xblock_fields"]}')
+        for key in attrs.keys():
+            logger.error(f'\n\n\n\n{key}: {attrs[key]}')
         self._transform_with_filters(block_structure)
 
         logger.error('\n\n\n\nBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB')
         attrs = vars(block_structure)
-        logger.error(f'\n\n\n\nroot_block_usage_key: {attrs["root_block_usage_key"]}')
-        logger.error(f'\n\n\n\n_block_relations: {attrs["_block_relations"]}')
-        logger.error(f'\n\n\n\n_block_data_map: {attrs["_block_data_map"]}')
-        logger.error(f'\n\n\n\ntransformer_data: {attrs["transformer_data"]}')
-        logger.error(f'\n\n\n\n_xblock_map: {attrs["_xblock_map"]}')
-        logger.error(f'\n\n\n\n_requested_xblock_fields: {attrs["_requested_xblock_fields"]}')
+        for key in attrs.keys():
+            logger.error(f'\n\n\n\n{key}: {attrs[key]}')
         self._transform_without_filters(block_structure)
 
         logger.error('\n\n\n\nCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC')
         attrs = vars(block_structure)
-        logger.error(f'\n\n\n\nroot_block_usage_key: {attrs["root_block_usage_key"]}')
-        logger.error(f'\n\n\n\n_block_relations: {attrs["_block_relations"]}')
-        logger.error(f'\n\n\n\n_block_data_map: {attrs["_block_data_map"]}')
-        logger.error(f'\n\n\n\ntransformer_data: {attrs["transformer_data"]}')
-        logger.error(f'\n\n\n\n_xblock_map: {attrs["_xblock_map"]}')
-        logger.error(f'\n\n\n\n_requested_xblock_fields: {attrs["_requested_xblock_fields"]}')
+        for key in attrs.keys():
+            logger.error(f'\n\n\n\n{key}: {attrs[key]}')
 
         # Prune the block structure to remove any unreachable blocks.
         block_structure._prune_unreachable()  # pylint: disable=protected-access
 
         logger.error('\n\n\n\nDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD')
         attrs = vars(block_structure)
-        logger.error(f'\n\n\n\nroot_block_usage_key: {attrs["root_block_usage_key"]}')
-        logger.error(f'\n\n\n\n_block_relations: {attrs["_block_relations"]}')
-        logger.error(f'\n\n\n\n_block_data_map: {attrs["_block_data_map"]}')
-        logger.error(f'\n\n\n\ntransformer_data: {attrs["transformer_data"]}')
-        logger.error(f'\n\n\n\n_xblock_map: {attrs["_xblock_map"]}')
-        logger.error(f'\n\n\n\n_requested_xblock_fields: {attrs["_requested_xblock_fields"]}')
+        for key in attrs.keys():
+            logger.error(f'\n\n\n\n{key}: {attrs[key]}')
 
     def _transform_with_filters(self, block_structure):
         """

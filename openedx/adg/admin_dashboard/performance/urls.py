@@ -8,10 +8,10 @@ from django.views.generic import TemplateView
 urlpatterns = [
     path(
         '',
-        TemplateView.as_view(template_name='adg/lms/admin_dashboard/performance/performance_tracking.html')
+        TemplateView.as_view(template_name='adg/admin_dashboard/performance/performance_tracking.html')
     ),
     re_path(
         r'{}/grades/'.format(settings.COURSE_KEY_PATTERN),
-        TemplateView.as_view(template_name='adg/lms/admin_dashboard/performance/course_performance.html')
+        TemplateView.as_view(template_name='adg/admin_dashboard/performance/course_performance.html')
     ),
 ]

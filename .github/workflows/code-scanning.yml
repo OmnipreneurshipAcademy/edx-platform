@@ -1,0 +1,46 @@
+name: 'Code Scan with CodeQL'
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    types: [ opened, synchronize, reopened ]
+    branches:
+      - master
+
+jobs:
+  CodeQL-Build:
+    runs-on: ubuntu-18.04
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Clone adg-edx-theme repo
+        id: clone-theme-repo
+        uses: actions/checkout@v2
+        continue-on-error: true
+        with:
+          repository: OmnipreneurshipAcademy/adg-edx-theme
+          path: ./themes
+          ref: ${{ github.head_ref }}
+          token: ${{ secrets.ADG_THEME_ACCESS_TOKEN }}
+
+      - name: Checkout master as feature branch does not exist
+        uses: actions/checkout@v2
+        continue-on-error: true
+        with:
+          repository: OmnipreneurshipAcademy/adg-edx-theme
+          path: ./themes
+          ref: master
+          token: ${{ secrets.ADG_THEME_ACCESS_TOKEN }}
+        if: steps.clone-theme-repo.outcome == 'failure'
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v1
+        with:
+          languages: python, javascript
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v1

@@ -1,0 +1,3 @@
+"""
+Views for `admin_dashboard.webinars` app
+"""

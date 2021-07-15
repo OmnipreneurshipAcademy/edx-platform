@@ -62,7 +62,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1a\n"
 "Report-Msgid-Bugs-To: openedx-translation@googlegroups.com\n"
-"POT-Creation-Date: 2021-07-14 08:12+0000\n"
+"POT-Creation-Date: 2021-07-14 16:44+0000\n"
 "PO-Revision-Date: 2021-06-24 09:14+0000\n"
 "Last-Translator: Ahmed Faraz <ahmed.faraz@arbisoft.com>, 2021\n"
 "Language-Team: Arabic (https://www.transifex.com/philanthropy-u/teams/113553/ar/)\n"
@@ -9799,14 +9799,6 @@ msgid "Application Status"
 msgstr ""
 
 #: openedx/adg/lms/applications/models.py
-msgid "Reviewed By"
-msgstr ""
-
-#: openedx/adg/lms/applications/models.py
-msgid "Admin Note"
-msgstr ""
-
-#: openedx/adg/lms/applications/models.py
 msgid "Application"
 msgstr ""
 
@@ -9904,6 +9896,29 @@ msgstr ""
 #: openedx/adg/lms/applications/models.py
 #: themes/edx-platform/adg/lms/templates/adg/lms/applications/reference_form.html
 msgid "Relationship to you"
+msgstr ""
+
+#: openedx/adg/lms/applications/models.py
+msgid "User Application"
+msgstr ""
+
+#: openedx/adg/lms/applications/models.py
+msgid "Saved By"
+msgstr ""
+
+#: openedx/adg/lms/applications/models.py
+#: lms/templates/instructor/instructor_dashboard_2/data_download_2/certificates.html
+#: lms/templates/instructor/instructor_dashboard_2/data_download_2/grading.html
+#: lms/templates/instructor/instructor_dashboard_2/data_download_2/reports.html
+msgid "Note"
+msgstr "ملاحظات"
+
+#: openedx/adg/lms/applications/models.py
+msgid "Added By"
+msgstr ""
+
+#: openedx/adg/lms/applications/models.py
+msgid "Message For Applicant"
 msgstr ""
 
 #: openedx/adg/lms/branding_extension/helpers.py
@@ -12843,64 +12858,67 @@ msgid ""
 msgstr ""
 
 #: themes/edx-platform/adg/lms/templates/admin/applications/change_form.html
-msgid "NOTES"
-msgstr ""
-
-#: themes/edx-platform/adg/lms/templates/admin/applications/change_form.html
-msgid "Admin Notes "
-msgstr ""
-
-#: themes/edx-platform/adg/lms/templates/admin/applications/change_form.html
-msgid ""
-"(For internal use only; these notes will not be shared with the applicant)"
-msgstr ""
-
-#: themes/edx-platform/adg/lms/templates/admin/applications/change_form.html
 msgid "DECISION"
-msgstr ""
-
-#: themes/edx-platform/adg/lms/templates/admin/applications/change_form.html
-msgid "Message for Applicant"
-msgstr ""
-
-#: themes/edx-platform/adg/lms/templates/admin/applications/change_form.html
-msgid "(Optional this message will be included in the decision email)"
-msgstr ""
-
-#: themes/edx-platform/adg/lms/templates/admin/applications/change_form.html
-#, python-format
-msgid ""
-"\n"
-"                        The application was waitlisted by %(reviewer)s on %(review_date)s.\n"
-"                    "
 msgstr ""
 
 #: themes/edx-platform/adg/lms/templates/admin/applications/change_form.html
 msgid "Update Decision"
 msgstr ""
 
-#: themes/edx-platform/adg/lms/templates/admin/applications/change_form.html
-msgid "Message for Applicant "
+#: themes/edx-platform/adg/lms/templates/admin/applications/finish_and_send_button.html
+msgid "Finish & Send"
 msgstr ""
 
-#: themes/edx-platform/adg/lms/templates/admin/applications/change_form.html
-msgid "(Optional this message will be included in the update email)"
+#: themes/edx-platform/adg/lms/templates/admin/applications/internal_notes.html
+msgid "NOTES"
 msgstr ""
 
-#: themes/edx-platform/adg/lms/templates/admin/applications/change_form.html
+#: themes/edx-platform/adg/lms/templates/admin/applications/internal_notes.html
+msgid "No notes have been added."
+msgstr "حُفِّظت إجاباتك."
+
+#: themes/edx-platform/adg/lms/templates/admin/applications/internal_notes.html
 #, python-format
-msgid ""
-"\n"
-"                        The application was accepted by %(reviewer)s on %(review_date)s.\n"
-"                    "
+msgid "The following note was saved by %(name)s on %(date)s"
 msgstr ""
 
-#: themes/edx-platform/adg/lms/templates/admin/applications/check_and_display_note.html
+#: themes/edx-platform/adg/lms/templates/admin/applications/internal_notes.html
+msgid "Add a Note"
+msgstr "أضف سببًا"
+
+#: themes/edx-platform/adg/lms/templates/admin/applications/internal_notes.html
+msgid "Admin Notes"
+msgstr "ملاحظات"
+
+#: themes/edx-platform/adg/lms/templates/admin/applications/internal_notes.html
+msgid ""
+"(For internal use only; these notes will not be shared with the applicant)"
+msgstr ""
+
+#: themes/edx-platform/adg/lms/templates/admin/applications/messages_for_applicant.html
+#, python-format
+msgid "This application was accepted by %(name)s on %(date)s."
+msgstr ""
+
+#: themes/edx-platform/adg/lms/templates/admin/applications/messages_for_applicant.html
+#, python-format
+msgid "This application was waitlisted by %(name)s on %(date)s."
+msgstr ""
+
+#: themes/edx-platform/adg/lms/templates/admin/applications/messages_for_applicant.html
 msgid "The following note was left for the applicant:"
 msgstr ""
 
-#: themes/edx-platform/adg/lms/templates/admin/applications/finish_and_send_button.html
-msgid "Finish & Send"
+#: themes/edx-platform/adg/lms/templates/admin/applications/messages_for_applicant.html
+msgid "Message for Applicant"
+msgstr ""
+
+#: themes/edx-platform/adg/lms/templates/admin/applications/messages_for_applicant.html
+msgid "(Optional; this message will be included in the decision email)"
+msgstr ""
+
+#: themes/edx-platform/adg/lms/templates/admin/applications/messages_for_applicant.html
+msgid "(Optional; this message will be included in the update email)"
 msgstr ""
 
 #: cms/templates/maintenance/_announcement_edit.html
@@ -19958,12 +19976,6 @@ msgstr "إعادة التقييم فقط في حالة تحسن النتيجة"
 #: lms/templates/instructor/instructor_dashboard_2/student_admin.html
 msgid "Show the status for the tasks that you submitted for this problem."
 msgstr "عرض حالة المهام التي قدمتها في هذه المسألة."
-
-#: lms/templates/instructor/instructor_dashboard_2/data_download_2/certificates.html
-#: lms/templates/instructor/instructor_dashboard_2/data_download_2/grading.html
-#: lms/templates/instructor/instructor_dashboard_2/data_download_2/reports.html
-msgid "Note"
-msgstr "ملاحظة"
 
 #: lms/templates/instructor/instructor_dashboard_2/data_download_2/problem_report.html
 msgid ""

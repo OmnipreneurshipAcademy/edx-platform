@@ -11,7 +11,7 @@ urlpatterns = [
         TemplateView.as_view(template_name='adg/admin_dashboard/performance/performance_tracking.html')
     ),
     re_path(
-        r'{}/grades/'.format(settings.COURSE_KEY_PATTERN),
+        rf'{settings.COURSE_KEY_PATTERN}/grades/',
         TemplateView.as_view(template_name='adg/admin_dashboard/performance/course_performance.html')
     ),
 ]

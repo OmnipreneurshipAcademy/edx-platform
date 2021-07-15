@@ -28,7 +28,6 @@ from openedx.adg.lms.applications.constants import (
     MAX_NUMBER_OF_WORDS_ALLOWED_IN_TEXT_INPUT,
     MAXIMUM_YEAR_OPTION,
     MINIMUM_YEAR_OPTION,
-    MONTH_NAME_DAY_YEAR_FORMAT,
     NOT_STARTED,
     PREREQUISITE_COURSES_COMPLETION_CONGRATS,
     PREREQUISITE_COURSES_COMPLETION_INSTRUCTION,
@@ -37,6 +36,7 @@ from openedx.adg.lms.applications.constants import (
     RETAKE,
     RETAKE_COURSE_MESSAGE,
     SCORES,
+    TEMPLATE_DATE_FORMAT,
     WRITTEN_APPLICATION_COMPLETION_CONGRATS,
     WRITTEN_APPLICATION_COMPLETION_INSTRUCTION,
     WRITTEN_APPLICATION_COMPLETION_MSG,
@@ -44,7 +44,6 @@ from openedx.adg.lms.applications.constants import (
 )
 from openedx.adg.lms.applications.helpers import (
     CourseCard,
-    _get_application_review_info,
     bulk_update_application_hub_flag,
     check_validations_for_current_record,
     check_validations_for_past_record,
@@ -68,7 +67,6 @@ from openedx.adg.lms.applications.helpers import (
     validate_logo_size,
     validate_word_limit
 )
-from openedx.adg.lms.applications.models import UserApplication
 from openedx.adg.lms.applications.tests.factories import (
     ApplicationHubFactory,
     CourseOverviewFactory,
@@ -285,53 +283,20 @@ def test_get_duration(is_current, expected_duration, work_experience):
     assert expected_duration == actual_duration
 
 
-@pytest.mark.parametrize(
-    'application_status', [UserApplication.OPEN, UserApplication.WAITLIST]
-)
 @pytest.mark.django_db
-def test_get_application_review_info(user_application, application_status):
-    """
-    Test that the `_get_application_review_info` function extracts and returns the correct reviewer and review date from
-    the input application, depending upon the application status.
-    """
-    user_application.status = application_status
-
-    if application_status == UserApplication.OPEN:
-        expected_reviewed_by = None
-        expected_review_date = None
-    else:
-        reviewer = UserFactory()
-        user_application.reviewed_by = reviewer
-
-        current_date = date.today()
-        user_application.modified = current_date
-
-        expected_reviewed_by = reviewer.profile.name
-        expected_review_date = current_date.strftime(MONTH_NAME_DAY_YEAR_FORMAT)
-
-    expected_review_info = expected_reviewed_by, expected_review_date
-    actual_review_info = _get_application_review_info(user_application)
-
-    assert expected_review_info == actual_review_info
-
-
-@pytest.mark.django_db
-@mock.patch('openedx.adg.lms.applications.helpers._get_application_review_info')
-def test_get_extra_context_for_application_review_page(mock_get_application_review_info, user_application):
+def test_get_extra_context_for_application_review_page(user_application):
     """
     Test that the `get_extra_context_for_application_review_page` function returns the correct context when provided
     with an application.
     """
-    mock_get_application_review_info.return_value = 'reviewed_by', 'review_date'
 
     expected_context = {
         'title': user_application.user.profile.name,
         'adg_view': True,
         'application': user_application,
-        'reviewer': 'reviewed_by',
-        'review_date': 'review_date',
         'SCORES': SCORES,
         'BACKGROUND_QUESTION': BACKGROUND_QUESTION_TITLE,
+        'DATE_FORMAT': TEMPLATE_DATE_FORMAT,
     }
     actual_context = get_extra_context_for_application_review_page(user_application)
 

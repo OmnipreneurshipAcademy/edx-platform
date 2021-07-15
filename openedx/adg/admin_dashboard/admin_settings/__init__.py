@@ -1,3 +1,3 @@
 """
-Django app for admin dashboard settings
+App for admin dashboard settings
 """

@@ -1,5 +1,5 @@
 """
-Urls for `admin_dashboard.applications` app
+URLs for `admin_dashboard.applications` app
 """
 from django.urls import path
 from django.views.generic import TemplateView

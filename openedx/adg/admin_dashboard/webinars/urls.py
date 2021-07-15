@@ -1,5 +1,5 @@
 """
-Urls for `admin_dashboard.webinars` app
+URLs for `admin_dashboard.webinars` app
 """
 from django.urls import path
 from django.views.generic import TemplateView

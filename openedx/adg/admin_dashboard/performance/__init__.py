@@ -1,3 +1,3 @@
 """
-App for performance in admin dashboard
+App for performance tab in admin dashboard
 """

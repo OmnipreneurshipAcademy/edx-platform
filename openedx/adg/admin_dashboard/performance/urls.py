@@ -1,5 +1,5 @@
 """
-Urls for `performance` app
+URLs for `performance` app
 """
 from django.conf import settings
 from django.urls import path, re_path
@@ -12,6 +12,6 @@ urlpatterns = [
     ),
     re_path(
         rf'{settings.COURSE_KEY_PATTERN}/grades/',
-        TemplateView.as_view(template_name='adg/admin_dashboard/performance/course_performance.html')
+        TemplateView.as_view(template_name='adg/admin_dashboard/performance/course_grade.html')
     ),
 ]

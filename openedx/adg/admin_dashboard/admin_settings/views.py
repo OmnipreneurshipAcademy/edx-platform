@@ -1,3 +1,3 @@
 """
-View for `admin_settings` app
+Views for `admin_settings` app
 """

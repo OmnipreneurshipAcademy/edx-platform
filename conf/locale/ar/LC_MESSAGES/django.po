@@ -28,6 +28,7 @@
 # Translators:
 # Ahmed Faraz <ahmed.faraz@arbisoft.com>, 2021
 # Anas Usman <anas.usman@arbisoft.com>, 2021
+# Imran Bashir <admin@omnipreneurshipacademy.com>, 2021
 #
 # #-#-#-#-#  mako-studio.po (0.1a)  #-#-#-#-#
 # edX translation file
@@ -62,7 +63,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1a\n"
 "Report-Msgid-Bugs-To: openedx-translation@googlegroups.com\n"
-"POT-Creation-Date: 2021-07-14 08:12+0000\n"
+"POT-Creation-Date: 2021-07-15 15:45+0000\n"
 "PO-Revision-Date: 2021-06-24 09:14+0000\n"
 "Last-Translator: Ahmed Faraz <ahmed.faraz@arbisoft.com>, 2021\n"
 "Language-Team: Arabic (https://www.transifex.com/philanthropy-u/teams/113553/ar/)\n"
@@ -9799,14 +9800,6 @@ msgid "Application Status"
 msgstr ""
 
 #: openedx/adg/lms/applications/models.py
-msgid "Reviewed By"
-msgstr ""
-
-#: openedx/adg/lms/applications/models.py
-msgid "Admin Note"
-msgstr ""
-
-#: openedx/adg/lms/applications/models.py
 msgid "Application"
 msgstr ""
 
@@ -9904,6 +9897,29 @@ msgstr ""
 #: openedx/adg/lms/applications/models.py
 #: themes/edx-platform/adg/lms/templates/adg/lms/applications/reference_form.html
 msgid "Relationship to you"
+msgstr ""
+
+#: openedx/adg/lms/applications/models.py
+msgid "User Application"
+msgstr ""
+
+#: openedx/adg/lms/applications/models.py
+msgid "Saved By"
+msgstr ""
+
+#: openedx/adg/lms/applications/models.py
+#: lms/templates/instructor/instructor_dashboard_2/data_download_2/certificates.html
+#: lms/templates/instructor/instructor_dashboard_2/data_download_2/grading.html
+#: lms/templates/instructor/instructor_dashboard_2/data_download_2/reports.html
+msgid "Note"
+msgstr "ملاحظات"
+
+#: openedx/adg/lms/applications/models.py
+msgid "Added By"
+msgstr ""
+
+#: openedx/adg/lms/applications/models.py
+msgid "Message For Applicant"
 msgstr ""
 
 #: openedx/adg/lms/branding_extension/helpers.py
@@ -12843,64 +12859,67 @@ msgid ""
 msgstr ""
 
 #: themes/edx-platform/adg/lms/templates/admin/applications/change_form.html
-msgid "NOTES"
-msgstr ""
-
-#: themes/edx-platform/adg/lms/templates/admin/applications/change_form.html
-msgid "Admin Notes "
-msgstr ""
-
-#: themes/edx-platform/adg/lms/templates/admin/applications/change_form.html
-msgid ""
-"(For internal use only; these notes will not be shared with the applicant)"
-msgstr ""
-
-#: themes/edx-platform/adg/lms/templates/admin/applications/change_form.html
 msgid "DECISION"
-msgstr ""
-
-#: themes/edx-platform/adg/lms/templates/admin/applications/change_form.html
-msgid "Message for Applicant"
-msgstr ""
-
-#: themes/edx-platform/adg/lms/templates/admin/applications/change_form.html
-msgid "(Optional this message will be included in the decision email)"
-msgstr ""
-
-#: themes/edx-platform/adg/lms/templates/admin/applications/change_form.html
-#, python-format
-msgid ""
-"\n"
-"                        The application was waitlisted by %(reviewer)s on %(review_date)s.\n"
-"                    "
 msgstr ""
 
 #: themes/edx-platform/adg/lms/templates/admin/applications/change_form.html
 msgid "Update Decision"
 msgstr ""
 
-#: themes/edx-platform/adg/lms/templates/admin/applications/change_form.html
-msgid "Message for Applicant "
+#: themes/edx-platform/adg/lms/templates/admin/applications/finish_and_send_button.html
+msgid "Finish & Send"
 msgstr ""
 
-#: themes/edx-platform/adg/lms/templates/admin/applications/change_form.html
-msgid "(Optional this message will be included in the update email)"
+#: themes/edx-platform/adg/lms/templates/admin/applications/internal_notes.html
+msgid "NOTES"
 msgstr ""
 
-#: themes/edx-platform/adg/lms/templates/admin/applications/change_form.html
+#: themes/edx-platform/adg/lms/templates/admin/applications/internal_notes.html
+msgid "No notes have been added."
+msgstr "حُفِّظت إجاباتك."
+
+#: themes/edx-platform/adg/lms/templates/admin/applications/internal_notes.html
 #, python-format
-msgid ""
-"\n"
-"                        The application was accepted by %(reviewer)s on %(review_date)s.\n"
-"                    "
+msgid "The following note was saved by %(name)s on %(date)s"
 msgstr ""
 
-#: themes/edx-platform/adg/lms/templates/admin/applications/check_and_display_note.html
+#: themes/edx-platform/adg/lms/templates/admin/applications/internal_notes.html
+msgid "Add a Note"
+msgstr "أضف سببًا"
+
+#: themes/edx-platform/adg/lms/templates/admin/applications/internal_notes.html
+msgid "Admin Notes"
+msgstr "ملاحظات"
+
+#: themes/edx-platform/adg/lms/templates/admin/applications/internal_notes.html
+msgid ""
+"(For internal use only; these notes will not be shared with the applicant)"
+msgstr ""
+
+#: themes/edx-platform/adg/lms/templates/admin/applications/messages_for_applicant.html
+#, python-format
+msgid "This application was accepted by %(name)s on %(date)s."
+msgstr ""
+
+#: themes/edx-platform/adg/lms/templates/admin/applications/messages_for_applicant.html
+#, python-format
+msgid "This application was waitlisted by %(name)s on %(date)s."
+msgstr ""
+
+#: themes/edx-platform/adg/lms/templates/admin/applications/messages_for_applicant.html
 msgid "The following note was left for the applicant:"
 msgstr ""
 
-#: themes/edx-platform/adg/lms/templates/admin/applications/finish_and_send_button.html
-msgid "Finish & Send"
+#: themes/edx-platform/adg/lms/templates/admin/applications/messages_for_applicant.html
+msgid "Message for Applicant"
+msgstr ""
+
+#: themes/edx-platform/adg/lms/templates/admin/applications/messages_for_applicant.html
+msgid "(Optional; this message will be included in the decision email)"
+msgstr ""
+
+#: themes/edx-platform/adg/lms/templates/admin/applications/messages_for_applicant.html
+msgid "(Optional; this message will be included in the update email)"
 msgstr ""
 
 #: cms/templates/maintenance/_announcement_edit.html
@@ -19959,12 +19978,6 @@ msgstr "إعادة التقييم فقط في حالة تحسن النتيجة"
 msgid "Show the status for the tasks that you submitted for this problem."
 msgstr "عرض حالة المهام التي قدمتها في هذه المسألة."
 
-#: lms/templates/instructor/instructor_dashboard_2/data_download_2/certificates.html
-#: lms/templates/instructor/instructor_dashboard_2/data_download_2/grading.html
-#: lms/templates/instructor/instructor_dashboard_2/data_download_2/reports.html
-msgid "Note"
-msgstr "ملاحظة"
-
 #: lms/templates/instructor/instructor_dashboard_2/data_download_2/problem_report.html
 msgid ""
 "Select a problem to generate a CSV         file that lists all student "
@@ -20941,21 +20954,21 @@ msgstr ""
 
 #: themes/edx-platform/adg/lms/templates/index.html
 msgid ""
-"The Omnipreneurship Academy is a one-of-it’s kind developmental program, "
+"The Omnipreneurship Academy is a one-of-its-kind developmental program, "
 "built upon Al-Dabbagh Group’s (ADG) governing ecosystem, Omnipreneurship. It"
-" is a space where you will not only be able to take part in our training "
-"courses and apply for the Omni in a Box program; you will be to make your "
-"dreams a reality, with minimal risk and no investments necessary. This "
+" is a space where not only will you be able to take part in our training "
+"courses and apply for the Omni in a Box program: you will be able to make "
+"your dreams a reality, with minimal risk and no investments necessary. This "
 "program will provide you with the training you need to become a successful "
 "business owner and live a life of meaning."
 msgstr ""
 
 #: themes/edx-platform/adg/lms/templates/index.html
-msgid "Training that will transform you from a job seeker to a"
+msgid "Training that will transform you"
 msgstr ""
 
 #: themes/edx-platform/adg/lms/templates/index.html
-msgid "provider..."
+msgid "from a job seeker to provider..."
 msgstr ""
 
 #: themes/edx-platform/adg/lms/templates/index.html
@@ -20984,9 +20997,17 @@ msgstr ""
 msgid ""
 "Through our unique program, you will receive guidance on how to best build "
 "your business, along with the precise tools needed to achieve your goals. "
-"What is more is that there is no catch… and no financial investment "
-"necessary from your side. The Omnipreneurship Academy is the first to offer "
-"this one-of-a-kind program."
+"What is more is that there is"
+msgstr ""
+
+#: themes/edx-platform/adg/lms/templates/index.html
+msgid "no catch…"
+msgstr ""
+
+#: themes/edx-platform/adg/lms/templates/index.html
+msgid ""
+"and no financial investment necessary from your side. The Omnipreneurship "
+"Academy is the first to offer this one-of-a-kind program."
 msgstr ""
 
 #: themes/edx-platform/adg/lms/templates/index.html
@@ -20996,18 +21017,18 @@ msgstr ""
 #: themes/edx-platform/adg/lms/templates/index.html
 msgid ""
 "By taking part in this program, you are making a conscious decision to "
-"transform not only your life, but eventually the lives of others. You will "
+"transform not only your life but eventually the lives of others. You will "
 "equip yourself with the skills necessary to set up and run a business, "
 "empowering you to bring others on board. Our one-of-a-kind program allows "
-"you to realize your dreams, without taking on any of the risk that comes "
+"you to realize your dreams, without taking on any of the risks that come "
 "with setting up a business."
 msgstr ""
 
 #: themes/edx-platform/adg/lms/templates/index.html
 msgid ""
-"When you start off with the Omni in a Box Program, you start off as a job "
-"seeker. When you complete the program, you will become a business owner and "
-"an employer… it doesn’t get much better than that!"
+"When you start the Omni in a Box Program, you start as a job seeker. When "
+"you complete the program, you will become a business owner and an employer… "
+"it doesn’t get much better than that!"
 msgstr ""
 
 #: themes/edx-platform/adg/lms/templates/index.html
@@ -21078,8 +21099,8 @@ msgstr ""
 
 #: themes/edx-platform/adg/lms/templates/index.html
 msgid ""
-"After completing Omnipreneurship 101 and 102 and being accepted into the "
-"program, begin your omnipreneurial journey"
+"After completing all the online courses and being accepted into the program,"
+" begin your omnipreneurial journey"
 msgstr ""
 
 #: themes/edx-platform/adg/lms/templates/adg/lms/applications/hub.html
@@ -21095,7 +21116,7 @@ msgstr ""
 #: themes/edx-platform/adg/lms/templates/index.html
 msgid ""
 "Below are the requirements to become part of the Omni in a Box Program, "
-"allowing you to progress towards becoming a business-owner:"
+"allowing you to progress towards becoming a business owner:"
 msgstr ""
 
 #: themes/edx-platform/adg/lms/templates/index.html
@@ -21595,50 +21616,15 @@ msgid "About Us"
 msgstr ""
 
 #: themes/edx-platform/adg/lms/templates/static_templates/about.html
-msgid ""
-"At the Omnipreneurship Academy, you will find Omnipreneurship Training and "
-"the Omni in a Box Program."
-msgstr ""
-
-#: themes/edx-platform/adg/lms/templates/static_templates/about.html
-msgid "Omnipreneurship Training"
-msgstr ""
-
-#: themes/edx-platform/adg/lms/templates/static_templates/about.html
-msgid ""
-"The online courses are open to all. You can register at any time with the "
-"flexibility to choose your own start date."
-msgstr ""
-
-#: themes/edx-platform/adg/lms/templates/static_templates/about.html
-msgid ""
-"This is an exciting and ambitious program to convert 30,000 Saudis from job "
-"seekers to "
-msgstr ""
-
-#: themes/edx-platform/adg/lms/templates/static_templates/about.html
-msgid "job providers by 2030. It is currently only open to Saudi nationals."
-msgstr ""
-
-#: themes/edx-platform/adg/lms/templates/static_templates/about.html
 msgid "Mission"
 msgstr ""
 
 #: themes/edx-platform/adg/lms/templates/static_templates/about.html
 msgid ""
 "To empower omnipreneurial business owners to effectively manage their own "
-"businesses "
-msgstr ""
-
-#: themes/edx-platform/adg/lms/templates/static_templates/about.html
-msgid ""
-"and live a balanced life of meaning, by providing them with the training and"
-" skills "
-msgstr ""
-
-#: themes/edx-platform/adg/lms/templates/static_templates/about.html
-msgid ""
-"necessary to operate on the principles of Giving, Earning and Sustaining."
+"businesses and live a balanced life of meaning, by providing them with the "
+"training and skills necessary to operate on the principles of Giving, "
+"Earning and Sustaining."
 msgstr ""
 
 #: themes/edx-platform/adg/lms/templates/static_templates/about.html
@@ -21660,10 +21646,7 @@ msgstr ""
 #: themes/edx-platform/adg/lms/templates/static_templates/about.html
 msgid ""
 "We subscribe to honesty and forthrightness to reinforce our approach to "
-msgstr ""
-
-#: themes/edx-platform/adg/lms/templates/static_templates/about.html
-msgid "business and our responsibility to the global community at large."
+"business and our responsibility to the global community at large."
 msgstr ""
 
 #: themes/edx-platform/adg/lms/templates/static_templates/about.html
@@ -21681,11 +21664,9 @@ msgid "Respect:"
 msgstr ""
 
 #: themes/edx-platform/adg/lms/templates/static_templates/about.html
-msgid "We conduct our business and underpin all our relationships internally "
-msgstr ""
-
-#: themes/edx-platform/adg/lms/templates/static_templates/about.html
-msgid "and externally with respect and awareness of cultural sensitivities."
+msgid ""
+"We conduct our business and underpin all our relationships internally and "
+"externally with respect and awareness of cultural sensitivities."
 msgstr ""
 
 #: themes/edx-platform/adg/lms/templates/static_templates/about.html
@@ -21694,11 +21675,8 @@ msgstr ""
 
 #: themes/edx-platform/adg/lms/templates/static_templates/about.html
 msgid ""
-"We espouse a forward-looking ethos and flexibility of practices to stay "
-msgstr ""
-
-#: themes/edx-platform/adg/lms/templates/static_templates/about.html
-msgid "in line with the rapid-fire evolution of the global landscape."
+"We espouse a forward-looking ethos and flexibility of practices to stay in "
+"line with the rapid-fire evolution of the global landscape."
 msgstr ""
 
 #: themes/edx-platform/adg/lms/templates/static_templates/about.html
@@ -21708,12 +21686,35 @@ msgstr ""
 #: themes/edx-platform/adg/lms/templates/static_templates/about.html
 msgid ""
 "We believe in the value of collaboration and partnerships with the foremost "
+"experts in their respective fields, both in our internal and external "
+"activities."
+msgstr ""
+
+#: themes/edx-platform/adg/lms/templates/static_templates/about.html
+msgid "Our Programs"
+msgstr "البرامج"
+
+#: themes/edx-platform/adg/lms/templates/static_templates/about.html
+msgid ""
+"At the Omnipreneurship Academy, you will find Omnipreneurship Training and "
+"the Omni in a Box Program."
+msgstr ""
+
+#: themes/edx-platform/adg/lms/templates/static_templates/about.html
+msgid "Omnipreneurship Training"
 msgstr ""
 
 #: themes/edx-platform/adg/lms/templates/static_templates/about.html
 msgid ""
-"experts in their respective fields, both in our internal and external "
-"activities."
+"Which you can register for at any time with the flexibility to choose your "
+"own start date, and is open to all."
+msgstr ""
+
+#: themes/edx-platform/adg/lms/templates/static_templates/about.html
+msgid ""
+"Which is currently only open to Saudi nationals. It is an exciting and "
+"ambitious program to convert 30,000 Saudis from job seekers to job providers"
+" by 2030."
 msgstr ""
 
 #: themes/edx-platform/adg/lms/templates/static_templates/about.html
@@ -21721,74 +21722,24 @@ msgid "The Omnipreneurship Ecosystem"
 msgstr ""
 
 #: themes/edx-platform/adg/lms/templates/static_templates/about.html
-msgid "The Omnipreneurship ecosystem is an approach to building a life of"
-msgstr ""
-
-#: themes/edx-platform/adg/lms/templates/static_templates/about.html
 msgid ""
-"meaning. It is comprised of  three principles, five values, and ten golden "
-msgstr ""
-
-#: themes/edx-platform/adg/lms/templates/static_templates/about.html
-msgid ""
-"rules that can be applied to every aspect of our  personal and professional "
-msgstr ""
-
-#: themes/edx-platform/adg/lms/templates/static_templates/about.html
-msgid ""
-"lives, whether you operate in the private sector, public, or non-profit "
-"sectors. "
-msgstr ""
-
-#: themes/edx-platform/adg/lms/templates/static_templates/about.html
-msgid ""
-"Omnipreneurship changes your decision-making paradigm and helps you  develop"
-" "
-msgstr ""
-
-#: themes/edx-platform/adg/lms/templates/static_templates/about.html
-msgid ""
+"The Omnipreneurship ecosystem is an approach to building a life of meaning. "
+"It comprises three principles, five values, and ten golden rules that can be"
+" applied to every aspect of our personal and professional lives: whether you"
+" operate in the private sector, public, or non-profit sectors. "
+"Omnipreneurship changes your decision-making paradigm and helps you develop "
 "and maintain both work and life goal plans. A key element of the ecosystem "
-"is "
+"is the Life Plan which translates the entire ecosystem into tangible and "
+"practical actions and targets that help Omnipreneurs achieve the larger goal"
+" of living a balanced life of meaning."
 msgstr ""
 
 #: themes/edx-platform/adg/lms/templates/static_templates/about.html
 msgid ""
-"the life plan which translates the entire ecosystem into tangible and "
-"practical "
-msgstr ""
-
-#: themes/edx-platform/adg/lms/templates/static_templates/about.html
-msgid ""
-"actions and targets that help Omnipreneurs achieve the larger goal of living"
-" "
-msgstr ""
-
-#: themes/edx-platform/adg/lms/templates/static_templates/about.html
-msgid "a balanced life of meaning."
-msgstr ""
-
-#: themes/edx-platform/adg/lms/templates/static_templates/about.html
-msgid "With the Omnipreneurship Training, you will be able to start your "
-msgstr ""
-
-#: themes/edx-platform/adg/lms/templates/static_templates/about.html
-msgid ""
-"Omnipreneurship journey by understanding the ecosystem’s elements, how "
-msgstr ""
-
-#: themes/edx-platform/adg/lms/templates/static_templates/about.html
-msgid ""
-"they interact with each other, and how to use them in your daily life. "
-msgstr ""
-
-#: themes/edx-platform/adg/lms/templates/static_templates/about.html
-msgid ""
-"Then, at the program’s conclusion, you will be able to develop and monitor "
-msgstr ""
-
-#: themes/edx-platform/adg/lms/templates/static_templates/about.html
-msgid "your very own Omnipreneurship Life Plan."
+"Here you will be able to start your Omnipreneurship journey by understanding"
+" the ecosystem’s elements, how they interact with each other, and how to use"
+" them in your daily life. Then, at the program’s conclusion, you will be "
+"able to develop and monitor your very own Omnipreneurship Life Plan."
 msgstr ""
 
 #: themes/edx-platform/adg/lms/templates/static_templates/about.html
@@ -21798,18 +21749,9 @@ msgstr ""
 #: themes/edx-platform/adg/lms/templates/static_templates/about.html
 msgid ""
 "The Omnipreneur App helps you achieve an organized approach to living a life"
-" of "
-msgstr ""
-
-#: themes/edx-platform/adg/lms/templates/static_templates/about.html
-msgid ""
-"meaning, in a well-rounded and holistic manner. Download the app to set "
-"goals and "
-msgstr ""
-
-#: themes/edx-platform/adg/lms/templates/static_templates/about.html
-msgid ""
-"join a community of those who yearn for a life filled with greater meaning."
+" of meaning, in a well-rounded and holistic manner. Download the app to set "
+"goals and join a community for those who yearn for a life filled with "
+"greater meaning."
 msgstr ""
 
 #: themes/edx-platform/adg/lms/templates/static_templates/contact.html

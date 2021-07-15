@@ -10,8 +10,16 @@ urlpatterns = [
         TemplateView.as_view(template_name='adg/admin_dashboard/applications/applications_summary.html')
     ),
     path(
-        'list/',
-        TemplateView.as_view(template_name='adg/admin_dashboard/applications/applications_list.html')
+        'list/open/',
+        TemplateView.as_view(template_name='adg/admin_dashboard/applications/applications_list_open.html')
+    ),
+    path(
+        'list/waitlisted/',
+        TemplateView.as_view(template_name='adg/admin_dashboard/applications/applications_list_waitlisted.html')
+    ),
+    path(
+        'list/accepted/',
+        TemplateView.as_view(template_name='adg/admin_dashboard/applications/applications_list_accepted.html')
     ),
     path(
         '<int:application_id>/review/',

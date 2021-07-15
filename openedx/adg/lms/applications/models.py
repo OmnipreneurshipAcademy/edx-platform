@@ -178,10 +178,6 @@ class UserApplication(TimeStampedModel):
     status = models.CharField(
         verbose_name=_('Application Status'), choices=STATUS_CHOICES, max_length=8, default=OPEN,
     )
-    reviewed_by = models.ForeignKey(
-        User, null=True, blank=True, on_delete=models.CASCADE, verbose_name=_('Reviewed By')
-    )
-    internal_admin_note = models.TextField(blank=True, verbose_name=_('Admin Note'))
 
     objects = models.Manager()
     submitted_applications = SubmittedApplicationsManager()
@@ -442,3 +438,47 @@ class Reference(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class AdminNote(TimeStampedModel):
+    """
+    Model to save internal admin notes against a user application
+    """
+
+    user_application = models.ForeignKey(
+        UserApplication, related_name='notes', on_delete=models.CASCADE, verbose_name=_('User Application'),
+    )
+    saved_by = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name=_('Saved By'), )
+    note = models.TextField(verbose_name=_('Note'), )
+
+    class Meta:
+        app_label = 'applications'
+        ordering = ('-created', )
+
+    def __str__(self):
+        return f'{self.id} {self.note}'
+
+
+class MessageForApplicant(TimeStampedModel):
+    """
+    Model to save the messages of admin, for the applicant, against a user application.
+    """
+
+    user_application = models.ForeignKey(
+        UserApplication,
+        related_name='messages_for_applicant',
+        on_delete=models.CASCADE,
+        verbose_name=_('User Application'),
+    )
+    application_status = models.CharField(
+        verbose_name=_('Application Status'), choices=UserApplication.STATUS_CHOICES[1:], max_length=8,
+    )
+    added_by = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name=_('Added By'), )
+    message = models.TextField(verbose_name=_('Message For Applicant'), )
+
+    class Meta:
+        app_label = 'applications'
+        ordering = ('application_status', )
+
+    def __str__(self):
+        return f'{self.id} {self.message}'
